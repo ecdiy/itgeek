@@ -42,6 +42,7 @@ UploadDir=./upload/  上传图片的目录
 DbDriver=mysql       数据库驱动名称
 DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true  
 ImgHost=http://127.0.0.1:9000
+MultiSite=0         这个参数不要设置成1，这个多站点标识，如果要设置成多站点与开发者单独联系。
 
 geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true ImgHost=http://127.0.0.1:9000
 
