@@ -1,10 +1,10 @@
 <template>
     <div>
         <card>
-            <p slot="title">
+            <span slot="title">
                 <Icon type="stats-bars"></Icon>
                 今日阅读排行
-            </p>
+            </span>
             <p v-for="(it,i ) in today">
                 <router-link :to="'/p/topic/detail,'+it.Id+','+it.UserId">{{i+1}}.{{it.Title}}</router-link>
             </p>

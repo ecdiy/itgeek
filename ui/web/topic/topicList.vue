@@ -24,7 +24,6 @@
                                     <router-link :to="'/p/member/'+it.ReplyUsername">{{it.ReplyUsername}}</router-link>
                                     </strong></span>
                             </span>
-                            <span class="small">点击量:{{it.ShowTimes}}</span>
                         </td>
                         <td width="70" align="right" valign="middle">
                             <router-link v-if="it.ReplyCount>0" :to="'/p/topic/detail,'+it.Id+','+it.UserId"

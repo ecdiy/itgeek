@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "init": "webpack --progress --config build/webpack.dev.config.js",
-    "dev-web": "webpack-dev-server --disableHostCheck true --content-base ./geek/web/ --open http://127.0.0.1/ --inline --hot --compress --config build/web-dev.js",
-    "dev-m": "webpack-dev-server --port 8282 --disableHostCheck true --content-base ./geek/m/ --open http://test.ecdiy.cn:82/ --inline --hot --compress --config build/m-dev.js",
+    "dev-web": "webpack-dev-server --disableHostCheck true --content-base ./web/ --open http://127.0.0.1/ --inline --hot --compress --config build/web-dev.js",
+    "dev-m": "webpack-dev-server --port 8282 --disableHostCheck true --content-base ./m/ --open http://test.ecdiy.cn:82/ --inline --hot --compress --config build/m-dev.js",
     "build-web": "webpack --progress --hide-modules --config build/web-prod.js",
     "build-m": "webpack --progress --hide-modules --config build/m-prod.js",
     "lint": "eslint --fix --ext .js,.vue src"
