@@ -24,9 +24,7 @@ export const routers = [
         r(() => import('@/user/member.vue'), 'member/:id', ''),
 
         r(() => import('@/base/home.vue'), '', '首页'),
-
-
-
+        
     ]
 }, {
     path: '/', component: Main,
