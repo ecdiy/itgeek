@@ -111,7 +111,7 @@ func WebSeoDetail(ctx *gin.Context) {
 				seelog.Error(e)
 			}
 		} else {
-			seelog.Error("TopicDao not exist,", pp)
+			seelog.Error("topic not exist,", SiteId, pp)
 		}
 	} else {
 		seelog.Error("param error.", p)

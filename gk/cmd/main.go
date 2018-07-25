@@ -47,5 +47,7 @@ func main() {
 	upload.InitWeb(web, gkuser.Verify)
 
 	gkadmin.InitWeb(web)
+	web.Static("/h5dist", "./m/h5dist")
+	web.Static("/dist", "./web/dist")
 	web.Run(ws.EnvParam(ws.KeyBindAddr))
 }

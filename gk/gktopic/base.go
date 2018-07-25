@@ -38,7 +38,7 @@ func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
 	auth("/followStatus", WebFollowStatus)
 
 	//---SEO
-	web.GET("/", WebSeoHome)
+	web.GET("/", WebHome)
 	web.GET("/p/topic/detail,:p", WebSeoDetail)
 	web.GET("/sitemap.xml", WebSiteMap)
 

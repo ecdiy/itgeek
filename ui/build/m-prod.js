@@ -15,10 +15,10 @@ jobName = jobName.substr(idx + 1)
 
 module.exports = merge(webpackBaseConfig, {
     output: {
-        publicPath: '/dist/',  // 修改 https://iv...admin 这部分为你的服务器域名
+        publicPath: '/h5dist/',  // 修改 https://iv...admin 这部分为你的服务器域名
         filename: '[name].[hash].js',
         chunkFilename: '[name].[hash].chunk.js',
-        path: path.resolve(__dirname, '../dist/' + jobName + '/dist')
+        path: path.resolve(__dirname, '../dist/' + jobName + '/h5dist')
     },
     plugins: [ new TransformModulesPlugin(),
         new cleanWebpackPlugin(['dist/' + jobName + '/*'], {

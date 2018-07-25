@@ -11,7 +11,7 @@ const package = require('../package.json');
 module.exports = merge(webpackBaseConfig, {
     devtool: '#source-map',
     output: {
-        publicPath: '/dist/',
+        publicPath: '/h5dist/',
         filename: '[name].js',
         chunkFilename: '[name].chunk.js'
     },

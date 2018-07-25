@@ -10,7 +10,6 @@ var happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
 var jobName = process.env.npm_lifecycle_event
 var idx = jobName.indexOf('-')
 jobName = jobName.substr(idx + 1)
-console.log('job=' + jobName)
 
 function resolve(dir) {
     return path.join(__dirname, dir);
