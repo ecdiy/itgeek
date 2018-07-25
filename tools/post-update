@@ -1,0 +1,32 @@
+function bui(){
+	rm -rf /data/webs/geek-$1-bak
+	cd /data/gopath/src/github.com/ecdiy/itgeek/ui/
+	res=`git log  -1 --name-only | grep -c /$1/`
+	if [ $res -eq 0 ]; then
+	   echo "$1 no change.$res"
+	else
+	   echo "$1 change $res files"
+	   npm run build-$1
+	   mv /data/webs/geek-$1 /data/webs/geek-$1-bak
+	   mv /data/gopath/src/github.com/ecdiy/itgeek/ui/dist/$1 /data/webs/geek-$1
+	fi
+}
+cd .. || exit
+unset GIT_DIR
+/usr/bin/git reset --hard
+cd /data/gopath/src/github.com/ecdiy/itgeek/gk/
+res=`git log  -1 --name-only | grep -c gk/`
+if [ $res -eq 0 ]; then
+		echo "go code no change.$res"
+else
+		cd /data/gopath/src/github.com/ecdiy/itgeek/gk/cmd
+		go build  -ldflags "-s -w" -o /data/geek-new
+		pkill -9 geek
+		rm -rf /data/geek
+		mv /data/geek-new /data/geek
+		nohup /data/geek profile=prod > /data/logs/geek.log  2>&1  &
+fi
+
+bui web
+bui m
+/data/bins/nginx-1.14.0/sbin/nginx -s reload
