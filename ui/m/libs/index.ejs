@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.css[0] %>">
+    <link rel="stylesheet" name="theme" href="">
+</head>
+
+<body>
+    <div id="app"></div>
+    <div class="lock-screen-back" id="lock_screen_back"></div>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[0] %>"></script>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[1] %>"></script>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[2] %>"></script>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cfd1223338bd52e7cc0d7e1c8a536bf7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</body>
+
+</html>
