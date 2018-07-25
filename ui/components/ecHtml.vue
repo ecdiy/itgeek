@@ -1,13 +1,16 @@
 <template>
-    <div v-html=""></div>
+    <div class="h" v-html="param.html"></div>
 </template>
 
 <script>
     export default {
-        name: "ecHtml"
+        props: ['param']
     }
 </script>
 
 <style scoped>
-
+    div.h {
+        width: 100%;
+        overflow: hidden;
+    }
 </style>

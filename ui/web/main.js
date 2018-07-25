@@ -64,11 +64,11 @@ Vue.component('login', function (resolve) {
 
 
 Vue.component('gk-img', function (resolve) {
-    require(['./libs/components/ecImg.vue'], resolve)
+    require(['../libs/components/ecImg.vue'], resolve)
 })
 
 Vue.component('gk-html', function (resolve) {
-    require(['./libs/components/ecHtml.vue'], resolve)
+    require(['../libs/components/ecHtml.vue'], resolve)
 })
 
 window.goUrl = '/';
