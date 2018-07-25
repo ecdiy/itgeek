@@ -17,11 +17,11 @@ func tmpHome() string {
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>ITGeek 首页</title>
+    <title></title>
 	<meta name="keywords" content="Go,Golang,Go语言">
 	<meta name="description" content="Go语言中文网，中国 Golang 社区，Go语言学习园地，致力于构建完善的 Golang 中文社区，Go语言爱好者的学习家园。分享 Go 语言知识，交流使用经验">
   </head>
-<ul>
+<ul siteId="{{.SiteId}}">
 {{range .list}}<li><a href="/p/topic/detail,{{.Id}},{{.UserId}}">{{.Title}}</a></li>{{end}}
 </ul>
 共有{{.total}}条记录</html>
@@ -86,6 +86,7 @@ func init() {
 func WebSeoHome(ctx *gin.Context) {
 	data := make(map[string]interface{})
 	SiteId := ws.SiteId(ctx)
+	data["SiteId"] = SiteId
 	data["list"], _ = ws.TopicDao.Top1000(SiteId, )
 	data["total"], _, _ = ws.TopicDao.Count(SiteId, )
 	e := tplHome.Execute(ctx.Writer, data)
