@@ -52,6 +52,6 @@ func main() {
 	//web.Static("/avatar", "./upload/avatar")
 	web.Static("/static", "./static")
 
-
+	seelog.Info("version:0.0.1 (itgeek.top)")
 	web.Run(ws.EnvParam(ws.KeyBindAddr))
 }
