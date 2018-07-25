@@ -34,6 +34,9 @@ QQ群：620063196
 [https://nodejs.org/en/]
 
 #### 参数说明
+```angular2html
+
+
 BindAddr=:9000
 UploadDir=./upload/  上传图片的目录
 DbDriver=mysql       数据库驱动名称
@@ -43,3 +46,4 @@ ImgHost=http://127.0.0.1:9000
 geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true ImgHost=http://127.0.0.1:9000
 
 以上是默认值，如果与之一样可以不用配置
+```
