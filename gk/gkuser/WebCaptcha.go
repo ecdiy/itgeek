@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/dchest/captcha"
-	"utils/base"
+	"github.com/ecdiy/itgeek/gk/ws"
 )
 
 func Captcha(c *gin.Context) {
@@ -18,5 +18,5 @@ func Captcha(c *gin.Context) {
 }
 
 func CaptchaNew(c *gin.Context) {
-	c.JSON(200, base.OK.Result(captcha.New()))
+	c.JSON(200, ws.OK.Result(captcha.New()))
 }

@@ -2,7 +2,6 @@ package gktopic
 
 import (
 	"strings"
-	"utils/base"
 
 	"fmt"
 	"github.com/ecdiy/itgeek/gk/gkuser"
@@ -62,7 +61,7 @@ func WebDetail(param *ws.Param, res map[string]interface{}) {
 			}
 		}
 	} else {
-		base.StErrorParameter.To(res)
+		ws.StErrorParameter.To(res)
 	}
 }
 

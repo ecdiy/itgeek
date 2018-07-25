@@ -6,7 +6,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"time"
-	"utils/base"
 	"strings"
 	"github.com/cihub/seelog"
 	"github.com/ecdiy/itgeek/gk/ws"
@@ -26,27 +25,27 @@ func WebUserLogin(param *ws.Param, res map[string]interface{}) {
 	res["Status"] = r.Status
 }
 
-func DoUserLogin(param *ws.Param, Username, Password, Captcha, Digits string, res map[string]interface{}) *base.Result {
+func DoUserLogin(param *ws.Param, Username, Password, Captcha, Digits string, res map[string]interface{}) *ws.Result {
 	if len(Username) == 0 || len(Password) == 0 {
-		return base.StErrorParameter.Result("Password")
+		return ws.StErrorParameter.Result("Password")
 	}
 	v, ext, e := ws.UserDao.BaseInfoByUsername(param.SiteId, Username)
 	if e != nil {
-		return base.StErrorDb.ResultNil()
+		return ws.StErrorDb.ResultNil()
 	}
 	if !ext {
-		return base.StUsernameNotExist.Result("Username")
+		return ws.StUsernameNotExist.Result("Username")
 	}
 	if v == nil || len(v) == 0 {
-		return base.StUsernameNotExist.Result("Username")
+		return ws.StUsernameNotExist.Result("Username")
 	}
 	errTime, _ := strconv.Atoi(v["PasswordError"])
 	if errTime > 3 {
 		if Captcha == "" {
-			return base.StErrorCaptcha.Result("Captcha").Put("Val", captcha.New())
+			return ws.StErrorCaptcha.Result("Captcha").Put("Val", captcha.New())
 		} else {
 			if !captcha.VerifyString(Captcha, Digits) {
-				return base.StErrorCaptcha.Result("Captcha").Put("Val", captcha.New())
+				return ws.StErrorCaptcha.Result("Captcha").Put("Val", captcha.New())
 			}
 		}
 	}
@@ -56,11 +55,11 @@ func DoUserLogin(param *ws.Param, Username, Password, Captcha, Digits string, re
 		return UserInfoToRedis(param.SiteId, param.Ua, v, )
 	} else {
 		ws.UserDao.SetPasswordError(errTime+1, Username, param.SiteId, )
-		return base.StUserPassError.Result("Password")
+		return ws.StUserPassError.Result("Password")
 	}
 }
 
-func UserInfoToRedis(siteId int64, ua string, v map[string]string) *base.Result {
+func UserInfoToRedis(siteId int64, ua string, v map[string]string) *ws.Result {
 	delete(v, "Password")
 	delete(v, "PasswordError")
 
@@ -69,7 +68,7 @@ func UserInfoToRedis(siteId int64, ua string, v map[string]string) *base.Result 
 	tk := hex.EncodeToString(h.Sum(nil))
 	v["Token"] = tk
 
-	result := base.OK.ResultNil()
+	result := ws.OK.ResultNil()
 	result.Result = v["Id"] + "_" + tk
 	ws.TokenDao.Del(ua, v["Id"], siteId)
 	ws.TokenDao.Add(v["Id"], ua, tk, siteId)
@@ -88,12 +87,12 @@ func WebUserRegister(param *ws.Param, res map[string]interface{}) {
 	res["Status"] = r.Status
 }
 
-func doUserRegister(m *ws.Param, res map[string]interface{}) *base.Result {
+func doUserRegister(m *ws.Param, res map[string]interface{}) *ws.Result {
 	captchaId := m.String("CaptchaId")
 	captchaVal := m.String("CaptchaVal")
 	if captchaId != "" && captchaVal != "" {
 		if !captcha.VerifyString(captchaId, captchaVal) {
-			return base.StErrorCaptcha.Result(captcha.New())
+			return ws.StErrorCaptcha.Result(captcha.New())
 		}
 		Email := m.String("Email")
 		Password := m.String("Password")
@@ -104,16 +103,16 @@ func doUserRegister(m *ws.Param, res map[string]interface{}) *base.Result {
 			len(Password) < 6 || strings.Index(Email, "@") < 0 ||
 			len(Mobile) < 8 || len(Mobile) > 32 {
 			seelog.Warn("参数不合法.", m)
-			return base.StErrorParameter.Result(captcha.New())
+			return ws.StErrorParameter.Result(captcha.New())
 		}
 		uCount, unb, _ := ws.UserDao.CheckByUsername(m.SiteId, Username)
 		seelog.Info("~~~UserDao Register~~", Username, Mobile, Email)
 		if unb && uCount > 0 {
-			return base.StUsernameExist.Result(captcha.New())
+			return ws.StUsernameExist.Result(captcha.New())
 		}
 		eCount, eb, _ := ws.UserDao.CheckByEmail(m.SiteId, Email)
 		if eb && eCount > 0 {
-			return base.StEmailExist.Result(captcha.New())
+			return ws.StEmailExist.Result(captcha.New())
 		}
 		Password = UserMd5Pass(Username, Password)
 		id, ue := ws.UserDao.Add(m.SiteId, Username, Password, Email, Mobile)
@@ -132,10 +131,10 @@ func doUserRegister(m *ws.Param, res map[string]interface{}) *base.Result {
 			}
 			return rs
 		} else {
-			return base.StErrorUnknown.Result(captcha.New())
+			return ws.StErrorUnknown.Result(captcha.New())
 		}
 	} else {
 		seelog.Warn("注册参数错误:", m)
-		return base.StErrorParameter.Result(captcha.New())
+		return ws.StErrorParameter.Result(captcha.New())
 	}
 }

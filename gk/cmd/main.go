@@ -20,14 +20,14 @@ func ParamBase() {
 	ws.ParamInit(ws.EnvDev, `
 UploadDir=D:\dev\upload\
 DbDriver=mysql
-Dsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
+DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
 ImgHost=http://127.0.0.1
 ImgMaxWidth=800
 `)
 	ws.ParamInit(ws.EnvProd, `
 UploadDir=/data/upload/
 DbDriver=mysql
-Dsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
+DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
 ImgHost=http://s.ecdiy.cn
 ImgMaxWidth=800
 `)

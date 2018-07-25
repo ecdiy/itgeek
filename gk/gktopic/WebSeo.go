@@ -85,7 +85,7 @@ func init() {
 
 func WebSeoHome(ctx *gin.Context) {
 	data := make(map[string]interface{})
-	SiteId := xgin.SiteId(ctx)
+	SiteId := ws.SiteId(ctx)
 	data["list"], _ = ws.TopicDao.Top1000(SiteId, )
 	data["total"], _, _ = ws.TopicDao.Count(SiteId, )
 	e := tplHome.Execute(ctx.Writer, data)
@@ -95,7 +95,7 @@ func WebSeoHome(ctx *gin.Context) {
 }
 
 func WebSeoDetail(ctx *gin.Context) {
-	SiteId := xgin.SiteId(ctx)
+	SiteId := ws.SiteId(ctx)
 	p := ctx.Param("p")
 	pp := strings.Split(p, ",")
 	if len(pp) == 2 {
@@ -119,7 +119,7 @@ func WebSeoDetail(ctx *gin.Context) {
 
 func WebSiteMap(ctx *gin.Context) {
 	data := make(map[string]interface{})
-	data["list"], _ = ws.TopicDao.Top1000(xgin.SiteId(ctx))
+	data["list"], _ = ws.TopicDao.Top1000(ws.SiteId(ctx))
 	e := tplSiteMap.Execute(ctx.Writer, data)
 	if e != nil {
 		seelog.Error(e)
