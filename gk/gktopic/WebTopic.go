@@ -52,7 +52,7 @@ func WebDetail(param *ws.Param, res map[string]interface{}) {
 			res["thank"], _ = ws.ThankDao.List(param.SiteId, id, bu)
 		}
 		referer := param.String("referer")
-		if len(referer) > 0 {
+		if len(referer) > 0 && strings.Index(referer, "http") == 0 && len(referer) < 240 {
 			ch, chb, _ := ws.RefererDao.Check(param.SiteId, id, referer)
 			if chb && ch == 0 {
 				ws.RefererDao.Add(param.SiteId, id, referer)
