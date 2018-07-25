@@ -32,6 +32,7 @@ func Token(id int64) string {
 }
 
 func InitWeb(web *gin.Engine) {
+
 	post := func(url string, fun func(param *ws.Param, res map[string]interface{})) {
 		ws.Post(web, "/api/gk-user"+url, func(param *ws.Param, res map[string]interface{}) {
 			Verify(param.Context)

@@ -23,6 +23,7 @@ DbDriver=mysql
 DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
 ImgHost=http://127.0.0.1:9000
 ImgMaxWidth=800
+MultiSite=0
 `)
 	ws.ParamInit(ws.EnvProd, `
 UploadDir=./upload/
@@ -30,6 +31,7 @@ DbDriver=mysql
 DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
 ImgHost=http://s.ecdiy.cn
 ImgMaxWidth=800
+MultiSite=0
 `)
 
 }
@@ -37,11 +39,14 @@ ImgMaxWidth=800
 func main() {
 	ParamBase()
 	defer seelog.Flush()
+
 	ws.EnvParamSet(ws.KeyBindAddr, ":9000")
+	ws.MultiSite = ws.EnvParamInt("MultiSite", 0)
 
 	ws.InitDao()
 
 	gkuser.InitWeb(web)
+
 	gknote.InitWeb(web, gkuser.Verify)
 	gktopic.InitWeb(web, gkuser.Verify)
 	upload.InitWeb(web, gkuser.Verify)

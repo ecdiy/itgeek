@@ -9,9 +9,7 @@ import (
 
 //--所有常量
 const (
-	KeyBindAddr     = "BindAddr"
-
-	KeyDbDriverName = "DbDriverName"
+	KeyBindAddr = "BindAddr"
 
 	EnvProd = "prod"
 	EnvDev  = "dev"
@@ -44,10 +42,6 @@ func init() {
 	if profile == "" {
 		profile = "dev"
 	}
-}
-
-func IsDevEnv() bool {
-	return profile == EnvDev
 }
 
 var profile string
