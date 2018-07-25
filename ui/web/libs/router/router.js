@@ -26,7 +26,6 @@ export const routers = [
             r(() => import('@/base/home.vue'), 'topic/list,:id', ''),
             r(() => import('@/topic/detail.vue'), 'topic/detail,:id', ''),
 
-            r(() => import('@/my/own-space.vue'), 'my_ownspace', '个人主页'),
 
         ]
     },
