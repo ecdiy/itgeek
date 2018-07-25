@@ -96,25 +96,33 @@ func WebSeoHome(ctx *gin.Context) {
 }
 
 func WebSeoDetail(ctx *gin.Context) {
-	SiteId := ws.SiteId(ctx)
-	p := ctx.Param("p")
-	pp := strings.Split(p, ",")
-	if len(pp) == 2 {
-		d, b, _ := ws.TopicDao.FindById(SiteId, pp[0], pp[1])
-		if b {
-			data := make(map[string]interface{})
-			data["detail"] = d
-			data["list"], _ = ws.ReplyDao.List(SiteId, pp[0])
 
-			e := tplDetail.Execute(ctx.Writer, data)
-			if e != nil {
-				seelog.Error(e)
+	ua := GetUa(ctx)
+	if ua == "web" {
+		ctx.Data(200, "text/html;charset=utf-8", [] byte(HtmlWeb))
+	} else if ua == "h5" {
+		ctx.Data(200, "text/html;charset=utf-8", [] byte(HtmlH5))
+	} else {
+		SiteId := ws.SiteId(ctx)
+		p := ctx.Param("p")
+		pp := strings.Split(p, ",")
+		if len(pp) == 2 {
+			d, b, _ := ws.TopicDao.FindById(SiteId, pp[0], pp[1])
+			if b {
+				data := make(map[string]interface{})
+				data["detail"] = d
+				data["list"], _ = ws.ReplyDao.List(SiteId, pp[0])
+
+				e := tplDetail.Execute(ctx.Writer, data)
+				if e != nil {
+					seelog.Error(e)
+				}
+			} else {
+				seelog.Error("topic not exist,", SiteId, pp)
 			}
 		} else {
-			seelog.Error("topic not exist,", SiteId, pp)
+			seelog.Error("param error.", p)
 		}
-	} else {
-		seelog.Error("param error.", p)
 	}
 }
 

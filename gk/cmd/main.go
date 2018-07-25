@@ -18,14 +18,14 @@ var web = gin.New()
 func ParamBase() {
 
 	ws.ParamInit(ws.EnvDev, `
-UploadDir=D:\dev\upload\
+UploadDir=./upload/
 DbDriver=mysql
 DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
-ImgHost=http://127.0.0.1
+ImgHost=http://127.0.0.1:9000
 ImgMaxWidth=800
 `)
 	ws.ParamInit(ws.EnvProd, `
-UploadDir=/data/upload/
+UploadDir=./upload/
 DbDriver=mysql
 DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
 ImgHost=http://s.ecdiy.cn
@@ -49,5 +49,9 @@ func main() {
 	gkadmin.InitWeb(web)
 	web.Static("/h5dist", "./m/h5dist")
 	web.Static("/dist", "./web/dist")
+	//web.Static("/avatar", "./upload/avatar")
+	web.Static("/static", "./static")
+
+
 	web.Run(ws.EnvParam(ws.KeyBindAddr))
 }

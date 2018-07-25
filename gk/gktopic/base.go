@@ -4,6 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/ecdiy/itgeek/gk/ws"
+	"strings"
+	"os"
+	"io/ioutil"
 )
 
 func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
@@ -43,4 +46,32 @@ func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
 	web.GET("/sitemap.xml", WebSiteMap)
 
 	post("/zxPage", WebZxPage)
+	web.NoRoute(func(ctx *gin.Context) {
+		url := ctx.Request.URL.Path
+		if strings.Index(url, "/avatar/") == 0 {
+
+			p := "./upload" + url
+			_, e := os.Stat(p)
+			if e == nil {
+				bs, e := ioutil.ReadFile(p)
+				if e == nil {
+					ctx.Data(200, "image/png", bs)
+					return
+				}
+			}
+			ctx.Request.URL.Path = "/static/head-default.png"
+			web.HandleContext(ctx)
+			return
+		}
+
+		if strings.Index(url, "/p/") == 0 {
+			ua := GetUa(ctx)
+			if ua == "web" {
+				ctx.Data(200, "text/html;charset=utf-8", [] byte(HtmlWeb))
+			} else if ua == "h5" {
+				ctx.Data(200, "text/html;charset=utf-8", [] byte(HtmlH5))
+			}
+			return
+		}
+	})
 }

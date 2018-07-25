@@ -20,9 +20,12 @@ var (
 
 func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
 	DirUpload = ws.EnvParam("UploadDir")
-	ImgHost =  ws.EnvParam("ImgHost")
+	ImgHost = ws.EnvParam("ImgHost")
 	ImgMaxWidth = ws.EnvParamInt("ImgMaxWidth", 800)
 	os.MkdirAll(DirUpload, 0777)
+
+	web.Static("/upload", "./upload")
+
 	web.POST("/api/gk-upload/upload", func(ctx *gin.Context) {
 		b, _ := verify(ctx)
 		if b {
@@ -39,5 +42,7 @@ func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
 			ctx.Status(401)
 		}
 	})
+
+
 
 }
