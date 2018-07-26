@@ -4,3 +4,4 @@
 /ui/*.zip
 /*.cmd
 /gk/cmd/gk_test.go
+/*.iml
