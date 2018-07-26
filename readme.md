@@ -4,7 +4,6 @@ go get github.com/gin-gonic/gin
 go get github.com/cihub/seelog
 go get github.com/hunterhug/go_image/graphics
 go get github.com/ecdiy/itgeek
-
 ```
  
  ```angular2html
@@ -13,7 +12,7 @@ go get github.com/ecdiy/itgeek
 ```
 
 
-详情介绍：[http://itgeek.top] 
+详情介绍：[http://itgeek.top/p/topic/list,300,308,1] 
 
 
 #### 目录结构

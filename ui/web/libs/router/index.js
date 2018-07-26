@@ -12,6 +12,10 @@ export const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
+    //baidu 统计代码
+    if (to.path && _hmt) {
+        _hmt.push(['_trackPageview', '/#' + to.fullPath]);
+    }
     // var fd = false;
     // var pos = 0;
     // for (var i = 0; i < routers.length; i++) {
