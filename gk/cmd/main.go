@@ -11,6 +11,8 @@ import (
 	"github.com/ecdiy/itgeek/gk/upload"
 	"github.com/ecdiy/itgeek/gk/ws"
 	"github.com/ecdiy/itgeek/gk/gkadmin"
+	"os"
+	"strings"
 )
 
 var web = gin.New()
@@ -36,7 +38,20 @@ MultiSite=0
 
 }
 
+var BaseDir string
+
+func init() {
+	bin := os.Args[0]
+	idx := strings.LastIndex(bin, string(os.PathSeparator))
+	if idx > 0 {
+		BaseDir = bin[0 : idx+1]
+	} else {
+		BaseDir, _ = os.Getwd()
+	}
+}
+
 func main() {
+
 	ParamBase()
 	defer seelog.Flush()
 
@@ -52,11 +67,10 @@ func main() {
 	upload.InitWeb(web, gkuser.Verify)
 
 	gkadmin.InitWeb(web)
-	web.Static("/h5dist", "./m/h5dist")
-	web.Static("/dist", "./web/dist")
-	//web.Static("/avatar", "./upload/avatar")
-	web.Static("/static", "./static")
+	web.Static("/h5dist", BaseDir+"/m/h5dist")
+	web.Static("/dist", BaseDir+"/web/dist")
+	web.Static("/static", BaseDir+"/static")
 
-	seelog.Info("version:0.0.1 (itgeek.top)")
+	seelog.Info("version:0.0.1 (itgeek.top) BaseDir=", BaseDir)
 	web.Run(ws.EnvParam(ws.KeyBindAddr))
 }

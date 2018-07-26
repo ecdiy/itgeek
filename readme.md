@@ -26,7 +26,6 @@ go get github.com/ecdiy/itgeek
       tools/post-update     编译参考，可以放在.git/hooks/ 在push代码后自动编译，有前后端的编译,ITGeek.top网站用的自动发布脚本，有需要的可以参考。
       tools/nginx-dev.conf  开发时nginx配置
       tools/post-update     开发环境nginx配置
-         
 ```
 
 #### 其它工具
@@ -46,5 +45,10 @@ geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0
 以上是默认值，如果与之一样可以不用配置
 ```
 
+#### 数据库增量升级: 
+/db/geek.sql是当前版本下的数据库脚本，如果需要做增量升级的，参数这个主题
+[http://www.itgeek.top/p/topic/detail,32,10021]
+ 
+#### 使用过程有问题请到 [http://www.itgeek.top]相应的板块反馈，截图。
 
 QQ群：620063196
