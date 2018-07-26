@@ -13,8 +13,8 @@ export const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     //baidu 统计代码
-    if (to.path && _hmt) {
-        _hmt.push(['_trackPageview', '/#' + to.fullPath]);
+    if (to.path && window._hmt) {
+        _hmt.push(['_trackPageview', to.fullPath]);
     }
     // var fd = false;
     // var pos = 0;
@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
     //         window.goUrl = '#' + to.path;
     //         next({path: '/user/login'});
     //     } else {
-            next();
+    next();
     //     }
     // } else {
     //     //  next({path: '/404'});
