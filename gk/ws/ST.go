@@ -1,10 +1,5 @@
 package ws
 
-import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-)
-
 var (
 	/**
 	NE  : NOT EXIST
@@ -53,12 +48,17 @@ func (c *ST) Result(result string) *Result {
 	return &Result{Result: result, Status: &ST{Code: c.Code, Msg: c.Msg}}
 }
 
-func (c *ST) OutJSON(gin *gin.Context, result interface{}) {
-	gin.Header("Content-Type", "application/json; charset=utf-8")
-	gin.JSON(http.StatusOK, map[string]interface{}{"Result": result, "Status": c})
+type Result struct {
+	Status *ST
+	Result string
+	Param  map[string]string
 }
 
-func (c *ST) To(m map[string]interface{}) {
-	m["Status"] = c
-	//return &Result{Status: &ST{Code: c.Code, Msg: c.Msg}}
+//--
+func (c *Result) Put(key, val string) *Result {
+	if c.Param == nil {
+		c.Param = make(map[string]string)
+	}
+	c.Param[key] = val
+	return c
 }
