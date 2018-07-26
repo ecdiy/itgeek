@@ -8,7 +8,6 @@ var (
 	AppendDao        = &DaoTopicAppend{}
 )
 
-
 type DaoTopicCategory struct {
 	List func(SiteId int64) ([]map[string]string, error) `select Id,Name,ParentId,ItemCount from Category where SiteId=?`
 
@@ -22,7 +21,7 @@ type DaoTopicCategory struct {
 }
 
 type DaoTopic struct {
-	FindBase func(SiteId, Id int64) (map[string]string, bool, error) `select Title,UserId from Topic where SiteId=? and Id=?`
+	FindBase func(SiteId, Id int64) (map[string]string, bool, error) `select Title,UserId,Id from Topic where SiteId=? and Id=?`
 
 	UpCategory func(toId, catId, siteId int64) (int64, error) `update Topic set CategoryId=? where CategoryId=? and SiteId=?`
 
@@ -93,8 +92,6 @@ type DaoTopicAppend struct {
 	List func(SiteId, TopicId int64) ([]map[string]string, error) `select Id,fmt(CreateAt)CreateAt,AppendText from TopicAppend where SiteId=? and TopicId=?`
 
 	Count func(SiteId, TopicId int64) (int64, bool, error) `select count(*) from TopicAppend where SiteId=? and TopicId=?`
-
-	FindAuthor func(TopicId int64) (int64, bool, error) `select UserId from Topic where Id=?`
 
 	Add func(SiteId, TopicId int64, AppendText string) (int64, error) `INSERT INTO  TopicAppend(SiteId,TopicId,AppendText,CreateAt)VALUES(?,?,?,now())`
 }

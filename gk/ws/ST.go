@@ -16,12 +16,12 @@ var (
 	StErrorParameter = st(1, "参数错误")
 	StErrorToken     = st(2, "用户未登录，Token失效")
 	StMax            = st(3, "已达最大记录数")
-
-	StExist        = st(5, "已存在")
-	StNotExist     = st(6, "不存在")
-	StErrorDb      = st(7, "数据逻辑错误")
-	StErrorCaptcha = st(8, "认证码错误")
-	StErrorUnknown = st(9, "未知错误")
+	StScoreLack      = st(4, "积分不够")
+	StExist          = st(5, "已存在")
+	StNotExist       = st(6, "不存在")
+	StErrorDb        = st(7, "数据逻辑错误")
+	StErrorCaptcha   = st(8, "认证码错误")
+	StErrorUnknown   = st(9, "未知错误")
 
 	StVerifyFail = st(12, "数据认证失败")
 

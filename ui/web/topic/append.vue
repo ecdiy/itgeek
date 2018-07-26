@@ -1,6 +1,23 @@
 <template>
     <div>
+        <card>
+            <Breadcrumb>
+                <BreadcrumbItem>
+                    <router-link to="/">首页</router-link>
+                </BreadcrumbItem>
+                <!--<BreadcrumbItem>-->
+                <!--<router-link :to="'/p/topic/list,'+topic.ParentId+',0,1'">{{topic.ParentCatName}}-->
+                <!--</router-link>-->
+                <!--</BreadcrumbItem>-->
+                <BreadcrumbItem>
+                    <router-link :to="'/p/topic/detail,' + topicId + ',' + userId">
+                        {{title}}
+                    </router-link>
+                </BreadcrumbItem>
+            </Breadcrumb>
+        </card>
         <Card shadow>
+            <!--<span slot=""></span>-->
             <textarea class='tinymce-textarea' id="tinymceEditer"></textarea>
             <Button @click="saveGoods">保存</Button>
             <Spin fix v-if="spinShow">
@@ -12,7 +29,7 @@
             <span slot="title">关于为主题创建附言</span>
             请在确有必要的情况下再使用此功能为原主题补充信息<br>
             每个主题至多可以附加 3 条附言<br>
-            创建附言价格为每千字 20
+            创建附言价格为 20
         </Card>
     </div>
 </template>
@@ -22,18 +39,22 @@
 
     export default {
         data() {
-            return {fm: {}, imgParam: {}, spinShow: true, Id: ''};
+            return {fm: {}, imgParam: {}, spinShow: true, topicId: '', userId: '', title: ''};
         },
         methods: {
             init() {
-                this.Id = window.location.pathname.split[1];
-
-                this.ajax('/gk-topic/topicBase', {id: this.id}, (r, th) => {
-                    th.topic = r.Topic;
-                    th.replyList = r.Reply;
-                    th.weiboUrl += '&title=' + encodeURIComponent(th.topic.Title);
-                })
-
+                var p = window.location.pathname.split(",")
+                this.topicId = p[1];
+                this.userId = p[2];
+                var t = window.document.title;
+                var idx = t.indexOf(":");
+                if (idx > 0) {
+                    this.title = t.substr(idx + 1)
+                } else {
+                    this.ajax('/gk-topic/topicBase', {Id: this.topicId}, (r, th) => {
+                        th.title = r.base.Title;
+                    })
+                }
                 this.$nextTick(() => {
                     let vm = this;
                     let height = document.body.offsetHeight - 300;
@@ -78,12 +99,12 @@
                 if (idx > 0) {
                     html = html.substr(0, idx)
                 }
-                this.fm.SourceType = 'Html';
-                this.fm.Body = html;
-                this.fm.Id = this.Id
-                this.ajax("/gk-topic/append", this.fm, function (d, th) {
+                this.fm.AppendText = html;
+                this.fm.TopicId = this.topicId
+                this.ajax("/gk-topic/topicAppend", this.fm, (d, th) => {
                     localStorage.editorContent = "";
-                    th.$router.replace('/')
+                    gk.user.Score = d.score;
+                    th.$router.replace('/p/topic/detail,' + th.topicId + ',' + th.userId)
                 });
             },
 

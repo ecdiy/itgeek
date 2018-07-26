@@ -9,9 +9,7 @@ import (
 )
 
 func WebAdd(auth *ws.Auth) {
-	sc, _, _ := ws.UserDao.Score(auth.SiteId, auth.UserId)
-	if sc < 0 {
-		auth.Out["error"] = "积分不够，不能创建"
+	if auth.ScoreLack() {
 		return
 	}
 
@@ -23,7 +21,7 @@ func WebAdd(auth *ws.Auth) {
 	c, _, _ := ws.TopicDao.CountByUserId(auth.SiteId, auth.UserId)
 	sId := fmt.Sprint(Id)
 
-	auth.Out["Score"] = gkuser.UpCount(&ws.UpReq{UserId: auth.UserId, Type: "Topic", Val: c, Fee: ws.GetSoreRule(auth.SiteId).Topic,
+	auth.Out["ScoreLack"] = gkuser.UpCount(&ws.UpReq{UserId: auth.UserId, Type: "Topic", Val: c, Fee: ws.GetSoreRule(auth.SiteId).Topic,
 		ScoreType: "创建主题", EntityId: sId, SiteId: auth.SiteId,
 		ScoreDesc: `创建主题 › <go onclick="vgo('/p/topic/detail,` + sId + `,` + fmt.Sprint(auth.UserId) + `',this)">` + auth.String("Title") + "</go>"})
 
@@ -90,28 +88,33 @@ func WebTopicHot(web *ws.Web) {
 }
 
 func WebTopicBase(web *ws.Web) {
-	//res["topicTitle"]
-	//web.Out["topicTitle"]=ws.AppendDao.
 	web.Out["base"], _, _ = ws.TopicDao.FindBase(web.SiteId, web.Int64("Id"))
 }
 
-func WebAppend(web *ws.Auth) {
-	id := web.Int64("TopicId")
-	at := web.String("AppendText")
-	if id == 0 || len(at) == 0 {
-		web.ST(ws.StErrorParameter)
+func WebAppend(auth *ws.Auth) {
+	if auth.ScoreLack() {
 		return
 	}
-	author, _, _ := ws.AppendDao.FindAuthor(id)
-	if author == web.UserId {
-		c, cb, _ := ws.AppendDao.Count(web.SiteId, id)
+	id := auth.Int64("TopicId")
+	at := auth.String("AppendText")
+	if id == 0 || len(at) == 0 {
+		auth.ST(ws.StErrorParameter)
+		return
+	}
+	base, _, _ := ws.TopicDao.FindBase(auth.SiteId, id)
+
+	if base["UserId"] == fmt.Sprint(auth.UserId) {
+		c, cb, _ := ws.AppendDao.Count(auth.SiteId, id)
 		if cb && c < 3 {
-			ws.AppendDao.Add(web.SiteId, id, at)
+			appId, _ := ws.AppendDao.Add(auth.SiteId, id, at)
+			auth.Out["Id"] = appId
+			_, auth.Out["score"], _ = gkuser.ChangeScore(auth.SiteId, "append:"+fmt.Sprint(appId), "创建主题附言",
+				"创建了附言 > "+topicLink(base["Id"], base["UserId"], base["Title"]), -20, auth.UserId)
 		} else {
-			web.ST(ws.StMax)
+			auth.ST(ws.StMax)
 		}
 	} else {
-		web.ST(ws.StErrorParameter)
+		auth.ST(ws.StErrorParameter)
 		return
 	}
 }

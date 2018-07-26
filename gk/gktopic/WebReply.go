@@ -8,9 +8,7 @@ import (
 )
 
 func WebReply(auth *ws.Auth) {
-	sc, _, _ := ws.UserDao.Score(auth.SiteId, auth.UserId)
-	if sc < 0 {
-		auth.Out["error"] = "积分不够，不能回复"
+	if auth.ScoreLack() {
 		return
 	}
 
@@ -48,16 +46,14 @@ func WebReply(auth *ws.Auth) {
 		})
 
 	}
-	auth.Out["Score"], _, _ = ws.UserDao.Score(auth.SiteId, auth.UserId)
+	auth.Out["ScoreLack"], _, _ = ws.UserDao.Score(auth.SiteId, auth.UserId)
 }
 
-func topicLink(topicId, userId, title string) string {
-	return ` <a onclick="vgo('/p/topic/detail,` + topicId + `,` + userId + `',this)">` + title + `</a> `
-}
-func memberLink(un string) string {
-	return ` <a onclick="vgo('/p/member/` + un + `')">` + un + `</a> `
-}
+
 func WebTopicReplyThank(auth *ws.Auth) {
+	if auth.ScoreLack() {
+		return
+	}
 	rId := auth.Int64("ReplyId")
 	replyInfo, fd, fdErr := ws.ReplyDao.Get(auth.SiteId, rId)
 	if !fd || fdErr != nil {

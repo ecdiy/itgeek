@@ -9,8 +9,6 @@ import (
 	"strings"
 )
 
-
-
 type Web struct {
 	param, Out map[string]interface{}
 	Ua         string
@@ -53,6 +51,15 @@ type Auth struct {
 
 func (p *Auth) Username() string {
 	return fmt.Sprint(p.auth["Username"])
+}
+
+func (p *Auth) ScoreLack() bool { //检查积分
+	sc, _, _ := UserDao.Score(p.SiteId, p.UserId)
+	if sc < 0 {
+		p.ST(StScoreLack)
+		return true
+	}
+	return false
 }
 
 //--

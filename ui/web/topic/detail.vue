@@ -23,7 +23,7 @@
                         <small class="gray">
                             <router-link :to="'/p/member/'+topic.Username">{{topic.Username}}</router-link>
 
-                            <go :to="'topic/append,'+id" :title="'增加附言:'+topic.Title">APPEND</go>
+                            <go v-if="appendList && appendList.length<3" :to="'topic/append,'+id+','+userId" :title="'增加附言:'+topic.Title">APPEND</go>
                         </small>
                     </Col>
                     <Col span="6">
@@ -111,7 +111,7 @@
             return {
                 thank: [], fm: {}, topic: {}, gk: window.gk, id: '', replyList: [], favStatus: -1,
                 weiboUrl: 'https://service.weibo.com/share/share.php?url=' + encodeURIComponent(window.location),
-                appendList: []
+                appendList: [], userId: 0
             }
         }, created() {
             vm.$on("data", (p) => {
@@ -126,7 +126,8 @@
             }, init() {
                 var hash = window.location.pathname;
                 var p = hash.split(",")
-                this.id = p[1]
+                this.id = p[1];
+                this.userId = p[2];
                 this.ajax('/gk-topic/detail', {id: this.id, uId: p[2], referer: document.referrer}, (r, th) => {
                     th.topic = r.Topic;
                     th.replyList = r.Reply;
