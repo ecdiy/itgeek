@@ -51,6 +51,9 @@ export const routers = [
             r(() => import('@/my/LoginAward'), 'my_LoginAward', '领取今日登录奖励'),
             r(() => import('@/user/topPlayer'), 'user_topPlayer', '社区消费排行榜'),
             r(() => import('@/my/msg.vue'), 'my_msg', '消息'),
+
+            r(() => import('@/topic/append.vue'), 'topic/append,:id', '增加附言'),
+
         ]
     },
     {

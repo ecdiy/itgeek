@@ -15,7 +15,6 @@ go get github.com/ecdiy/itgeek
 
 详情介绍：[http://itgeek.top] 
 
-QQ群：620063196
 
 #### 目录结构
 ```angular2html
@@ -35,8 +34,6 @@ QQ群：620063196
 
 #### 参数说明
 ```angular2html
-
-
 BindAddr=:9000
 UploadDir=./upload/  上传图片的目录
 DbDriver=mysql       数据库驱动名称
@@ -48,3 +45,6 @@ geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0
 
 以上是默认值，如果与之一样可以不用配置
 ```
+
+
+QQ群：620063196

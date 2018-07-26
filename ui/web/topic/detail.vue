@@ -22,6 +22,8 @@
                         <h2>{{topic.Title}}</h2>
                         <small class="gray">
                             <router-link :to="'/p/member/'+topic.Username">{{topic.Username}}</router-link>
+
+                            <go :to="'topic/append,'+id" :title="'增加附言:'+topic.Title">APPEND</go>
                         </small>
                     </Col>
                     <Col span="6">
@@ -33,6 +35,14 @@
             <card>
                 <div class="markdown-body" v-html="topic.Body"></div>
             </card>
+
+            <div v-for="(it,idx) in appendList" class="markdown-body">
+                <card>
+                    <span slot="title">第 {{idx+1}} 条附言  ·  {{it.CreateAt}}</span>
+                    <div v-html="it.AppendText"></div>
+                </card>
+            </div>
+
             <div class="small" style="padding:5px 10px;border-radius: 4px;background-color:#e0e0e0; margin: 10px">
                     <span v-if="gk.login">
                         <a @click="doFav" v-if="favStatus==0">加入收藏</a>
@@ -100,7 +110,8 @@
         data() {
             return {
                 thank: [], fm: {}, topic: {}, gk: window.gk, id: '', replyList: [], favStatus: -1,
-                weiboUrl: 'https://service.weibo.com/share/share.php?url=' + encodeURIComponent(window.location)
+                weiboUrl: 'https://service.weibo.com/share/share.php?url=' + encodeURIComponent(window.location),
+                appendList: []
             }
         }, created() {
             vm.$on("data", (p) => {

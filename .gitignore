@@ -3,3 +3,4 @@
 /ui/package-lock.json
 /ui/*.zip
 /*.cmd
+/gk/cmd/gk_test.go
