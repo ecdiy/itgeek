@@ -4,45 +4,45 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebMsgList(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["totalAll"], _, _ = ws.MsgDao.Count(param.SiteId, userId)
-	res["totalUnread"], _, _ = ws.MsgDao.CountUnread(param.SiteId, userId)
-	//res["totalReply"], _, _ = MsgDao.CountByType(userId, "主题回复")
+func WebMsgList(auth *ws.Auth) {
+	auth.Out["totalAll"], _, _ = ws.MsgDao.Count(auth.SiteId, auth.UserId)
+	auth.Out["totalUnread"], _, _ = ws.MsgDao.CountUnread(auth.SiteId, auth.UserId)
+	//auth.Out["totalReply"], _, _ = MsgDao.CountByType(auth.UserId, "主题回复")
 
-	mType := param.String("mType")
+	mType := auth.String("mType")
 	if mType == "all" {
-		res["msgList"], _ = ws.MsgDao.List(param.SiteId, userId, param.Start(20))
-		res["total"] = res["totalAll"]
+		auth.Out["msgList"], _ = ws.MsgDao.List(auth.SiteId, auth.UserId, auth.Start())
+		auth.Out["total"] = auth.Out["totalAll"]
 	}
 	if mType == "unRead" {
-		res["msgList"], _ = ws.MsgDao.ListUnread(param.SiteId, userId, param.Start(20))
-		res["total"] = res["totalUnread"]
+		auth.Out["msgList"], _ = ws.MsgDao.ListUnread(auth.SiteId, auth.UserId, auth.Start())
+		auth.Out["total"] = auth.Out["totalUnread"]
 	}
 	//if mType == "reply" {
-	//	res["msgList"], _ = MsgDao.ListByType(userId, "主题回复", param.Start(20))
-	//	res["total"] = res["totalAll"]
+	//	auth.Out["msgList"], _ = MsgDao.ListByType(auth.UserId, "主题回复", auth.Start(20))
+	//	auth.Out["total"] = auth.Out["totalAll"]
 	//}
 }
 
-func WebMsgDel(userId int64, param *ws.Param, res map[string]interface{}) {
+func WebMsgDel(auth *ws.Auth) {
 
-	res["row"], _ = ws.MsgDao.Del(param.SiteId, param.Int64("id", 0), userId)
-	ws.UserDao.UpMsg(userId, userId, param.SiteId)
-	res["gkUser"], _, _ = ws.UserDao.BaseInfo(param.SiteId, userId)
-	res["totalAll"], _, _ = ws.MsgDao.Count(param.SiteId, userId)
-	res["totalUnread"], _, _ = ws.MsgDao.CountUnread(param.SiteId, userId)
+	auth.Out["row"], _ = ws.MsgDao.Del(auth.SiteId, auth.Int64("id"), auth.UserId)
+	ws.UserDao.UpMsg(auth.UserId, auth.UserId, auth.SiteId)
+	auth.Out["gkUser"], _, _ = ws.UserDao.BaseInfo(auth.SiteId, auth.UserId)
+	auth.Out["totalAll"], _, _ = ws.MsgDao.Count(auth.SiteId, auth.UserId)
+	auth.Out["totalUnread"], _, _ = ws.MsgDao.CountUnread(auth.SiteId, auth.UserId)
 }
 
-func WebMsgRead(userId int64, param *ws.Param, res map[string]interface{}) {
-	id := param.Int64("id", 0)
-	gId, gb, _ := ws.MsgDao.FindGroupId(param.SiteId, userId, id)
+func WebMsgRead(auth *ws.Auth) {
+	id := auth.Int64("id")
+	gId, gb, _ := ws.MsgDao.FindGroupId(auth.SiteId, auth.UserId, id)
 	if gb {
 		if gId > 0 {
-			res["row"], _ = ws.MsgDao.ReadGroup(param.SiteId, userId, gId)
+			auth.Out["row"], _ = ws.MsgDao.ReadGroup(auth.SiteId, auth.UserId, gId)
 		} else {
-			res["row"], _ = ws.MsgDao.Read(param.SiteId, userId, id)
+			auth.Out["row"], _ = ws.MsgDao.Read(auth.SiteId, auth.UserId, id)
 		}
 	}
-	ws.UserDao.UpMsg(userId, userId, param.SiteId)
-	res["gkUser"], _, _ = ws.UserDao.BaseInfo(param.SiteId, userId)
+	ws.UserDao.UpMsg(auth.UserId, auth.UserId, auth.SiteId)
+	auth.Out["gkUser"], _, _ = ws.UserDao.BaseInfo(auth.SiteId, auth.UserId)
 }

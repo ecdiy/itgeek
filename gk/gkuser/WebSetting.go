@@ -5,26 +5,26 @@ import (
 	"github.com/cihub/seelog"
 )
 
-func WebSite(param *ws.Param, res map[string]interface{}) {
-	res["site"], _, _ = ws.KvDao.Get(param.SiteId, "BaseInfo")
-	isLogin, uId := Verify(param.Context)
-	res["SiteId"] = param.SiteId
+func WebSite(web *ws.Web) {
+	web.Out["site"], _, _ = ws.KvDao.Get(web.SiteId, "BaseInfo")
+	isLogin, uId := Verify(web.Context)
+	web.Out["SiteId"] = web.SiteId
 	if isLogin {
-		mm, bx, _ := ws.UserDao.BaseInfo(param.SiteId, uId)
+		mm, bx, _ := ws.UserDao.BaseInfo(web.SiteId, uId)
 		if bx {
-			res["Info"] = mm
+			web.Out["Info"] = mm
 		} else {
 			seelog.Warn("not find info.", uId)
 		}
-		res["Login"] = true
+		web.Out["Login"] = true
 	} else {
-		res["Login"] = false
+		web.Out["Login"] = false
 	}
 }
 
-func WebSettingSave(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["row"], _ = ws.UserDao.Setting(param.String("EditType"), param.String("Info"), param.Int64("Privacy", 0), userId, param.SiteId)
+func WebSettingSave(auth *ws.Auth) {
+	auth.Out["row"], _ = ws.UserDao.Setting(auth.String("EditType"), auth.String("Info"), auth.Int64("Privacy"), auth.UserId, auth.SiteId)
 }
-func WebSettingGet(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["row"], _, _ = ws.UserDao.SettingGet(param.SiteId, userId)
+func WebSettingGet(auth *ws.Auth) {
+	auth.Out["row"], _, _ = ws.UserDao.SettingGet(auth.SiteId, auth.UserId)
 }

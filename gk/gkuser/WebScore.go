@@ -21,23 +21,21 @@ func GenerateRangeNum(min, max int) int64 {
 	return int64(rand.Intn(max-min) + min)
 }
 
-func WebScoreLoginAward(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["LoginAward"], _, _ = ws.UserDao.LoginAward(param.SiteId, userId)
+func WebScoreLoginAward(auth *ws.Auth) {
+	auth.Out["LoginAward"], _, _ = ws.UserDao.LoginAward(auth.SiteId, auth.UserId)
 }
-func WebScoreLoginAwardDo(userId int64, param *ws.Param, res map[string]interface{}) {
+func WebScoreLoginAwardDo(auth *ws.Auth) {
 	val := GenerateRangeNum(5, 50)
 	t := time.Now().Format("2006-01-02")
-	id, score, _ := ChangeScore(param.SiteId, t, "每日登录奖励", t+"的每日登录奖励", val, userId)
+	id, score, _ := ChangeScore(auth.SiteId, t, "每日登录奖励", t+"的每日登录奖励", val, auth.UserId)
 	if id > 0 {
-		ws.UserDao.LoginAwardDo(param.SiteId, userId)
+		ws.UserDao.LoginAwardDo(auth.SiteId, auth.UserId)
 	}
-	res["Id"] = id
-	res["Score"] = score
+	auth.Out["Id"] = id
+	auth.Out["Score"] = score
 }
 
-func WebScoreLogList(userId int64, param *ws.Param, res map[string]interface{}) {
-	page := param.Int64("page", 1)
-	page = (page - 1) * 20
-	res["total"], _, _ = ws.ScoreLog.Count(param.SiteId, userId)
-	res["list"], _ = ws.ScoreLog.List(param.SiteId, userId, page)
+func WebScoreLogList(auth *ws.Auth) {
+	auth.Out["total"], _, _ = ws.ScoreLog.Count(auth.SiteId, auth.UserId)
+	auth.Out["list"], _ = ws.ScoreLog.List(auth.SiteId, auth.UserId, auth.Start())
 }

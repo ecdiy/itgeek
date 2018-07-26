@@ -11,18 +11,17 @@ import (
 
 func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
 
-	post := func(url string, fun func(param *ws.Param, res map[string]interface{})) {
-		ws.Post(web, "/api/gk-topic"+url, func(param *ws.Param, res map[string]interface{}) {
-			verify(param.Context)
-			fun(param, res)
-		})
+	auth := func(url string, fun func(param *ws.Auth)) {
+		ws.WebAuth(web, "/api/gk-topic"+url, fun, verify)
 	}
-	auth := func(url string, fun func(UserId int64, param *ws.Param, res map[string]interface{})) {
-		ws.Auth(web, "/api/gk-topic"+url, fun, verify)
+	post := func(url string, fun func(param *ws.Web)) {
+		ws.WebPost(web, "/api/gk-topic"+url, fun)
 	}
 
-	auth("/save", WebAdd)
 	post("/detail", WebDetail)
+	post("/topicBase", WebTopicBase)
+
+	auth("/save", WebAdd)
 
 	post("/topic/hot", WebTopicHot)
 
@@ -39,13 +38,16 @@ func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
 	auth("/follow", WebFollow)
 	auth("/followList", WebFollowList)
 	auth("/followStatus", WebFollowStatus)
+	//--
 
+	auth("/topicAppend", WebAppend)
 	//---SEO
 	web.GET("/", WebHome)
 	web.GET("/p/topic/detail,:p", WebSeoDetail)
 	web.GET("/sitemap.xml", WebSiteMap)
 
 	post("/zxPage", WebZxPage)
+
 	web.NoRoute(func(ctx *gin.Context) {
 		url := ctx.Request.URL.Path
 		if strings.Index(url, "/avatar/") == 0 {

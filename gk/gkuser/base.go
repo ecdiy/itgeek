@@ -33,14 +33,14 @@ func Token(id int64) string {
 
 func InitWeb(web *gin.Engine) {
 
-	post := func(url string, fun func(param *ws.Param, res map[string]interface{})) {
-		ws.Post(web, "/api/gk-user"+url, func(param *ws.Param, res map[string]interface{}) {
-			Verify(param.Context)
-			fun(param, res)
+	post := func(url string, fun func(web *ws.Web)) {
+		ws.WebPost(web, "/api/gk-user"+url, func(web *ws.Web) {
+			Verify(web.Context)
+			fun(web)
 		})
 	}
-	auth := func(url string, fun func(UserId int64, param *ws.Param, res map[string]interface{})) {
-		ws.Auth(web, "/api/gk-user"+url, fun, Verify)
+	auth := func(url string, fun func(auth *ws.Auth)) {
+		ws.WebAuth(web, "/api/gk-user"+url, fun, Verify)
 	}
 	//xgin.SpAjax(base.IsDevEnv(), "/sp", db, web, UserFilter, "Sp")
 

@@ -5,31 +5,28 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebFavList(UserId int64, param *ws.Param, res map[string]interface{}) {
-	page := param.Int64("page", 1)
-	if page >= 1 {
-		page = (page - 1) * 20
-	}
-	res["FavList"], _ = ws.FavDao.List(param.SiteId, UserId, page)
+func WebFavList(auth *ws.Auth) {
+
+	auth.Out["FavList"], _ = ws.FavDao.List(auth.SiteId, auth.UserId, auth.Start())
 }
 
-func WebFav(UserId int64, param *ws.Param, res map[string]interface{}) {
-	id := param.String("id")
-	fc, _, _ := ws.FavDao.Exist(param.SiteId, UserId, id)
+func WebFav(auth *ws.Auth) {
+	id := auth.String("id")
+	fc, _, _ := ws.FavDao.Exist(auth.SiteId, auth.UserId, id)
 	doType := 1
 	if fc == 1 {
-		ws.FavDao.Del(param.SiteId, UserId, id)
+		ws.FavDao.Del(auth.SiteId, auth.UserId, id)
 		doType = 0
 	} else {
-		ws.FavDao.Save(param.SiteId, UserId, id)
+		ws.FavDao.Save(auth.SiteId, auth.UserId, id)
 	}
-	tfc, _, _ := ws.FavDao.Count(param.SiteId, UserId)
+	tfc, _, _ := ws.FavDao.Count(auth.SiteId, auth.UserId)
 
-	gkuser.UpCount(&ws.UpReq{UserId: UserId, Type: "Fav", Val: tfc, Fee: int64(0), SiteId: param.SiteId,})
-	res["TopicFavCount"] = tfc
-	res["Fav"] = doType
+	gkuser.UpCount(&ws.UpReq{UserId: auth.UserId, Type: "Fav", Val: tfc, Fee: int64(0), SiteId: auth.SiteId,})
+	auth.Out["TopicFavCount"] = tfc
+	auth.Out["Fav"] = doType
 }
 
-func WebFavStatus(UserId int64, param *ws.Param, res map[string]interface{}) {
-	res["Fav"], _, _ = ws.FavDao.Exist(param.SiteId, UserId, param.Int64("id", 0))
+func WebFavStatus(auth *ws.Auth) {
+	auth.Out["Fav"], _, _ = ws.FavDao.Exist(auth.SiteId, auth.UserId, auth.Int64("id"))
 }

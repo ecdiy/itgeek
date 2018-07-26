@@ -5,7 +5,9 @@ var (
 	TopicCategoryDao = &DaoTopicCategory{}
 	FavDao           = &DaoFav{}
 	FollowDao        = &DaoFollow{}
+	AppendDao        = &DaoTopicAppend{}
 )
+
 
 type DaoTopicCategory struct {
 	List func(SiteId int64) ([]map[string]string, error) `select Id,Name,ParentId,ItemCount from Category where SiteId=?`
@@ -19,9 +21,9 @@ type DaoTopicCategory struct {
 	UpName func(name string, Id, SiteId int64) (int64, error) `update Category set Name=? where Id=? and SiteId=? `
 }
 
-
-
 type DaoTopic struct {
+	FindBase func(SiteId, Id int64) (map[string]string, bool, error) `select Title,UserId from Topic where SiteId=? and Id=?`
+
 	UpCategory func(toId, catId, siteId int64) (int64, error) `update Topic set CategoryId=? where CategoryId=? and SiteId=?`
 
 	Find          func(id interface{}) (map[string]string, bool, error)   `select Id,Title,UserId from Topic where Id=?`
@@ -85,4 +87,14 @@ type DaoFollow struct {
 								from Topic t left join Category c on t.CategoryId=c.Id 
 								where t.SiteId=? and t.UserId in (select FollowId from Follow where UserId=?)
 								order by ifnull(t.ReplyTime,t.CreateAt) desc limit ?,20`
+}
+
+type DaoTopicAppend struct {
+	List func(SiteId, TopicId int64) ([]map[string]string, error) `select Id,fmt(CreateAt)CreateAt,AppendText from TopicAppend where SiteId=? and TopicId=?`
+
+	Count func(SiteId, TopicId int64) (int64, bool, error) `select count(*) from TopicAppend where SiteId=? and TopicId=?`
+
+	FindAuthor func(TopicId int64) (int64, bool, error) `select UserId from Topic where Id=?`
+
+	Add func(SiteId, TopicId int64, AppendText string) (int64, error) `INSERT INTO  TopicAppend(SiteId,TopicId,AppendText,CreateAt)VALUES(?,?,?,now())`
 }

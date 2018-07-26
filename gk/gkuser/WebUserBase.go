@@ -19,13 +19,13 @@ func UserMd5Pass(Username, pass string) string {
 	h.Write([]byte( Username + "," + pass))
 	return hex.EncodeToString(h.Sum(nil))
 }
-func WebUserLogin(param *ws.Param, res map[string]interface{}) {
-	r := DoUserLogin(param, param.String("Username"), param.String("Password"), param.String("Captcha"), param.String("Digits"), res)
-	res["Result"] = r.Result
-	res["Status"] = r.Status
+func WebUserLogin(web *ws.Web) {
+	r := DoUserLogin(web, web.String("Username"), web.String("Password"), web.String("Captcha"), web.String("Digits"), web.Out)
+	web.Out["Result"] = r.Result
+	web.Out["Status"] = r.Status
 }
 
-func DoUserLogin(param *ws.Param, Username, Password, Captcha, Digits string, res map[string]interface{}) *ws.Result {
+func DoUserLogin(param *ws.Web, Username, Password, Captcha, Digits string, res map[string]interface{}) *ws.Result {
 	if len(Username) == 0 || len(Password) == 0 {
 		return ws.StErrorParameter.Result("Password")
 	}
@@ -80,14 +80,14 @@ func UserInfoToRedis(siteId int64, ua string, v map[string]string) *ws.Result {
 
 //-----
 
-func WebUserRegister(param *ws.Param, res map[string]interface{}) {
-	r := doUserRegister(param, res)
-	res["Result"] = r.Result
-	res["Param"] = r.Param
-	res["Status"] = r.Status
+func WebUserRegister(param *ws.Web) {
+	r := doUserRegister(param, param)
+	param.Out["Result"] = r.Result
+	param.Out["Param"] = r.Param
+	param.Out["Status"] = r.Status
 }
 
-func doUserRegister(m *ws.Param, res map[string]interface{}) *ws.Result {
+func doUserRegister(m *ws.Web, param *ws.Web) *ws.Result {
 	captchaId := m.String("CaptchaId")
 	captchaVal := m.String("CaptchaVal")
 	if captchaId != "" && captchaVal != "" {
@@ -120,7 +120,7 @@ func doUserRegister(m *ws.Param, res map[string]interface{}) *ws.Result {
 		if ue == nil {
 			v, _, _ := ws.UserDao.BaseInfo(m.SiteId, id)
 			rs := UserInfoToRedis(m.SiteId, m.Ua, v)
-			res["Info"] = v
+			param.Out["Info"] = v
 			ws.KvDao.UserCount(m.SiteId, m.SiteId)
 
 			fee := ws.GetSoreRule(m.SiteId).Register

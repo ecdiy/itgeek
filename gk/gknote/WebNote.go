@@ -4,24 +4,25 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebUserList(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["cat"], _ = ws.CategoryDao.List(param.SiteId, userId)
-	res["list"], _ = ws.NoteDao.List(param.SiteId, userId)
+func WebUserList(auth *ws.Auth) {
+	auth.Out["cat"], _ = ws.CategoryDao.List(auth.SiteId, auth.UserId)
+	auth.Out["list"], _ = ws.NoteDao.List(auth.SiteId, auth.UserId)
 }
 
-func WebList(param *ws.Param, res map[string]interface{}) {
-	userId := param.Int64("userId", 0)
-	res["cat"], _ = ws.CategoryDao.List(param.SiteId, userId)
-	res["list"], _ = ws.NoteDao.List(param.SiteId, userId)
+func WebList(web *ws.Web) {
+	userId := web.Int64("userId")
+	web.Out["cat"], _ = ws.CategoryDao.List(web.SiteId, userId)
+	web.Out["list"], _ = ws.NoteDao.List(web.SiteId, userId)
 }
 
-func WebAdd(UserId int64, param *ws.Param, res map[string]interface{}) {
-	res["Id"], _ = ws.NoteDao.Add(param.SiteId, param.String("CategoryId"), param.String("Title"), param.String("Body"), param.String("SourceType"), param.String("Source"), UserId)
+func WebAdd(auth *ws.Auth) {
+	auth.Out["Id"], _ = ws.NoteDao.Add(auth.SiteId, auth.String("CategoryId"), auth.String("Title"), auth.String("Body"),
+		auth.String("SourceType"), auth.String("Source"), auth.UserId)
 }
 
-func WebDetail(UserId int64, param *ws.Param, res map[string]interface{}) {
-	res["Notes"], _, _ = ws.NoteDao.Detail(param.SiteId, param.Int64("id", 0), UserId)
+func WebDetail(auth *ws.Auth) {
+	auth.Out["Notes"], _, _ = ws.NoteDao.Detail(auth.SiteId, auth.Int64("id"), auth.UserId)
 }
-func WebUserDetail(param *ws.Param, res map[string]interface{}) {
-	res["Notes"], _, _ = ws.NoteDao.Detail(param.SiteId, param.Int64("id", 0), param.Int64("userId", 0))
+func WebUserDetail(web *ws.Web) {
+	web.Out["Notes"], _, _ = ws.NoteDao.Detail(web.SiteId, web.Int64("id"), web.Int64("userId"))
 }

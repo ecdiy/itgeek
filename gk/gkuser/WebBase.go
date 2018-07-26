@@ -4,20 +4,18 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebMemberInfo(param *ws.Param, res map[string]interface{}) {
-	username := param.String("username")
-	m, bb, _ := ws.UserDao.MemberInfo(param.SiteId, username)
+func WebMemberInfo(web *ws.Web) {
+	username := web.String("username")
+	m, bb, _ := ws.UserDao.MemberInfo(web.SiteId, username)
 	if bb {
-		res["member"] = m
-		res["DauOrder"], _, _ = ws.UserDao.DauOrder(param.SiteId, m["Id"])
+		web.Out["member"] = m
+		web.Out["DauOrder"], _, _ = ws.UserDao.DauOrder(web.SiteId, m["Id"])
 	}
 }
 
-
-
-func CountInfo(param *ws.Param, res map[string]interface{}) {
-	list, _ := ws.KvDao.CountInfo(param.SiteId, )
+func CountInfo(web *ws.Web) {
+	list, _ := ws.KvDao.CountInfo(web.SiteId, )
 	for _, v := range list {
-		res[v[0]] = v[1]
+		web.Out[v[0]] = v[1]
 	}
 }

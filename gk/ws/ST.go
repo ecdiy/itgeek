@@ -13,18 +13,16 @@ var (
 	 */
 	OK = st(0, "")
 	//---0~9 全局系统错误
-	StErrorParameter  = st(1, "参数错误")
-	StErrorToken      = st(2, "用户未登录，Token失效")
-	StNotOrderService = st(3, "没有订购服务")
-	StErrorRpc        = st(4, "远程RPC调用错误")
-	StExist           = st(5, "已存在")
-	StNotExist        = st(6, "不存在")
-	StErrorDb         = st(7, "数据逻辑错误")
-	StErrorCaptcha    = st(8, "认证码错误")
-	StErrorUnknown    = st(9, "未知错误")
-	StErrorRank       = st(10, "用户等级错误")
+	StErrorParameter = st(1, "参数错误")
+	StErrorToken     = st(2, "用户未登录，Token失效")
+	StMax            = st(3, "已达最大记录数")
 
-	StErrorSp    = st(11, "逻辑错误")
+	StExist        = st(5, "已存在")
+	StNotExist     = st(6, "不存在")
+	StErrorDb      = st(7, "数据逻辑错误")
+	StErrorCaptcha = st(8, "认证码错误")
+	StErrorUnknown = st(9, "未知错误")
+
 	StVerifyFail = st(12, "数据认证失败")
 
 	//1~2 AppId 3~4 状态

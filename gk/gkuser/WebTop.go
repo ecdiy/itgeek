@@ -4,6 +4,6 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebTopDau(param *ws.Param, res map[string]interface{}) {
-	res["list"], _ = ws.UserDao.Dau(param.SiteId)
+func WebTopDau(web *ws.Web) {
+	web.Out["list"], _ = ws.UserDao.Dau(web.SiteId)
 }

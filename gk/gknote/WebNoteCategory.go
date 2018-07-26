@@ -4,20 +4,19 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebCategoryList(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["cat"], _ = ws.CategoryDao.List(param.SiteId, userId)
+func WebCategoryList(auth *ws.Auth) {
+	auth.Out["cat"], _ = ws.CategoryDao.List(auth.SiteId, auth.UserId)
 }
-func WebCategoryAdd(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["Id"], _ = ws.CategoryDao.Add(param.SiteId, param.String("Name"), param.Int64("ParentId", 0), 0, userId)
+func WebCategoryAdd(auth *ws.Auth) {
+	auth.Out["Id"], _ = ws.CategoryDao.Add(auth.SiteId, auth.String("Name"), auth.Int64("ParentId"), 0, auth.UserId)
 }
-func WebCategoryModify(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["Row"], _ = ws.CategoryDao.ModifyName(param.String("Name"), param.Int64("Id", 0), userId, param.SiteId)
+func WebCategoryModify(auth *ws.Auth) {
+	auth.Out["Row"], _ = ws.CategoryDao.ModifyName(auth.String("Name"), auth.Int64("Id"), auth.UserId, auth.SiteId)
 }
-func WebCategoryDel(userId int64, param *ws.Param, res map[string]interface{}) {
-
-	id := param.Int64("Id", 0)
-	ws.NoteDao.UpdateCat(0, id, userId, param.SiteId)
-	ws.NoteDao.UpdatePCat(0, id, userId, param.SiteId)
-	ws.CategoryDao.DelParentId(param.SiteId, id, userId)
-	res["Row"], _ = ws.CategoryDao.Del(param.SiteId, id, userId)
+func WebCategoryDel(auth *ws.Auth) {
+	id := auth.Int64("Id")
+	ws.NoteDao.UpdateCat(0, id, auth.UserId, auth.SiteId)
+	ws.NoteDao.UpdatePCat(0, id, auth.UserId, auth.SiteId)
+	ws.CategoryDao.DelParentId(auth.SiteId, id, auth.UserId)
+	auth.Out["Row"], _ = ws.CategoryDao.Del(auth.SiteId, id, auth.UserId)
 }

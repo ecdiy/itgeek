@@ -4,6 +4,6 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebCategoryList(param *ws.Param, res map[string]interface{}) {
-	res["catList"], _ = ws.TopicCategoryDao.List(param.SiteId)
+func WebCategoryList(web *ws.Web) {
+	web.Out["catList"], _ = ws.TopicCategoryDao.List(web.SiteId)
 }

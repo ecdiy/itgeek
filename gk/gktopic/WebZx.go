@@ -2,6 +2,6 @@ package gktopic
 
 import "github.com/ecdiy/itgeek/gk/ws"
 
-func WebZxPage(param *ws.Param, res map[string]interface{}) {
-	res["result"], _, _ = ws.ZxDao.Get(param.SiteId, param.Ua, param.String("PageKey"))
+func WebZxPage(web *ws.Web) {
+	web.Out["result"], _, _ = ws.ZxDao.Get(web.SiteId, web.Ua, web.String("PageKey"))
 }

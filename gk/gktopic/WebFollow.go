@@ -5,33 +5,30 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebFollow(userId int64, param *ws.Param, res map[string]interface{}) {
-	id := param.Int64("userId", 0)
-	fc, _, _ := ws.FollowDao.Exist(param.SiteId, id, userId)
+func WebFollow(auth *ws.Auth) {
+	id := auth.Int64("userId")
+	fc, _, _ := ws.FollowDao.Exist(auth.SiteId, id, auth.UserId)
 	doType := 1
 	if fc == 1 {
-		ws.FollowDao.UnFollow(param.SiteId, id, userId)
+		ws.FollowDao.UnFollow(auth.SiteId, id, auth.UserId)
 		doType = 0
 	} else {
-		ws.FollowDao.Follow(param.SiteId, id, userId)
+		ws.FollowDao.Follow(auth.SiteId, id, auth.UserId)
 	}
-	tfc, _, _ := ws.FollowDao.Count(param.SiteId, userId)
+	tfc, _, _ := ws.FollowDao.Count(auth.SiteId, auth.UserId)
 
 	gkuser.UpCount(&ws.UpReq{
-		UserId: userId, Type: "Follow", Val: tfc, Fee: int64(0),
+		UserId: auth.UserId, Type: "Follow", Val: tfc, Fee: int64(0),
 	})
 
-	res["followCount"] = tfc
-	res["followStatus"] = doType
+	auth.Out["followCount"] = tfc
+	auth.Out["followStatus"] = doType
 }
 
-func WebFollowList(userId int64, param *ws.Param, res map[string]interface{}) {
-	page := param.Int64("page", 1)
-	if page >= 1 {
-		page = (page - 1) * 20
-	}
-	res["FavList"], _ = ws.FollowDao.TopicList(param.SiteId, userId, page)
+func WebFollowList(auth *ws.Auth) {
+
+	auth.Out["FavList"], _ = ws.FollowDao.TopicList(auth.SiteId, auth.UserId, auth.Start())
 }
-func WebFollowStatus(userId int64, param *ws.Param, res map[string]interface{}) {
-	res["followStatus"], _, _ = ws.FollowDao.Exist(param.SiteId, param.Int64("id", 0), userId)
+func WebFollowStatus(auth *ws.Auth) {
+	auth.Out["followStatus"], _, _ = ws.FollowDao.Exist(auth.SiteId, auth.Int64("id"), auth.UserId)
 }
