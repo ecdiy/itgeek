@@ -46,7 +46,7 @@ func WebReply(auth *ws.Web) {
 		})
 
 	}
-	auth.Out["ScoreLack"], _, _ = ws.UserDao.Score(auth.SiteId, auth.UserId)
+	auth.Out["Score"], _, _ = ws.UserDao.Score(auth.SiteId, auth.UserId)
 }
 
 

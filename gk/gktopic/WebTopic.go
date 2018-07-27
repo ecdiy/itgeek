@@ -21,7 +21,7 @@ func WebAdd(auth *ws.Web) {
 	c, _, _ := ws.TopicDao.CountByUserId(auth.SiteId, auth.UserId)
 	sId := fmt.Sprint(Id)
 
-	auth.Out["ScoreLack"] = gkuser.UpCount(&ws.UpReq{UserId: auth.UserId, Type: "Topic", Val: c, Fee: ws.GetSoreRule(auth.SiteId).Topic,
+	auth.Out["Score"] = gkuser.UpCount(&ws.UpReq{UserId: auth.UserId, Type: "Topic", Val: c, Fee: ws.GetSoreRule(auth.SiteId).Topic,
 		ScoreType: "创建主题", EntityId: sId, SiteId: auth.SiteId,
 		ScoreDesc: `创建主题 › <go onclick="vgo('/p/topic/detail,` + sId + `,` + fmt.Sprint(auth.UserId) + `',this)">` + auth.String("Title") + "</go>"})
 

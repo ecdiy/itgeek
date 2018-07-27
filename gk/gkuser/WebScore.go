@@ -32,7 +32,7 @@ func WebScoreLoginAwardDo(auth *ws.Web) {
 		ws.UserDao.LoginAwardDo(auth.SiteId, auth.UserId)
 	}
 	auth.Out["Id"] = id
-	auth.Out["ScoreLack"] = score
+	auth.Out["Score"] = score
 }
 
 func WebScoreLogList(auth *ws.Web) {
