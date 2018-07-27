@@ -17,7 +17,9 @@ var (
 	WebGin   = gin.New()
 )
 
-func InitDao() {
+func InitWs() {
+
+	MultiSite = EnvParamInt("MultiSite", 0)
 	Gpa = gpa.Init(EnvParam("DbDriver"), EnvParam("DbDsn"), UserDao, KvDao, ScoreLog, MsgDao, TokenDao,
 
 		TopicDao, TopicCategoryDao, ReplyDao, FavDao, FollowDao, AppendDao,

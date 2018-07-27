@@ -2,9 +2,7 @@ package main
 
 import (
 	"github.com/cihub/seelog"
-
 	"github.com/ecdiy/itgeek/gk/gkuser"
-
 	"github.com/ecdiy/itgeek/gk/gktopic"
 	"github.com/ecdiy/itgeek/gk/gknote"
 	"github.com/ecdiy/itgeek/gk/upload"
@@ -53,21 +51,20 @@ func main() {
 	defer seelog.Flush()
 
 	ws.EnvParamSet(ws.KeyBindAddr, ":9000")
-	ws.MultiSite = ws.EnvParamInt("MultiSite", 0)
 
-	ws.InitDao()
+	ws.InitWs()
 
 	gkuser.InitWeb()
 
 	gknote.InitWeb()
 	gktopic.InitWeb()
 	upload.InitWeb()
-
 	gkadmin.InitWeb()
+
 	ws.WebGin.Static("/h5dist", BaseDir+"/m/h5dist")
 	ws.WebGin.Static("/dist", BaseDir+"/web/dist")
 	ws.WebGin.Static("/static", BaseDir+"/static")
 
-	seelog.Info("version:0.0.1 (itgeek.top) BaseDir=", BaseDir)
+	seelog.Info("version:0.0.3 (itgeek.top) BaseDir=", BaseDir)
 	ws.WebGin.Run(ws.EnvParam(ws.KeyBindAddr))
 }

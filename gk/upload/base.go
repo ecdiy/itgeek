@@ -29,7 +29,7 @@ func InitWeb() {
 	ws.WebGin.POST("/api/gk-upload/upload", func(ctx *gin.Context) {
 		web := ws.Verify(ctx)
 		if web.Auth {
-			DoUpload(ctx, fmt.Sprint(ws.SiteId(ctx)))
+			DoUpload(ctx, fmt.Sprint(web.SiteId))
 		} else {
 			ctx.Status(401)
 		}
@@ -37,7 +37,7 @@ func InitWeb() {
 	ws.WebGin.POST("/api/gk-upload/Avatar", func(ctx *gin.Context) {
 		web := ws.Verify(ctx)
 		if web.Auth {
-			WebAvatar(ctx, fmt.Sprint(ws.SiteId(ctx)), web.UserId)
+			WebAvatar(ctx, fmt.Sprint(web.SiteId), web.UserId)
 		} else {
 			ctx.Status(401)
 		}
