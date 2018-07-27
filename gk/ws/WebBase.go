@@ -19,6 +19,9 @@ type Web struct {
 	Username string
 }
 
+func (p *Web) Result(r interface{}) {
+	p.Out["result"] = r
+}
 func (p *Web) initParam() {
 	row, b := p.Context.GetRawData()
 	if b == nil {

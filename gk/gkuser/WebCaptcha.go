@@ -17,6 +17,7 @@ func Captcha(c *gin.Context) {
 	captcha.WriteImage(c.Writer, id, captcha.StdWidth, captcha.StdHeight)
 }
 
-func CaptchaNew(c *gin.Context) {
-	c.JSON(200, ws.OK.Result(captcha.New()))
+func CaptchaNew(web *ws.Web) {
+	//c.JSON(200, ws.OK.Result(captcha.New()))
+	web.Result(captcha.New())
 }

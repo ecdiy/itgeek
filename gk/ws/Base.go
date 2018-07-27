@@ -11,7 +11,7 @@ const PageSize = 20
 
 var (
 	Gpa       *gpa.Gpa
-	TokenMap  = make(map[string]map[string]string)
+	TokenMap  = make(map[string][]string)
 	MultiSite = 0
 
 	ScoreMap = make(map[int64]*ScoreRule)

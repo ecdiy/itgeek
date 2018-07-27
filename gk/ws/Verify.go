@@ -21,10 +21,10 @@ func Verify(c *gin.Context) *Web {
 			v, b := TokenMap [auth.Ua+"_"+id]
 			uid, _ := strconv.ParseInt(id, 10, 0)
 			if b {
-				if v["Token"] == sut[idx+1:] {
+				if v[0] == sut[idx+1:] {
 					UserDao.DauAdd(auth.SiteId, uid)
 					auth.UserId = uid
-					auth.Username = v["Username"]
+					auth.Username = v[1]
 					auth.Auth = true
 					return auth
 				}
@@ -32,11 +32,10 @@ func Verify(c *gin.Context) *Web {
 				tk, b, ee := TokenDao.Find(auth.SiteId, uid, auth.Ua)
 				if ee == nil && b && tk == sut[idx+1:] {
 					vf, _, _ := UserDao.BaseInfo(auth.SiteId, id)
-					vf["Token"] = tk
-					TokenMap[auth.Ua+"_"+id] = vf
+					auth.Username = vf["Username"]
+					TokenMap[auth.Ua+"_"+id] = []string{tk, auth.Username}
 					UserDao.DauAdd(auth.SiteId, uid)
 					auth.UserId = uid
-					auth.Username = v["Username"]
 					auth.Auth = true
 					return auth
 				}

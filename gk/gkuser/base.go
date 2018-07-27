@@ -32,8 +32,8 @@ func InitWeb() {
 	post("/site", WebSite)
 
 	ws.WebGin.GET("/api/gk-user/Captcha", Captcha)
-	ws.WebGin.GET("/api/gk-user/CaptchaNew", CaptchaNew)
-	ws.WebGin.POST("/api/gk-user/CaptchaNew", CaptchaNew)
+
+	post("/CaptchaNew", CaptchaNew)
 
 	post("/Register", WebUserRegister)
 	post("/Login", WebUserLogin)

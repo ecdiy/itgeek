@@ -18,46 +18,56 @@ func UserMd5Pass(Username, pass string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 func WebUserLogin(web *ws.Web) {
-	r := DoUserLogin(web, web.String("Username"), web.String("Password"), web.String("Captcha"), web.String("Digits"), web.Out)
-	web.Out["Result"] = r.Result
-	web.Out["Status"] = r.Status
-}
-
-func DoUserLogin(param *ws.Web, Username, Password, Captcha, Digits string, res map[string]interface{}) *ws.Result {
+	Username := web.String("Username")
+	Password := web.String("Password")
+	Captcha := web.String("Captcha")
+	Digits := web.String("Digits")
 	if len(Username) == 0 || len(Password) == 0 {
-		return ws.StErrorParameter.Result("Password")
+		web.Out["Type"] = "Password"
+		web.ST(ws.StErrorParameter)
+		return
 	}
-	v, ext, e := ws.UserDao.BaseInfoByUsername(param.SiteId, Username)
+	v, ext, e := ws.UserDao.BaseInfoByUsername(web.SiteId, Username)
 	if e != nil {
-		return ws.StErrorDb.ResultNil()
+		web.ST(ws.StErrorDb)
+		return
 	}
-	if !ext {
-		return ws.StUsernameNotExist.Result("Username")
+	if !ext || v == nil || len(v) == 0 {
+		web.Out["Type"] = "Username"
+		web.ST(ws.StUsernameNotExist)
+		return
 	}
-	if v == nil || len(v) == 0 {
-		return ws.StUsernameNotExist.Result("Username")
-	}
+
 	errTime, _ := strconv.Atoi(v["PasswordError"])
 	if errTime > 3 {
 		if Captcha == "" {
-			return ws.StErrorCaptcha.Result("Captcha").Put("Val", captcha.New())
+			web.Out["Type"] = "Captcha"
+			web.Out["Val"] = captcha.New()
+			web.ST(ws.StErrorCaptcha)
+			return
 		} else {
 			if !captcha.VerifyString(Captcha, Digits) {
-				return ws.StErrorCaptcha.Result("Captcha").Put("Val", captcha.New())
+				web.Out["Val"] = captcha.New()
+				web.Out["Type"] = "Captcha"
+				web.ST(ws.StErrorCaptcha)
+				return
 			}
 		}
 	}
 	if v["Password"] == UserMd5Pass(Username, Password) {
-		ws.UserDao.SetPasswordError(0, Username, param.SiteId, )
-		res["Info"] = v
-		return UserInfoToRedis(param.SiteId, param.Ua, v, )
+		ws.UserDao.SetPasswordError(0, Username, web.SiteId, )
+		web.Out["Info"] = v
+		UserInfoToRedis(web, v, )
+		return
 	} else {
-		ws.UserDao.SetPasswordError(errTime+1, Username, param.SiteId, )
-		return ws.StUserPassError.Result("Password")
+		ws.UserDao.SetPasswordError(errTime+1, Username, web.SiteId, )
+		web.Out["Type"] = "Password"
+		web.ST(ws.StUserPassError)
+		return
 	}
 }
 
-func UserInfoToRedis(siteId int64, ua string, v map[string]string) *ws.Result {
+func UserInfoToRedis(web *ws.Web, v map[string]string) {
 	delete(v, "Password")
 	delete(v, "PasswordError")
 
@@ -66,73 +76,71 @@ func UserInfoToRedis(siteId int64, ua string, v map[string]string) *ws.Result {
 	tk := hex.EncodeToString(h.Sum(nil))
 	v["Token"] = tk
 
-	result := ws.OK.ResultNil()
-	result.Result = v["Id"] + "_" + tk
-	ws.TokenDao.Del(ua, v["Id"], siteId)
-	ws.TokenDao.Add(v["Id"], ua, tk, siteId)
-	ws.TokenMap[ua+"_"+v["Id"]] = v
-	delete(result.Param, "Token")
+	web.Result(v["Id"] + "_" + tk)
+	ws.TokenDao.Del(web.Ua, v["Id"], web.SiteId)
+	ws.TokenDao.Add(v["Id"], web.Ua, tk, web.SiteId)
+	ws.TokenMap[web.Ua+"_"+v["Id"]] = []string{tk, v["Username"]}
 
-	return result
 }
 
 //-----
 
-func WebUserRegister(param *ws.Web) {
-	r := doUserRegister(param, param)
-	param.Out["Result"] = r.Result
-	param.Out["Param"] = r.Param
-	param.Out["Status"] = r.Status
-}
+func WebUserRegister(web *ws.Web) {
+	captchaId := web.String("CaptchaId")
+	captchaVal := web.String("CaptchaVal")
 
-func doUserRegister(m *ws.Web, param *ws.Web) *ws.Result {
-	captchaId := m.String("CaptchaId")
-	captchaVal := m.String("CaptchaVal")
-	if captchaId != "" && captchaVal != "" {
-		if !captcha.VerifyString(captchaId, captchaVal) {
-			return ws.StErrorCaptcha.Result(captcha.New())
-		}
-		Email := m.String("Email")
-		Password := m.String("Password")
-		Username := m.String("Username")
-		Mobile := m.String("Mobile")
-
-		if len(Username) < 5 || strings.Index(Username, "@") > 0 ||
-			len(Password) < 6 || strings.Index(Email, "@") < 0 ||
-			len(Mobile) < 8 || len(Mobile) > 32 {
-			seelog.Warn("参数不合法.", m)
-			return ws.StErrorParameter.Result(captcha.New())
-		}
-		uCount, unb, _ := ws.UserDao.CheckByUsername(m.SiteId, Username)
-		seelog.Info("~~~UserDao Register~~", Username, Mobile, Email)
-		if unb && uCount > 0 {
-			return ws.StUsernameExist.Result(captcha.New())
-		}
-		eCount, eb, _ := ws.UserDao.CheckByEmail(m.SiteId, Email)
-		if eb && eCount > 0 {
-			return ws.StEmailExist.Result(captcha.New())
-		}
-		Password = UserMd5Pass(Username, Password)
-		id, ue := ws.UserDao.Add(m.SiteId, Username, Password, Email, Mobile)
-
-		if ue == nil {
-			v, _, _ := ws.UserDao.BaseInfo(m.SiteId, id)
-			rs := UserInfoToRedis(m.SiteId, m.Ua, v)
-			param.Out["Info"] = v
-			ws.KvDao.UserCount(m.SiteId, m.SiteId)
-
-			fee := ws.GetSoreRule(m.SiteId).Register
-			if fee != 0 {
-				UpCount(&ws.UpReq{UserId: id, Fee: fee, EntityId: fmt.Sprint(id), SiteId: m.SiteId,
-					ScoreType: "初始资本",
-					ScoreDesc: `获得初始资本 ` + fmt.Sprint(fee)})
-			}
-			return rs
-		} else {
-			return ws.StErrorUnknown.Result(captcha.New())
-		}
-	} else {
-		seelog.Warn("注册参数错误:", m)
-		return ws.StErrorParameter.Result(captcha.New())
+	if !captcha.VerifyString(captchaId, captchaVal) {
+		web.Result(captcha.New())
+		web.ST(ws.StErrorCaptcha)
+		return
 	}
+	Email := web.String("Email")
+	Password := web.String("Password")
+	Username := web.String("Username")
+	Mobile := web.String("Mobile")
+
+	if len(Username) < 5 || strings.Index(Username, "@") > 0 ||
+		len(Password) < 6 || strings.Index(Email, "@") < 0 ||
+		len(Mobile) < 8 || len(Mobile) > 32 {
+		seelog.Warn("参数不合法.", web)
+		web.Result(captcha.New())
+		web.ST(ws.StErrorParameter)
+		return
+	}
+	uCount, unb, _ := ws.UserDao.CheckByUsername(web.SiteId, Username)
+	seelog.Info("~~~UserDao Register~~", Username, Mobile, Email)
+	if unb && uCount > 0 {
+		web.Result(captcha.New())
+		web.ST(ws.StUsernameExist)
+		return
+	}
+	eCount, eb, _ := ws.UserDao.CheckByEmail(web.SiteId, Email)
+	if eb && eCount > 0 {
+		web.Result(captcha.New())
+		web.ST(ws.StEmailExist)
+		return
+	}
+	Password = UserMd5Pass(Username, Password)
+	id, ue := ws.UserDao.Add(web.SiteId, Username, Password, Email, Mobile)
+
+	if ue == nil {
+		v, _, _ := ws.UserDao.BaseInfo(web.SiteId, id)
+		UserInfoToRedis(web, v)
+		web.Out["Info"] = v
+		ws.KvDao.UserCount(web.SiteId, web.SiteId)
+
+		fee := ws.GetSoreRule(web.SiteId).Register
+		if fee != 0 {
+			UpCount(&ws.UpReq{UserId: id, Fee: fee, EntityId: fmt.Sprint(id), SiteId: web.SiteId,
+				ScoreType: "初始资本",
+				ScoreDesc: `获得初始资本 ` + fmt.Sprint(fee)})
+		}
+
+		return
+	} else {
+		web.Result(captcha.New())
+		web.ST(ws.StErrorUnknown)
+		return
+	}
+
 }

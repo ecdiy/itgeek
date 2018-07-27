@@ -41,24 +41,16 @@ type ST struct {
 	Msg  string
 }
 
-func (c *ST) ResultNil() *Result {
-	return &Result{Status: &ST{Code: c.Code, Msg: c.Msg}}
-}
-func (c *ST) Result(result string) *Result {
-	return &Result{Result: result, Status: &ST{Code: c.Code, Msg: c.Msg}}
-}
-
-type Result struct {
-	Status *ST
-	Result string
-	Param  map[string]string
-}
-
-//--
-func (c *Result) Put(key, val string) *Result {
-	if c.Param == nil {
-		c.Param = make(map[string]string)
-	}
-	c.Param[key] = val
-	return c
-}
+//func (c *ST) ResultNil() *Result {
+//	return &Result{Status: &ST{Code: c.Code, Msg: c.Msg}}
+//}
+//func (c *ST) Result(result string) *Result {
+//	return &Result{Result: result, Status: &ST{Code: c.Code, Msg: c.Msg}}
+//}
+//
+//type Result struct {
+//	Status *ST
+//	Result string
+//	Param  map[string]string
+//}
+//
