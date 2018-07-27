@@ -31,19 +31,16 @@ Vue.prototype.ajax = function (url, p, fun) {
             if (th.hasOwnProperty(k))
                 th[k] = r.data[k]
         }
-        if (r.data.hasOwnProperty("gkUser")) {
-            gk.user = r.data.gkUser;
-            vm.$emit("data", window.gk);
-        }
         if (fun && typeof(fun) == 'function') {
             fun(r.data, th)
+            vm.$emit("data", window.gk)
         }
     }).catch((err) => {
         if (err.response && err.response.status == 401) {
             window.goUrl = window.location.hash
             window.gk.login = false;
             window.gk.user = {};
-            Cookies.remove('token');
+            Cookies.remove('h5Token');
             th.$router.replace('/p/user/login')
             vm.$emit("data", window.gk)
         } else {
@@ -56,5 +53,5 @@ window.goUrl = '/';
 window.gk = {login: false, user: {}, site: {}, siteId: 0};
 
 Cookies.set("ua", "h5");
-window.vm =new Vue({el: '#app', router: router, render: h => h(App)});
+window.vm = new Vue({el: '#app', router: router, render: h => h(App)});
 

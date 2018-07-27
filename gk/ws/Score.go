@@ -6,7 +6,6 @@ type ScoreRule struct {
 	Thank, LoginMax, LoginMin, Reply, GetReply, Topic, Register int64
 }
 
-var ScoreMap = make(map[int64]*ScoreRule)
 
 func GetSoreRule(siteId int64) *ScoreRule {
 	r, b := ScoreMap[siteId]
@@ -16,6 +15,7 @@ func GetSoreRule(siteId int64) *ScoreRule {
 	rule, _, _ := KvDao.Get(siteId, "ScoreRule")
 	return SetSoreRule(siteId, rule)
 }
+
 func SetSoreRule(siteId int64, rule string) *ScoreRule {
 	if len(rule) > 2 {
 		df := &ScoreRule{}

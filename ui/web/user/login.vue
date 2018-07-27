@@ -1,6 +1,6 @@
 <template>
     <card>
-        <login cookie-token-name="token" captcha-new="/gk-user/CaptchaNew"
+        <login cookie-token-name="webToken" captcha-new="/gk-user/CaptchaNew"
                @on-login="handleLogin" action-url="/gk-user/Login" auth-img-url="/gk-user/Captcha?t="></login>
     </card>
 </template>

@@ -44,7 +44,7 @@ export default {
                 gk.login = true;
                 gk.user = r.Info;
             } else {
-                Cookies.remove("token");
+                Cookies.remove("h5Token");
                 gk.user = {};
                 gk.login = false;
             }
@@ -54,7 +54,7 @@ export default {
         loginOut() {
             window.gk.login = false;
             Cookies.remove("username");
-            Cookies.remove("token");
+            Cookies.remove("h5Token");
             vm.$emit("login", false);
         }
     }

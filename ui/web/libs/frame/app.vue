@@ -61,7 +61,7 @@
         }, methods: {
             loginOut() {
                 gk.login = false;
-                Cookies.remove("token");
+                Cookies.remove("webToken");
                 vm.$emit("login", false);
                 this.$router.push("/")
             }
@@ -76,7 +76,7 @@
                     gk.login = true;
                     gk.user = r.Info;
                 } else {
-                    Cookies.remove("token");
+                    Cookies.remove("webToken");
                     gk.user = {};
                     gk.login = false;
                 }

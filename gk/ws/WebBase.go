@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 	"encoding/json"
-	"strings"
 )
 
 type Web struct {
@@ -70,47 +69,4 @@ func (p *Web) ScoreLack() bool { //检查积分
 func (p *Web) ST(st *ST) {
 	p.Out["Code"] = st.Code
 	p.Out["Msg"] = st.Msg
-}
-
-func SiteId(c *gin.Context) int64 {
-	if MultiSite == 1 {
-		sql := "select SiteId from site.BindDomain where Domain=?"
-		host := c.Request.Host
-		ix := strings.Index(host, ":")
-		if ix > 0 {
-			host = host[0:ix]
-		}
-		idx := strings.Index(host, ".ecdiy.cn")
-		if idx > 0 {
-			sql = "select Id from site.Site where SubDomain=?"
-			host = host[0:idx]
-		}
-		hId, qb, _ := Gpa.QueryInt64(sql, host)
-		if qb {
-			return hId
-		}
-		return 0
-	}
-	return 0
-}
-
-func WebAuth(url string, fun func(wdb *Web)) {
-	WebGin.POST(url, func(c *gin.Context) {
-		web := Verify(c)
-		if web.Auth {
-			web.initParam()
-			fun(web)
-			c.JSON(200, web.Out)
-		} else {
-			c.AbortWithStatus(401)
-		}
-	})
-}
-
-func WebPost(url string, fun func(wdb *Web)) {
-	WebGin.POST(url, func(c *gin.Context) {
-		web := Verify(c)
-		fun(web)
-		c.JSON(200, web.Out)
-	})
 }

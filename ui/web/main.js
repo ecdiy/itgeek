@@ -36,7 +36,7 @@ Vue.prototype.ajax = function (url, p, fun) {
             window.goUrl = window.location.hash
             window.gk.login = false;
             window.gk.user = {};
-            Cookies.remove('token');
+            Cookies.remove('webToken');
             th.$router.replace('/p/user/login')
             vm.$emit("data", window.gk)
         } else {
