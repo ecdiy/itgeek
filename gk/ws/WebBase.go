@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 	"encoding/json"
-	"github.com/cihub/seelog"
 	"strings"
 )
 
@@ -14,8 +13,23 @@ type Web struct {
 	Ua         string
 	Context    *gin.Context
 	SiteId     int64
+	//---
+	Auth     bool
+	UserId   int64
+	auth     map[string]interface{}
+	Username string
 }
 
+func (p *Web) initParam() {
+	row, b := p.Context.GetRawData()
+	if b == nil {
+		var data map[string]interface{}
+		je := json.Unmarshal(row, &data)
+		if je == nil {
+			p.param = data
+		}
+	}
+}
 func (p *Web) String(n string) string {
 	return fmt.Sprint(p.param[ n])
 }
@@ -43,17 +57,7 @@ func (p *Web) StartPageSize(ps int64) int64 {
 
 //--
 
-type Auth struct {
-	Web
-	UserId int64
-	auth   map[string]interface{}
-}
-
-func (p *Auth) Username() string {
-	return fmt.Sprint(p.auth["Username"])
-}
-
-func (p *Auth) ScoreLack() bool { //检查积分
+func (p *Web) ScoreLack() bool { //检查积分
 	sc, _, _ := UserDao.Score(p.SiteId, p.UserId)
 	if sc < 0 {
 		p.ST(StScoreLack)
@@ -90,89 +94,23 @@ func SiteId(c *gin.Context) int64 {
 	return 0
 }
 
-func GetWeb(c *gin.Context) (*Web, error) {
-	p, e := c.Get("param")
-	if e {
-		return p.(*Web), nil
-	}
-	ua, _ := c.Cookie("ua")
-	if ua == "web" {
-		ua = "web"
-	} else {
-		ua = "h5"
-	}
-	pm := &Web{Ua: ua, Context: c, SiteId: SiteId(c), Out: make(map[string]interface{})}
-	row, b := c.GetRawData()
-	if b == nil {
-		var data map[string]interface{}
-		je := json.Unmarshal(row, &data)
-		if je != nil {
-			seelog.Error("RawData JSON error:", row, je)
-			return pm, je
-		} else {
-			pm.param = data
-			c.Set("param", pm)
-			return pm, je
-		}
-	}
-	return pm, b
-}
-
-func GetAuth(c *gin.Context) (*Auth, error) {
-	p, e := c.Get("param")
-	if e {
-		return p.(*Auth), nil
-	}
-	ua, _ := c.Cookie("ua")
-	if ua == "web" {
-		ua = "web"
-	} else {
-		ua = "h5"
-	}
-	pm := &Auth{}
-	pm.Ua = ua
-	pm.Context = c
-	pm.SiteId = SiteId(c)
-	pm.Out = make(map[string]interface{})
-	row, b := c.GetRawData()
-	if b == nil {
-		var data map[string]interface{}
-		je := json.Unmarshal(row, &data)
-		if je != nil {
-			seelog.Error("RawData JSON error:", row, je)
-			return pm, je
-		} else {
-			pm.param = data
-			c.Set("param", pm)
-			return pm, je
-		}
-	}
-	return pm, b
-}
-
-func WebAuth(Gin *gin.Engine, url string, fun func(wdb *Auth), verify func(c *gin.Context) (bool, int64)) {
-	Gin.POST(url, func(c *gin.Context) {
-		auth, userId := verify(c)
-		if auth {
-			param, e := GetAuth(c)
-			param.UserId = userId
-			if e == nil {
-				param.auth = c.Keys
-				fun(param)
-				c.JSON(200, param.Out)
-			}
+func WebAuth(url string, fun func(wdb *Web)) {
+	WebGin.POST(url, func(c *gin.Context) {
+		web := Verify(c)
+		if web.Auth {
+			web.initParam()
+			fun(web)
+			c.JSON(200, web.Out)
 		} else {
 			c.AbortWithStatus(401)
 		}
 	})
 }
 
-func WebPost(Gin *gin.Engine, url string, fun func(wdb *Web)) {
-	Gin.POST(url, func(c *gin.Context) {
-		param, e := GetWeb(c)
-		if e == nil {
-			fun(param)
-			c.JSON(200, param.Out)
-		}
+func WebPost(url string, fun func(wdb *Web)) {
+	WebGin.POST(url, func(c *gin.Context) {
+		web := Verify(c)
+		fun(web)
+		c.JSON(200, web.Out)
 	})
 }

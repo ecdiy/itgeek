@@ -8,12 +8,12 @@ import (
 
 var ecTokenMap = make(map[string]string)
 
-func InitWeb(web *gin.Engine) {
+func InitWeb() {
 
-	web.POST("/api/gk-admin/siteUpload", WebUpload)
+	ws.WebGin.POST("/api/gk-admin/siteUpload", WebUpload)
 
 	auth := func(url string, fun func(param *Param, res map[string]interface{})) {
-		web.POST("/api/gk-admin/"+url, func(c *gin.Context) {
+		ws.WebGin.POST("/api/gk-admin/"+url, func(c *gin.Context) {
 			auth, param := VerifyAdmin(c)
 			if auth {
 				res := make(map[string]interface{})

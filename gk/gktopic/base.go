@@ -9,13 +9,17 @@ import (
 	"io/ioutil"
 )
 
-func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
+func InitWeb() {
 
-	auth := func(url string, fun func(param *ws.Auth)) {
-		ws.WebAuth(web, "/api/gk-topic"+url, fun, verify)
+	auth := func(url string, fun func(param *ws.Web)) {
+
+		ws.WebAuth("/api/gk-topic"+url, fun)
 	}
 	post := func(url string, fun func(param *ws.Web)) {
-		ws.WebPost(web, "/api/gk-topic"+url, fun)
+		ws.WebPost("/api/gk-topic"+url, func(web *ws.Web) {
+			ws.Verify(web.Context)
+			fun(web)
+		})
 	}
 
 	post("/detail", WebDetail)
@@ -42,13 +46,13 @@ func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
 
 	auth("/topicAppend", WebAppend)
 	//---SEO
-	web.GET("/", WebHome)
-	web.GET("/p/topic/detail,:p", WebSeoDetail)
-	web.GET("/sitemap.xml", WebSiteMap)
+	ws.WebGin.GET("/", WebHome)
+	ws.WebGin.GET("/p/topic/detail,:p", WebSeoDetail)
+	ws.WebGin.GET("/sitemap.xml", WebSiteMap)
 
 	post("/zxPage", WebZxPage)
 
-	web.NoRoute(func(ctx *gin.Context) {
+	ws.WebGin.NoRoute(func(ctx *gin.Context) {
 		url := ctx.Request.URL.Path
 		if strings.Index(url, "/avatar/") == 0 {
 
@@ -62,7 +66,7 @@ func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
 				}
 			}
 			ctx.Request.URL.Path = "/static/head-default.png"
-			web.HandleContext(ctx)
+			ws.WebGin.HandleContext(ctx)
 			return
 		}
 

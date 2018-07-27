@@ -8,14 +8,14 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebAdd(auth *ws.Auth) {
+func WebAdd(auth *ws.Web) {
 	if auth.ScoreLack() {
 		return
 	}
 
 	cid := auth.String("CategoryId")
 	Id, _ := ws.TopicDao.Add(auth.SiteId, auth.String("Title"), auth.String("Body"),
-		auth.UserId, cid, auth.Username(), auth.String("SourceType"), auth.String("Source"))
+		auth.UserId, cid, auth.Username, auth.String("SourceType"), auth.String("Source"))
 	auth.Out["Id"] = Id
 	ws.TopicCategoryDao.UpItemCount(auth.SiteId, cid)
 	c, _, _ := ws.TopicDao.CountByUserId(auth.SiteId, auth.UserId)
@@ -45,9 +45,9 @@ func WebDetail(web *ws.Web) {
 		if bx {
 			web.Out["Reply"], _ = ws.ReplyDao.List(web.SiteId, id)
 		}
-		b, bu := gkuser.Verify(web.Context)
-		if b {
-			web.Out ["thank"], _ = ws.ThankDao.List(web.SiteId, id, bu)
+
+		if web.Auth {
+			web.Out ["thank"], _ = ws.ThankDao.List(web.SiteId, id, web.UserId)
 		}
 		referer := web.String("referer")
 		if len(referer) > 0 && strings.Index(referer, "http") == 0 && len(referer) < 240 {
@@ -91,7 +91,7 @@ func WebTopicBase(web *ws.Web) {
 	web.Out["base"], _, _ = ws.TopicDao.FindBase(web.SiteId, web.Int64("Id"))
 }
 
-func WebAppend(auth *ws.Auth) {
+func WebAppend(auth *ws.Web) {
 	if auth.ScoreLack() {
 		return
 	}

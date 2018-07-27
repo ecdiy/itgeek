@@ -12,8 +12,6 @@ import (
 	"fmt"
 )
 
-var tokenMap = make(map[string]map[string]string)
-
 func UserMd5Pass(Username, pass string) string {
 	h := md5.New()
 	h.Write([]byte( Username + "," + pass))
@@ -72,7 +70,7 @@ func UserInfoToRedis(siteId int64, ua string, v map[string]string) *ws.Result {
 	result.Result = v["Id"] + "_" + tk
 	ws.TokenDao.Del(ua, v["Id"], siteId)
 	ws.TokenDao.Add(v["Id"], ua, tk, siteId)
-	tokenMap[ua+"_"+v["Id"]] = v
+	ws.TokenMap[ua+"_"+v["Id"]] = v
 	delete(result.Param, "Token")
 
 	return result

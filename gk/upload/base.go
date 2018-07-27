@@ -18,31 +18,29 @@ var (
 	ImgMaxWidth int
 )
 
-func InitWeb(web *gin.Engine, verify func(c *gin.Context) (bool, int64)) {
+func InitWeb() {
 	DirUpload = ws.EnvParam("UploadDir")
 	ImgHost = ws.EnvParam("ImgHost")
 	ImgMaxWidth = ws.EnvParamInt("ImgMaxWidth", 800)
 	os.MkdirAll(DirUpload, 0777)
 
-	web.Static("/upload", "./upload")
+	ws.WebGin.Static("/upload", "./upload")
 
-	web.POST("/api/gk-upload/upload", func(ctx *gin.Context) {
-		b, _ := verify(ctx)
-		if b {
+	ws.WebGin.POST("/api/gk-upload/upload", func(ctx *gin.Context) {
+		web := ws.Verify(ctx)
+		if web.Auth {
 			DoUpload(ctx, fmt.Sprint(ws.SiteId(ctx)))
 		} else {
 			ctx.Status(401)
 		}
 	})
-	web.POST("/api/gk-upload/Avatar", func(ctx *gin.Context) {
-		b, userId := verify(ctx)
-		if b {
-			WebAvatar(ctx, fmt.Sprint(ws.SiteId(ctx)), userId)
+	ws.WebGin.POST("/api/gk-upload/Avatar", func(ctx *gin.Context) {
+		web := ws.Verify(ctx)
+		if web.Auth {
+			WebAvatar(ctx, fmt.Sprint(ws.SiteId(ctx)), web.UserId)
 		} else {
 			ctx.Status(401)
 		}
 	})
-
-
 
 }

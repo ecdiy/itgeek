@@ -4,7 +4,7 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebMsgList(auth *ws.Auth) {
+func WebMsgList(auth *ws.Web) {
 	auth.Out["totalAll"], _, _ = ws.MsgDao.Count(auth.SiteId, auth.UserId)
 	auth.Out["totalUnread"], _, _ = ws.MsgDao.CountUnread(auth.SiteId, auth.UserId)
 	//auth.Out["totalReply"], _, _ = MsgDao.CountByType(auth.UserId, "主题回复")
@@ -24,7 +24,7 @@ func WebMsgList(auth *ws.Auth) {
 	//}
 }
 
-func WebMsgDel(auth *ws.Auth) {
+func WebMsgDel(auth *ws.Web) {
 
 	auth.Out["row"], _ = ws.MsgDao.Del(auth.SiteId, auth.Int64("id"), auth.UserId)
 	ws.UserDao.UpMsg(auth.UserId, auth.UserId, auth.SiteId)
@@ -33,7 +33,7 @@ func WebMsgDel(auth *ws.Auth) {
 	auth.Out["totalUnread"], _, _ = ws.MsgDao.CountUnread(auth.SiteId, auth.UserId)
 }
 
-func WebMsgRead(auth *ws.Auth) {
+func WebMsgRead(auth *ws.Web) {
 	id := auth.Int64("id")
 	gId, gb, _ := ws.MsgDao.FindGroupId(auth.SiteId, auth.UserId, id)
 	if gb {

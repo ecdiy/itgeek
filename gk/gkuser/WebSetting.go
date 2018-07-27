@@ -7,14 +7,14 @@ import (
 
 func WebSite(web *ws.Web) {
 	web.Out["site"], _, _ = ws.KvDao.Get(web.SiteId, "BaseInfo")
-	isLogin, uId := Verify(web.Context)
+
 	web.Out["SiteId"] = web.SiteId
-	if isLogin {
-		mm, bx, _ := ws.UserDao.BaseInfo(web.SiteId, uId)
+	if web.Auth {
+		mm, bx, _ := ws.UserDao.BaseInfo(web.SiteId, web.UserId)
 		if bx {
 			web.Out["Info"] = mm
 		} else {
-			seelog.Warn("not find info.", uId)
+			seelog.Warn("not find info.", web.UserId)
 		}
 		web.Out["Login"] = true
 	} else {
@@ -22,9 +22,9 @@ func WebSite(web *ws.Web) {
 	}
 }
 
-func WebSettingSave(auth *ws.Auth) {
+func WebSettingSave(auth *ws.Web) {
 	auth.Out["row"], _ = ws.UserDao.Setting(auth.String("EditType"), auth.String("Info"), auth.Int64("Privacy"), auth.UserId, auth.SiteId)
 }
-func WebSettingGet(auth *ws.Auth) {
+func WebSettingGet(auth *ws.Web) {
 	auth.Out["row"], _, _ = ws.UserDao.SettingGet(auth.SiteId, auth.UserId)
 }

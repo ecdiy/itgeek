@@ -5,7 +5,7 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebFollow(auth *ws.Auth) {
+func WebFollow(auth *ws.Web) {
 	id := auth.Int64("userId")
 	fc, _, _ := ws.FollowDao.Exist(auth.SiteId, id, auth.UserId)
 	doType := 1
@@ -25,10 +25,10 @@ func WebFollow(auth *ws.Auth) {
 	auth.Out["followStatus"] = doType
 }
 
-func WebFollowList(auth *ws.Auth) {
+func WebFollowList(auth *ws.Web) {
 
 	auth.Out["FavList"], _ = ws.FollowDao.TopicList(auth.SiteId, auth.UserId, auth.Start())
 }
-func WebFollowStatus(auth *ws.Auth) {
+func WebFollowStatus(auth *ws.Web) {
 	auth.Out["followStatus"], _, _ = ws.FollowDao.Exist(auth.SiteId, auth.Int64("id"), auth.UserId)
 }

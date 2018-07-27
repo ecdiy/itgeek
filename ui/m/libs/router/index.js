@@ -8,6 +8,10 @@ Vue.use(VueRouter);
 export const router = new VueRouter({mode: 'history', routes: routers});
 
 router.beforeEach((to, from, next) => {
+    //baidu 统计代码
+    if (to.path && window._hmt) {
+        _hmt.push(['_trackPageview', to.fullPath]);
+    }
     // var fd = false;
     // var pos = 0;
     // for (var i = 0; i < routers.length; i++) {

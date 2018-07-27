@@ -7,16 +7,16 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebReply(auth *ws.Auth) {
+func WebReply(auth *ws.Web) {
 	if auth.ScoreLack() {
 		return
 	}
 
 	tId := auth.Int64("TopicId")
-	id, _ := ws.ReplyDao.Insert(auth.SiteId, auth.UserId, tId, auth.Username(), auth.String("Reply"))
+	id, _ := ws.ReplyDao.Insert(auth.SiteId, auth.UserId, tId, auth.Username, auth.String("Reply"))
 	auth.Out["Id"] = id
 	cr, _, _ := ws.ReplyDao.Count(auth.SiteId, tId)
-	ws.TopicDao.UpdateReply(auth.Username(), cr, auth.UserId, tId)
+	ws.TopicDao.UpdateReply(auth.Username, cr, auth.UserId, tId)
 	auth.Out["Count"] = cr
 	auth.Out["list"], _ = ws.ReplyDao.List(auth.SiteId, tId)
 	c, _, _ := ws.ReplyDao.CountByUserId(auth.SiteId, auth.UserId)
@@ -26,7 +26,7 @@ func WebReply(auth *ws.Auth) {
 	entityId := "Reply:" + fmt.Sprint(id)
 
 	topicLink := ` <a onclick="vgo('/p/topic/detail,` + fmt.Sprint(tId) + `,` + tp["UserId"] + `',this)">` + tp["Title"] + `</a>`
-	memberLink := memberLink(auth.Username())
+	memberLink := memberLink(auth.Username)
 
 	sr := ws.GetSoreRule(auth.SiteId)
 
@@ -41,7 +41,7 @@ func WebReply(auth *ws.Auth) {
 			ScoreDesc: `收到 ` + memberLink + ` 的回复 › ` + topicLink})
 
 		gkuser.Msg(&ws.MsgReq{EntityId: entityId, MsgType: "主题回复", GroupId: tId,
-			FromUserId: auth.UserId, UserId: createId, Body: auth.String("Reply"), FromUsername: auth.Username(),
+			FromUserId: auth.UserId, UserId: createId, Body: auth.String("Reply"), FromUsername: auth.Username,
 			SiteId: auth.SiteId, Title: "在 " + topicLink + ` 里回复了你`,
 		})
 
@@ -50,7 +50,7 @@ func WebReply(auth *ws.Auth) {
 }
 
 
-func WebTopicReplyThank(auth *ws.Auth) {
+func WebTopicReplyThank(auth *ws.Web) {
 	if auth.ScoreLack() {
 		return
 	}
@@ -73,10 +73,10 @@ func WebTopicReplyThank(auth *ws.Auth) {
 		entityId := "thank:" + strconv.FormatInt(thId, 10)
 
 		gkuser.ChangeScore(auth.SiteId, entityId, "收到谢意",
-			"感谢 "+memberLink(auth.Username())+" 的回复", sr.Thank*(-1), toId)
+			"感谢 "+memberLink(auth.Username)+" 的回复", sr.Thank*(-1), toId)
 
 		gkuser.Msg(&ws.MsgReq{EntityId: entityId, MsgType: "收到谢意", GroupId: topicId,
-			FromUserId: auth.UserId, UserId: toId, Body: auth.String("Reply"), FromUsername: auth.Username(),
-			SiteId: auth.SiteId, Title: memberLink(auth.Username()) + " 感谢你在 " + tl + ` 的回复`,})
+			FromUserId: auth.UserId, UserId: toId, Body: auth.String("Reply"), FromUsername: auth.Username,
+			SiteId: auth.SiteId, Title: memberLink(auth.Username) + " 感谢你在 " + tl + ` 的回复`,})
 	}
 }

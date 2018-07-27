@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/cihub/seelog"
 
-	"github.com/gin-gonic/gin"
 	"github.com/ecdiy/itgeek/gk/gkuser"
 
 	"github.com/ecdiy/itgeek/gk/gktopic"
@@ -14,8 +13,6 @@ import (
 	"os"
 	"strings"
 )
-
-var web = gin.New()
 
 func ParamBase() {
 
@@ -60,17 +57,17 @@ func main() {
 
 	ws.InitDao()
 
-	gkuser.InitWeb(web)
+	gkuser.InitWeb()
 
-	gknote.InitWeb(web, gkuser.Verify)
-	gktopic.InitWeb(web, gkuser.Verify)
-	upload.InitWeb(web, gkuser.Verify)
+	gknote.InitWeb()
+	gktopic.InitWeb()
+	upload.InitWeb()
 
-	gkadmin.InitWeb(web)
-	web.Static("/h5dist", BaseDir+"/m/h5dist")
-	web.Static("/dist", BaseDir+"/web/dist")
-	web.Static("/static", BaseDir+"/static")
+	gkadmin.InitWeb()
+	ws.WebGin.Static("/h5dist", BaseDir+"/m/h5dist")
+	ws.WebGin.Static("/dist", BaseDir+"/web/dist")
+	ws.WebGin.Static("/static", BaseDir+"/static")
 
 	seelog.Info("version:0.0.1 (itgeek.top) BaseDir=", BaseDir)
-	web.Run(ws.EnvParam(ws.KeyBindAddr))
+	ws.WebGin.Run(ws.EnvParam(ws.KeyBindAddr))
 }

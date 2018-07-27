@@ -21,10 +21,10 @@ func GenerateRangeNum(min, max int) int64 {
 	return int64(rand.Intn(max-min) + min)
 }
 
-func WebScoreLoginAward(auth *ws.Auth) {
+func WebScoreLoginAward(auth *ws.Web) {
 	auth.Out["LoginAward"], _, _ = ws.UserDao.LoginAward(auth.SiteId, auth.UserId)
 }
-func WebScoreLoginAwardDo(auth *ws.Auth) {
+func WebScoreLoginAwardDo(auth *ws.Web) {
 	val := GenerateRangeNum(5, 50)
 	t := time.Now().Format("2006-01-02")
 	id, score, _ := ChangeScore(auth.SiteId, t, "每日登录奖励", t+"的每日登录奖励", val, auth.UserId)
@@ -35,7 +35,7 @@ func WebScoreLoginAwardDo(auth *ws.Auth) {
 	auth.Out["ScoreLack"] = score
 }
 
-func WebScoreLogList(auth *ws.Auth) {
+func WebScoreLogList(auth *ws.Web) {
 	auth.Out["total"], _, _ = ws.ScoreLog.Count(auth.SiteId, auth.UserId)
 	auth.Out["list"], _ = ws.ScoreLog.List(auth.SiteId, auth.UserId, auth.Start())
 }

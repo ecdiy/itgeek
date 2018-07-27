@@ -5,12 +5,12 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func WebFavList(auth *ws.Auth) {
+func WebFavList(auth *ws.Web) {
 
 	auth.Out["FavList"], _ = ws.FavDao.List(auth.SiteId, auth.UserId, auth.Start())
 }
 
-func WebFav(auth *ws.Auth) {
+func WebFav(auth *ws.Web) {
 	id := auth.String("id")
 	fc, _, _ := ws.FavDao.Exist(auth.SiteId, auth.UserId, id)
 	doType := 1
@@ -27,6 +27,6 @@ func WebFav(auth *ws.Auth) {
 	auth.Out["Fav"] = doType
 }
 
-func WebFavStatus(auth *ws.Auth) {
+func WebFavStatus(auth *ws.Web) {
 	auth.Out["Fav"], _, _ = ws.FavDao.Exist(auth.SiteId, auth.UserId, auth.Int64("id"))
 }
