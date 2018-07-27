@@ -41,16 +41,14 @@ type DaoTopic struct {
 
 	List func(SiteId int64, start int64) ([]map[string]string, error) `select t.Id,t.Title,t.Username,t.UserId,fmt(t.CreateAt)CreateAt,c.Name CategoryName,
 		t.CategoryId,t.ReplyCount,t.ReplyUsername,t.ReplyUserId,ifnull(t.ReplyTime,t.CreateAt)ReplyTime from Topic t left join Category c on t.CategoryId=c.Id 
-							where t.SiteId=?  order by ifnull(t.ReplyTime,t.CreateAt) desc limit ?,20`
+							where t.SiteId=? order by ifnull(t.ReplyTime,t.CreateAt) desc limit ?,20`
 
 	Top1000 func(SiteId int64, ) ([]map[string]string, error) `select Id,Title,UserId,date_format(ifnull(ReplyTime,CreateAt),'%Y-%m-%d %H:%i:%S') CreateAt from Topic where  SiteId=? order by Id desc limit 0,1000`
 
-	//Top1000 func() ([]map[string]string, error) `select t.Id,t.Title,t.Username,t.UserId,fmt(t.CreateAt) CreateAt,c.Name CategoryName,t.CategoryId,t.ReplyCount,t.ReplyUsername,t.ReplyUserId,ifnull(t.ReplyTime,t.CreateAt)ReplyTime from Topic t left join Category c on t.CategoryId=c.Id
-	//							  order by ifnull(t.ReplyTime,t.CreateAt) desc limit 0,1000`
 
 	ListBySub func(SiteId int64, id, start interface{}) ([]map[string]string, error) `select t.Id,t.Title,t.Username,t.UserId,fmt(t.CreateAt) CreateAt,c.Name CategoryName,t.CategoryId,t.ReplyCount,t.ReplyUsername,t.ReplyUserId,ifnull(t.ReplyTime,t.CreateAt)ReplyTime 
 		from Topic t left join Category c on t.CategoryId=c.Id 
-		where t.SiteId=? and CategoryId=? order by ifnull(t.ReplyTime,t.CreateAt) desc limit ?,20`
+		where t.SiteId=? and t.CategoryId=? order by ifnull(t.ReplyTime,t.CreateAt) desc limit ?,20`
 
 	ListByParent func(SiteId int64, parentId, start interface{}) ([]map[string]string, error) `select t.Id,t.Title,t.Username,t.UserId,fmt(t.CreateAt) CreateAt,c.Name CategoryName,t.CategoryId,t.ReplyCount,t.ReplyUsername,t.ReplyUserId,ifnull(t.ReplyTime,t.CreateAt)ReplyTime
 		from Topic t left join Category c on t.CategoryId=c.Id 

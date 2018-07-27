@@ -97,7 +97,7 @@ func WebSeoHome(ctx *gin.Context) {
 
 func WebSeoDetail(ctx *gin.Context) {
 
-	ua := GetUa(ctx)
+	ua :=ws. GetUa(ctx)
 	if ua == "web" {
 		ctx.Data(200, "text/html;charset=utf-8", [] byte(HtmlWeb))
 	} else if ua == "h5" {

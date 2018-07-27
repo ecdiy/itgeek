@@ -33,7 +33,7 @@
             handleSubmit() {
                 this.ajax('/gk-user/Login', this.form, function (r, th) {
                     if ((!r.Status.Code || r.Status.Code == 0) && r.Result.length > 0) {
-                        Cookies.set('h5Token', r.Result);
+                        Cookies.set('h5Token', r.Result, {expires: 365});
                         window.gk.user = r.Param;
                         window.gk.login = true;
                         vm.$emit("data", window.gk);

@@ -8,15 +8,11 @@ import (
 
 func Verify(c *gin.Context) *Web {
 	auth := &Web{}
-	auth.Ua, _ = c.Cookie("ua")
-	if auth.Ua == "web" {
-		auth.Ua = "web"
-	} else {
-		auth.Ua = "h5"
-	}
+	auth.Ua = GetUa(c)
 	auth.Context = c
 	auth.Out = make(map[string]interface{})
 	auth.SiteId = SiteId(c)
+
 	sut, e := c.Cookie(auth.Ua + "Token")
 	if e == nil && len(sut) > 1 {
 		idx := strings.Index(sut, "_")

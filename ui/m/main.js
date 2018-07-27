@@ -52,6 +52,5 @@ Vue.prototype.ajax = function (url, p, fun) {
 window.goUrl = '/';
 window.gk = {login: false, user: {}, site: {}, siteId: 0};
 
-Cookies.set("ua", "h5");
 window.vm = new Vue({el: '#app', router: router, render: h => h(App)});
 

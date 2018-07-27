@@ -4,6 +4,7 @@ import (
 	"github.com/ecdiy/gpa"
 	"github.com/gin-gonic/gin"
 	"strings"
+	"regexp"
 )
 
 const PageSize = 20
@@ -15,6 +16,9 @@ var (
 
 	ScoreMap = make(map[int64]*ScoreRule)
 	WebGin   = gin.New()
+
+	UaSeo = regexp.MustCompile(`baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator`)
+	UaH5  = regexp.MustCompile(`(MIDP)|(WAP)|(UP.Browser)|(Smartphone)|(Obigo)|(Mobile)|(AU.Browser)|(wxd.Mms)|(WxdB.Browser)|(CLDC)|(UP.Link)|(KM.Browser)|(UCWEB)|(SEMC\-Browser)|(Mini)|(Symbian)|(Palm)|(Nokia)|(Panasonic)|(MOT\-)|(SonyEricsson)|(NEC\-)|(Alcatel)|(Ericsson)|(BENQ)|(BenQ)|(Amoisonic)|(Amoi\-)|(Capitel)|(PHILIPS)|(SAMSUNG)|(Lenovo)|(Mitsu)|(Motorola)|(SHARP)|(WAPPER)|(LG\-)|(LG/)|(EG900)|(CECT)|(Compal)|(kejian)|(Bird)|(BIRD)|(G900/V1.0)|(Arima)|(CTL)|(TDG)|(Daxian)|(DAXIAN)|(DBTEL)|(Eastcom)|(EASTCOM)|(PANTECH)|(Dopod)|(Haier)|(HAIER)|(KONKA)|(KEJIAN)|(LENOVO)|(Soutec)|(SOUTEC)|(SAGEM)|(SEC\-)|(SED\-)|(EMOL\-)|(INNO55)|(ZTE)|(iPhone)|(Android)|(Windows CE)|(Wget)|(Java)|(curl)|(Opera)/`)
 )
 
 func InitWs() {
@@ -68,7 +72,22 @@ func WebAuth(url string, fun func(wdb *Web)) {
 func WebPost(url string, fun func(wdb *Web)) {
 	WebGin.POST(url, func(c *gin.Context) {
 		web := Verify(c)
+		web.initParam()
 		fun(web)
 		c.JSON(200, web.Out)
 	})
+}
+
+func GetUa(ctx *gin.Context) string {
+	ua := ctx.Request.UserAgent()
+	if len(ua) == 0 {
+		return "web"
+	}
+	if UaH5.MatchString(ua) {
+		return "h5"
+	}
+	if UaSeo.MatchString(ua) {
+		return "seo"
+	}
+	return "web"
 }

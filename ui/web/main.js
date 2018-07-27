@@ -82,5 +82,3 @@ window.vgo = (url, o) => {
         vm.$emit("msgClick", o.parentNode.getAttribute("msg-id"))
     vm.$router.replace(url)
 };
-
-Cookies.set("ua", "web");

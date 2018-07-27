@@ -71,7 +71,7 @@ func InitWeb() {
 		}
 
 		if strings.Index(url, "/p/") == 0 {
-			ua := GetUa(ctx)
+			ua := ws.GetUa(ctx)
 			if ua == "web" {
 				ctx.Data(200, "text/html;charset=utf-8", [] byte(HtmlWeb))
 			} else if ua == "h5" {

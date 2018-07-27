@@ -70,7 +70,7 @@
         methods: {
             loadCaptcha() {
                 let th = this;
-                post(this.captchaNew, {}, function (r) {
+                this.ajax(this.captchaNew, {}, function (r) {
                     th.CaptchaId = r.Result;
                     th.authImg = th.authImgUrl + th.CaptchaId;
                 });
@@ -83,7 +83,7 @@
                     if (valid) {
                         this.ajax(this.actionUrl, this.form, (r, th) => {
                             if ((!r.Status.Code || r.Status.Code == 0) && r.Result.length > 0) {
-                                Cookies.set(th.cookieTokenName, r.Result, {expires: 7});
+                                Cookies.set(th.cookieTokenName, r.Result, {expires: 365});
                                 th.$emit('on-login', r.Info);
                             } else {
                                 if (r.Status.Code == 8) {

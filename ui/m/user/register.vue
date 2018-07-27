@@ -77,7 +77,7 @@ export default {
             this.reg["CaptchaId"] = this.CaptchaId;
             this.ajax('/gk-user/Register', this.reg, (r, th) => {
                 if (r.Status && !r.Status.Code) {
-                    Cookies.set('h5Token', r.Result);
+                    Cookies.set('h5Token', r.Result, {expires: 365});
                     window.gk.user = r.Info;
                     window.gk.login = true;
                     vm.$emit("data", window.gk);
