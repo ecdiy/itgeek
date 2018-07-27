@@ -64,4 +64,8 @@ geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0
 
 #### FAQ
 ##### baidu统计代码，修改发表后的index.html,找到对应位置,注意有部分代码修改
-QQ群：620063196
+
+#### QQ群/收录申请：620063196
+
+#### 使用该项目搭建的网站  
+http://www.itgeek.top
