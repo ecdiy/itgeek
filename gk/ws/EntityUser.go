@@ -29,11 +29,12 @@ type DaoUser struct {
 	UpFollow func(rc, UserId int64, SiteId int64) (int64, error)      `update GkUser set FollowCount=?,ModifyAt=now() where Id=? and SiteId=? `
 	UpMsg    func(UserId, UserId2 int64, SiteId int64) (int64, error) `update GkUser set MsgCount=(select count(*) from Msg where UserId=? and status=0) where Id=? and SiteId=? `
 
-	LoginAward func(SiteId int64, userId int64) (int, bool, error)   `select LoginAward from GkUser where SiteId=? and  Id=?`
-	Score      func(SiteId int64, userId int64) (int64, bool, error) `select Score from GkUser where SiteId=? and Id=?`
+	LoginAward func(SiteId int64, userId int64) (map[string]string, bool, error) `select LoginAward,if(IF(AwardDate is null,0,DATEDIFF(now(),AwardDate))=1,LoginDay,0)LoginDay,AwardDate from GkUser where SiteId=? and  Id=?`
+	Score      func(SiteId int64, userId int64) (int64, bool, error)             `select Score from GkUser where SiteId=? and Id=?`
 
 	UpScore      func(sc, userId, siteId int64) (int64, error)   `update GkUser set Score=? where Id=? and SiteId=?`
-	LoginAwardDo func(SiteId int64, userId int64) (int64, error) `update GkUser set LoginAward=0 where SiteId=? and Id=? and LoginAward=1`
+
+	LoginAwardDo func(SiteId int64, userId int64) (int64, error) `update GkUser set LoginAward=0,LoginDay=if(IF(AwardDate is null,0,DATEDIFF(now(),AwardDate))=1,LoginDay,0)+1,AwardDate=now() where SiteId=? and Id=? and LoginAward=1`
 
 	Dau      func(SiteId int64, ) ([]map[string]string, error)           `select Dau,Id,Username,Info from GkUser where SiteId=? and  Dau>0 order by Dau desc limit 0,10`
 	DauOrder func(SiteId int64, userId interface{}) (int64, bool, error) `select count(*)+1 DauOrder from GkUser where SiteId=? and  Dau>(select Dau from GkUser where Id=?)`

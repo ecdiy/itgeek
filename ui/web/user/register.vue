@@ -100,7 +100,6 @@ export default {
             this.reg["CaptchaId"] = this.CaptchaId;
             this.ajax('/gk-user/Register', this.reg, function (r, th) {
                 if (r.code == 0) {
-                    Cookies.set('webToken', r.result, {expires: 365});
                     gk.user = r.result[0];
                     gk.login = true;
                     Cookies.set('webToken', gk.user.Token, {expires: 365});

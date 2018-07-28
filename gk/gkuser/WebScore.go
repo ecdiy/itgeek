@@ -21,8 +21,17 @@ func GenerateRangeNum(min, max int) int64 {
 	return int64(rand.Intn(max-min) + min)
 }
 
-func WebScoreLoginAward(auth *ws.Web) {
-	auth.Out["LoginAward"], _, _ = ws.UserDao.LoginAward(auth.SiteId, auth.UserId)
+func WebScoreLoginAwardStatus(auth *ws.Web) {
+	//LoginAward,LoginDay,AwardDate
+	res, rb, e := ws.UserDao.LoginAward(auth.SiteId, auth.UserId)
+	if e == nil && rb {
+		auth.Out["LoginAward"] = res["LoginAward"]
+		auth.Out["today"] = time.Now().Format("2006-01-02")
+		auth.Out["loginDay"] = res["LoginDay"]
+		if auth.Out["LoginAward"] == "1" {
+
+		}
+	}
 }
 func WebScoreLoginAwardDo(auth *ws.Web) {
 	val := GenerateRangeNum(5, 50)

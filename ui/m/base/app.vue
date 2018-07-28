@@ -40,6 +40,9 @@ export default {
         this.ajax('/gk-user/site', {}, (r, t) => {
             if (r.site && r.site.length > 2) {
                 gk.site = JSON.parse(r.site);
+                if (!gk.site.dw) {
+                    gk.site.dw = '铜币';
+                }
                 gk.siteId = r.SiteId;
                 document.title = gk.site.SiteName;
             }
@@ -70,6 +73,7 @@ export default {
         box-shadow: 0 2px 3px rgba(0, 0, 0, .1);
         border-bottom: 1px solid #e2e2e2;
         padding-bottom: 10px;
+        text-align: left;
     }
 
     a:active, a:link, a:visited {

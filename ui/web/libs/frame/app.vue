@@ -71,6 +71,9 @@
                     gk.site = JSON.parse(r.site);
                     gk.siteId = r.SiteId;
                     document.title = gk.site.SiteName;
+                    if (!gk.site.dw) {
+                        gk.site.dw = '铜币';
+                    }
                 }
                 if (r.Login) {
                     gk.login = true;

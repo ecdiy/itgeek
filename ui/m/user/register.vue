@@ -1,9 +1,10 @@
 <template>
-    <div>
+    <div class="box">
         <x-input v-model="reg.Username" title="用户名" placeholder="请输入用户名" novalidate
                  :icon-type="icon.Username"></x-input>
         <x-input v-model="reg.Email" title="邮 箱" placeholder="请输入邮箱" novalidate :icon-type="icon.Email"></x-input>
-        <x-input v-model="reg.Mobile" title="手机号" placeholder="请输入手机号" novalidate :icon-type="icon.Mobile"></x-input>
+        <x-input v-model="reg.Mobile" title="手机号" placeholder="请输入手机号" novalidate :icon-type="icon.Mobile"
+                 mask="999 9999 9999" :max="13" is-type="china-mobile"></x-input>
         <x-input v-model="reg.Password" title="密 码" type="password" placeholder="请输入密码"
                  novalidate :icon-type="icon.Password"></x-input>
         <x-input v-model="reg.CaptchaVal" title="认证码" placeholder="请输入认证码" novalidate
@@ -42,7 +43,7 @@ export default {
                 this.icon.Email = 'success';
             }
             e = this.reg.Mobile;
-            if (!e || e.length != 11) {
+            if (!e || e.length != 13) {
                 this.icon.Mobile = 'error';
                 return false;
             } else {
@@ -66,7 +67,7 @@ export default {
         },
         loadCaptcha() {
             this.ajax('/gk-user/CaptchaNew', {}, function (r, th) {
-                th.CaptchaId = r.result;
+                th.CaptchaId = r.result[0];
                 th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
             });
         },
@@ -75,23 +76,24 @@ export default {
                 return
             }
             this.reg["CaptchaId"] = this.CaptchaId;
+            var fm = JSON.parse(JSON.stringify(this.reg));
+            fm.Mobile = fm.Mobile.replace(' ', '').replace(' ', '');
             this.ajax('/gk-user/Register', this.reg, (r, th) => {
-                if (  !r.code) {
-                    Cookies.set('h5Token', r.result, {expires: 365});
-                    window.gk.user = r.Info;
-                    window.gk.login = true;
-
+                if (r.code == 0) {
+                    gk.user = r.result[0];
+                    gk.login = true;
+                    Cookies.set('h5Token', gk.user.Token, {expires: 365});
                     th.$vux.alert.show({
                         title: '注册成功',
                         onHide() {
-                            window.location = "#/";
+                            vm.$router.push({path: "/"});
                         }
                     });
                 } else {
                     th.reg.CaptchaVal = "";
-                    th.CaptchaId = r.result;
+                    th.CaptchaId = r.result[0];
                     th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
-                    th.$vux.toast.text(r.Status.Msg, 'bottom')
+                    th.$vux.toast.text(r.msg, 'bottom')
                     if (r.code == 8) {
                         th.icon.CaptchaVal = 'error';
                     }

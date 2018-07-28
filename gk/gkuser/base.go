@@ -44,7 +44,7 @@ func InitWeb() {
 	auth("/setting/save", WebSettingSave)
 	auth("/setting/get", WebSettingGet)
 
-	auth("/LoginAwardStatus", WebScoreLoginAward)
+	auth("/LoginAwardStatus", WebScoreLoginAwardStatus)
 	auth("/LoginAwardDo", WebScoreLoginAwardDo)
 	auth("/scoreLogList", WebScoreLogList)
 

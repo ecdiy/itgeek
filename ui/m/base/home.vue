@@ -1,12 +1,16 @@
 <template>
     <div>
-        <div class="cell swipe-wrapper" v-if="gk.user.LoginAward==1">
-            <x-icon type="cube" size="18"></x-icon>
-            <go to="my/LoginAward">
-                领取今日的登录奖励
-            </go>
+        <div class="box" v-if="gk.user.LoginAward==1">
+            <div style="font-size: 14px;padding: 5px 10px 0;height: 18px;line-height: 18px">
+                <x-icon type="cube" size="16"></x-icon>
+                <go to="my/LoginAward">
+                    领取今日的登录奖励
+                </go>
+            </div>
         </div>
-        <div class="cell ">
+        <div class="h10"/>
+
+        <div class="box">
             <div class="cat">
                 <ul>
                     <li>
@@ -30,7 +34,6 @@
                 </ul>
             </div>
         </div>
-
 
         <div class="cell swipe-wrapper" v-for="(it,index) in topicList" :key="it.Id">
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -131,6 +134,11 @@
     }
 </script>
 <style scoped>
+    .h10 {
+        height: 10px;
+        width: 100%
+    }
+
     ul {
         padding: 0;
         margin: 0
