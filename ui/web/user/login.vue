@@ -106,7 +106,7 @@
             loadCaptcha() {
                 let th = this;
                 this.ajax(this.captchaNew, {}, function (r) {
-                    th.CaptchaId = r.result;
+                    th.CaptchaId = r.result[0];
                     th.authImg = th.authImgUrl + th.CaptchaId;
                 });
             }

@@ -43,9 +43,7 @@
 export default {
     data() {
         return {
-            authImg: "",
-            reg: {},
-
+            authImg: "", reg: {},
             em: {Username: '', Email: '', Mobile: '', Password: '', CaptchaVal: ''},
         }
     }, created() {
@@ -91,7 +89,7 @@ export default {
         },
         loadCaptcha() {
             this.ajax('/gk-user/CaptchaNew', {}, (r, th) => {
-                th.CaptchaId = r.result;
+                th.CaptchaId = r.result[0];
                 th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
             });
         },
@@ -101,14 +99,16 @@ export default {
             }
             this.reg["CaptchaId"] = this.CaptchaId;
             this.ajax('/gk-user/Register', this.reg, function (r, th) {
-                if (  r.code == 0 ) {
+                if (r.code == 0) {
                     Cookies.set('webToken', r.result, {expires: 365});
-                    window.gk.user = r.Info;
-                    window.gk.login = true;
+                    gk.user = r.result[0];
+                    gk.login = true;
+                    Cookies.set('webToken', gk.user.Token, {expires: 365});
+
                     th.$Modal.success({
                         title: "", content: "注册成功",
                         onOk() {
-                            vm.$router.replace('/')
+                            vm.$router.push({path: "/"});
                         }
                     });
                 } else {
@@ -123,7 +123,7 @@ export default {
                     if (r.code == 1002) {
                         th.em.Email = r.msg;
                     }
-                    th.CaptchaId = r.result;
+                    th.CaptchaId = r.result[0];
                     th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
                 }
             });

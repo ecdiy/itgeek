@@ -104,7 +104,7 @@ func WebUserRegister(web *ws.Web) {
 		return
 	}
 	uCount, unb, _ := ws.UserDao.CheckByUsername(web.SiteId, Username)
-	seelog.Info("~~~UserDao Register~~", Username, Mobile, Email)
+	seelog.Info("~~~User Register~~", Username, Mobile, Email)
 	if unb && uCount > 0 {
 		web.ST(ws.StUsernameExist, captcha.New())
 		return
@@ -118,8 +118,6 @@ func WebUserRegister(web *ws.Web) {
 	id, ue := ws.UserDao.Add(web.SiteId, Username, Password, Email, Mobile)
 
 	if ue == nil {
-		v, _, _ := ws.UserDao.BaseInfo(web.SiteId, id)
-		UserInfoToRedis(web, v)
 		ws.KvDao.UserCount(web.SiteId, web.SiteId)
 		fee := ws.GetSoreRule(web.SiteId).Register
 		if fee != 0 {
@@ -127,6 +125,8 @@ func WebUserRegister(web *ws.Web) {
 				ScoreType: "初始资本",
 				ScoreDesc: `获得初始资本 ` + fmt.Sprint(fee)})
 		}
+		v, _, _ := ws.UserDao.BaseInfo(web.SiteId, id)
+		UserInfoToRedis(web, v)
 		web.ST(ws.OK, v)
 		return
 	} else {
