@@ -11,6 +11,7 @@ export const routers = [
     r(() => import('@/topic/detail.vue'), 'topic/detail,:id'),
     r(() => import('@/base/home.vue'), 'topic/list,:id'),
     r(() => import('@/my/LoginAward'), 'my_LoginAward'),
+    r(() => import('@/my/balance'), 'my_balance', '账户余额'),
 
     r(() => import('@/user/login.vue'), 'user_login', '登录'),
     {

@@ -65,50 +65,71 @@ export default {
     }
 };
 </script>
-<style>
-    div.box {
-        display: block;
-        background-color: #fff;
-        border-radius: 3px;
-        box-shadow: 0 2px 3px rgba(0, 0, 0, .1);
-        border-bottom: 1px solid #e2e2e2;
-        padding-bottom: 10px;
-        text-align: left;
-    }
+<style>.nav {
+    padding: 5px;
+}
 
-    a:active, a:link, a:visited {
-        color: #778087;
-        text-decoration: none;
-        word-break: break-all;
-    }
+.nav span {
+    padding: 0 8px
+}
 
-    .hd {
+.h10 {
+    height: 10px;
+    width: 100%
+}
 
-        padding: 10px 5px;
-        text-align: center;
-        background-color: #fff;
-        height: 25px;
-        line-height: 25px;
-        font-size: 15px;
-        font-weight: 500;
-        border-bottom: 1px solid rgba(0, 0, 0, .22);
-    }
+div.box {
+    display: block;
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .1);
+    border-bottom: 1px solid #e2e2e2;
+    padding-bottom: 10px;
+    text-align: left;
+    clear: both;
+}
 
-    .fl {
-        float: left;
-    }
+a:active, a:link, a:visited {
+    color: #778087;
+    text-decoration: none;
+    word-break: break-all;
+}
 
-    .fr {
-        padding-right: 10px;
-        float: right;
-    }
+.hd {
 
-    li {
-        list-style: none;
-        /*float: left;*/
-    }
+    padding: 10px 5px;
+    text-align: center;
+    background-color: #fff;
+    height: 25px;
+    line-height: 25px;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(0, 0, 0, .22);
+}
 
-    .small {
-        font-size: 11px;
-    }
+.fl {
+    float: left;
+}
+
+.fr {
+    padding-right: 10px;
+    float: right;
+}
+
+li {
+    list-style: none;
+    /*float: left;*/
+}
+
+.small {
+    font-size: 11px;
+}
+
+.cell {
+    padding: 10px;
+    font-size: 14px;
+    line-height: 120%;
+    text-align: left;
+    border-bottom: 1px solid #e2e2e2;
+}
 </style>

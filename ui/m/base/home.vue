@@ -8,10 +8,11 @@
                 </go>
             </div>
         </div>
+
         <div class="h10"/>
 
         <div class="box">
-            <div class="cat">
+            <div class="cat cell">
                 <ul>
                     <li>
                         <router-link :class="pId=='0' && cId=='0'?'current':''" @click="setId('0','0')"
@@ -33,39 +34,38 @@
                     </li>
                 </ul>
             </div>
-        </div>
-
-        <div class="cell swipe-wrapper" v-for="(it,index) in topicList" :key="it.Id">
-            <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                <tbody>
-                <tr>
-                    <td width="24" valign="top" align="center">
-                        <router-link :to="'/p/member/'+it.Username"><img
-                                :src="avatar(it.UserId)"
-                                border="0" align="default"
-                                style="max-width: 24px; max-height: 24px;"></router-link>
-                    </td>
-                    <td width="10"></td>
-                    <td width="auto" valign="middle"><span class="small fade">
+            <div class="cell swipe-wrapper" v-for="(it,index) in topicList" :key="it.Id">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tbody>
+                    <tr>
+                        <td width="24" valign="top" align="center">
+                            <router-link :to="'/p/member/'+it.Username"><img
+                                    :src="avatar(it.UserId)"
+                                    border="0" align="default"
+                                    style="max-width: 24px; max-height: 24px;"></router-link>
+                        </td>
+                        <td width="10"></td>
+                        <td width="auto" valign="middle"><span class="small fade">
                             <a class="node"
                                @click="setId(0,it.CategoryId)">{{it.CategoryName}}</a> &nbsp;•&nbsp; <strong><a
-                            :to="'/p/member/'+it.Username">{{it.Username}}</a></strong></span>
-                        <div>
+                                :to="'/p/member/'+it.Username">{{it.Username}}</a></strong></span>
+                            <div>
                                 <span class="item_title"><router-link
                                         :to="'/p/topic/detail,'+it.Id+','+it.UserId">{{it.Title}}</router-link></span>
-                        </div>
-                        <div>
-                            <span class="small fade">{{ it.CreateAt}}</span>
-                            <span class="small fade" v-if="it.ReplyUsername!=''">
+                            </div>
+                            <div>
+                                <span class="small fade">{{ it.CreateAt}}</span>
+                                <span class="small fade" v-if="it.ReplyUsername!=''">
                              &nbsp;•&nbsp;最后回复 <strong><router-link
-                                    :to="'/p/member/'+it.ReplyUserId">{{it.ReplyUsername}}</router-link></strong></span>
-                        </div>
-                    </td>
-                    <td width="70" align="right" valign="middle"> {{it.ReplyCount}}</td>
-                </tr>
-                </tbody>
-            </table>
+                                        :to="'/p/member/'+it.ReplyUserId">{{it.ReplyUsername}}</router-link></strong></span>
+                            </div>
+                        </td>
+                        <td width="70" align="right" valign="middle"> {{it.ReplyCount}}</td>
+                    </tr>
+                    </tbody>
+                </table>
 
+            </div>
         </div>
     </div>
 </template>
@@ -134,10 +134,6 @@
     }
 </script>
 <style scoped>
-    .h10 {
-        height: 10px;
-        width: 100%
-    }
 
     ul {
         padding: 0;

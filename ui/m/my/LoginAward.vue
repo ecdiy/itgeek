@@ -9,7 +9,9 @@
         </div>
 
         <div class="box" v-if="LoginAward==0">
-            每日登录奖励已领取, {{gk.user.Score}}
+                <span style="font-size: 18px;padding: 15px 8px;display: block">每日登录奖励已领取</span>
+            <x-button @click.native="goBalance">查看我的账户余额</x-button>
+            <div style=" padding: 15px 8px;display: block">已连续登录 {{loginDay}} 天</div>
         </div>
     </div>
 
@@ -22,6 +24,9 @@
         }, created() {
             this.ajax('/gk-user/LoginAwardStatus')
         }, methods: {
+            goBalance() {
+                vm.$router.push({path: '/'});
+            },
             laDo() {
                 this.ajax('/gk-user/LoginAwardDo', {}, function (r, th) {
                     window.gk.user.Score = r.Score;
