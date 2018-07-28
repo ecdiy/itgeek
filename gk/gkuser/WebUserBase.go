@@ -104,7 +104,7 @@ func WebUserRegister(web *ws.Web) {
 		return
 	}
 	uCount, unb, _ := ws.UserDao.CheckByUsername(web.SiteId, Username)
-	seelog.Info("~~~User Register~~", Username, Mobile, Email)
+	seelog.Info("~~~Register~~", Username, Mobile, Email)
 	if unb && uCount > 0 {
 		web.ST(ws.StUsernameExist, captcha.New())
 		return
@@ -133,5 +133,4 @@ func WebUserRegister(web *ws.Web) {
 		web.ST(ws.StErrorUnknown, captcha.New())
 		return
 	}
-
 }
