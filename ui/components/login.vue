@@ -82,11 +82,11 @@
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.ajax(this.actionUrl, this.form, (r, th) => {
-                            if ((!r.Status.Code || r.Status.Code == 0) && r.result.length > 0) {
+                            if ((!r.code || r.code == 0) && r.result.length > 0) {
                                 Cookies.set(th.cookieTokenName, r.result, {expires: 365});
                                 th.$emit('on-login', r.Info);
                             } else {
-                                if (r.Status.Code == 8) {
+                                if (r.code == 8) {
                                     th.captchaCls = '';
                                 } else {
                                     th.form.Password = "";
@@ -95,7 +95,7 @@
                                     }
                                 }
                                 if (r.result != '') {
-                                    th.err[r.result] = r.Status.Msg;
+                                    th.err[r.result] = r. msg;
                                 }
                                 if (r.result == 'Captcha') {
                                     th.captchaCls = '';

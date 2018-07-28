@@ -15,9 +15,7 @@ Vue.component('flexbox-item', FlexboxItem)
 Vue.component('go', function (resolve) {
     require(['../components/go.vue'], resolve)
 })
-Vue.component('card', function (resolve) {
-    require(['../components/mCard.vue'], resolve)
-})
+
 Vue.use(ConfirmPlugin)
 
 window.avatarVer = (new Date()).getTime()
@@ -27,7 +25,7 @@ Vue.prototype.avatar = function (id) {
 
 Vue.prototype.ajax = function (url, p, fun) {
     let th = this;
-    axios.post('/api' + url, p ? p : {}).then(function (r) {
+    axios.post('/api' + arguments[0], p ? p : {}).then(function (r) {
         for (var k in r.data) {
             if (th.hasOwnProperty(k))
                 th[k] = r.data[k]

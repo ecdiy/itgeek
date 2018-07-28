@@ -101,7 +101,7 @@ export default {
             }
             this.reg["CaptchaId"] = this.CaptchaId;
             this.ajax('/gk-user/Register', this.reg, function (r, th) {
-                if (r.Status && (!r.Status.Code || r.Status.Code == 0)) {
+                if (  r.code == 0 ) {
                     Cookies.set('webToken', r.result, {expires: 365});
                     window.gk.user = r.Info;
                     window.gk.login = true;
@@ -114,14 +114,14 @@ export default {
                 } else {
                     th.regCap = "";
                     th.reg.CaptchaVal = "";
-                    if (r.Status.Code == 8) {
-                        th.em.CaptchaVal = r.Status.Msg;
+                    if (r.code == 8) {
+                        th.em.CaptchaVal = r.msg;
                     }
-                    if (r.Status.Code == 1000) {
-                        th.em.Username = r.Status.Msg;
+                    if (r.code == 1000) {
+                        th.em.Username = r.msg;
                     }
-                    if (r.Status.Code == 1002) {
-                        th.em.Email = r.Status.Msg;
+                    if (r.code == 1002) {
+                        th.em.Email = r.msg;
                     }
                     th.CaptchaId = r.result;
                     th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;

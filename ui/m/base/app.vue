@@ -51,7 +51,6 @@ export default {
                 gk.user = {};
                 gk.login = false;
             }
-            vm.$emit("data", gk)
         })
     }, methods: {
         loginOut() {

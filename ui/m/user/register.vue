@@ -76,11 +76,10 @@ export default {
             }
             this.reg["CaptchaId"] = this.CaptchaId;
             this.ajax('/gk-user/Register', this.reg, (r, th) => {
-                if (r.Status && !r.Status.Code) {
+                if (  !r.code) {
                     Cookies.set('h5Token', r.result, {expires: 365});
                     window.gk.user = r.Info;
                     window.gk.login = true;
-                    vm.$emit("data", window.gk);
 
                     th.$vux.alert.show({
                         title: '注册成功',
@@ -93,13 +92,13 @@ export default {
                     th.CaptchaId = r.result;
                     th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
                     th.$vux.toast.text(r.Status.Msg, 'bottom')
-                    if (r.Status.Code == 8) {
+                    if (r.code == 8) {
                         th.icon.CaptchaVal = 'error';
                     }
-                    if (r.Status.Code == 1000) {
+                    if (r.code == 1000) {
                         th.icon.Username = 'error';
                     }
-                    if (r.Status.Code == 1002) {
+                    if (r.code == 1002) {
                         th.icon.Email = 'error';
                     }
                 }
