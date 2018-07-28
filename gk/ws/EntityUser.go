@@ -86,7 +86,7 @@ type DaoMsg struct {
 }
 
 type DaoToken struct {
-	Del  func(ua, userId interface{}, SiteId int64) (int64, error)        `delete from GkToken where Ua=? and UserId=? and SiteId=?`
-	Add  func(UserId, Ua, Token interface{}, SiteId int64) (int64, error) `insert into GkToken(UserId,Ua,Token,CreateAt,SiteId)VALUES(?,?,?,now(),?)`
-	Find func(SiteId, userId int64, ua string) (string, bool, error)      `select Token from GkToken where SiteId=? and UserId=? and Ua=? `
+	Del  func(SiteId, userId int64, ua string) (int64, error)        `delete from GkToken where SiteId=? and UserId=? and Ua=?`
+	Add  func(SiteId, UserId int64, Ua, Token string) (int64, error) `insert into GkToken(SiteId,UserId,Ua,Token,CreateAt)VALUES(?,?,?,?,now())`
+	Find func(SiteId, userId int64, ua string) (string, bool, error) `select Token from GkToken where SiteId=? and UserId=? and Ua=? `
 }

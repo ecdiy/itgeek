@@ -33,7 +33,6 @@ func WebUserLogin(web *ws.Web) {
 		return
 	}
 	if !ext || v == nil || len(v) == 0 {
-		//web.Out["Type"] = "Username"
 		web.ST(ws.StUsernameNotExist, "Username")
 		return
 	}
@@ -41,14 +40,10 @@ func WebUserLogin(web *ws.Web) {
 	errTime, _ := strconv.Atoi(v["PasswordError"])
 	if errTime > 3 {
 		if Captcha == "" {
-			//web.Out["Type"] = "Captcha"
-			//web.Out["Val"] = captcha.New()
 			web.ST(ws.StErrorCaptcha, "Captcha", captcha.New())
 			return
 		} else {
 			if !captcha.VerifyString(Captcha, Digits) {
-				//web.Out["Val"] = captcha.New()
-				//web.Out["Type"] = "Captcha"
 				web.ST(ws.StErrorCaptcha, "Captcha", captcha.New())
 				return
 			}
@@ -56,14 +51,16 @@ func WebUserLogin(web *ws.Web) {
 	}
 	if v["Password"] == UserMd5Pass(Username, Password) {
 		ws.UserDao.SetPasswordError(0, Username, web.SiteId, )
-		//web.Out["Info"] = v
 		UserInfoToRedis(web, v, )
 		web.ST(ws.OK, v)
 		return
 	} else {
-		ws.UserDao.SetPasswordError(errTime+1, Username, web.SiteId, )
-		//web.Out["Type"] = "Password"
-		web.ST(ws.StUserPassError, "Password")
+		if errTime > 3 {
+			web.ST(ws.StUserPassError, "Password", captcha.New())
+		} else {
+			ws.UserDao.SetPasswordError(errTime+1, Username, web.SiteId, )
+			web.ST(ws.StUserPassError, "Password")
+		}
 		return
 	}
 }
@@ -77,8 +74,9 @@ func UserInfoToRedis(web *ws.Web, v map[string]string) {
 	tk := hex.EncodeToString(h.Sum(nil))
 
 	v["Token"] = id + "_" + tk
-	ws.TokenDao.Del(web.Ua, id, web.SiteId)
-	ws.TokenDao.Add(id, web.Ua, tk, web.SiteId)
+	id64, _ := strconv.ParseInt(id, 10, 0)
+	ws.TokenDao.Del(web.SiteId, id64, web.Ua, )
+	ws.TokenDao.Add(web.SiteId, id64, web.Ua, tk, )
 	ws.TokenMap[web.Ua+"_"+id] = []string{tk, v["Username"]}
 
 }

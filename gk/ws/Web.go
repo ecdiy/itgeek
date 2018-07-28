@@ -54,13 +54,7 @@ func (p *Web) StartPageSize(ps int64) int64 {
 	return (page - 1) * ps
 }
 func (p *Web) Result(result ... interface{}) {
-	if result != nil {
-		if len(result) == 1 {
-			p.Out["result"] = result[0]
-		} else {
-			p.Out["result"] = result
-		}
-	}
+	p.Out["result"] = result
 }
 func (p *Web) ST(st *ST, result ... interface{}) {
 	p.Out["code"] = st.Code
