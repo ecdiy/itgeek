@@ -88,8 +88,7 @@ func WebUserRegister(web *ws.Web) {
 	captchaVal := web.String("CaptchaVal")
 
 	if !captcha.VerifyString(captchaId, captchaVal) {
-		web.Result(captcha.New())
-		web.ST(ws.StErrorCaptcha)
+		web.ST(ws.StErrorCaptcha, captcha.New())
 		return
 	}
 	Email := web.String("Email")
@@ -101,21 +100,18 @@ func WebUserRegister(web *ws.Web) {
 		len(Password) < 6 || strings.Index(Email, "@") < 0 ||
 		len(Mobile) < 8 || len(Mobile) > 32 {
 		seelog.Warn("参数不合法.", web)
-		web.Result(captcha.New())
-		web.ST(ws.StErrorParameter)
+		web.ST(ws.StErrorParameter, captcha.New())
 		return
 	}
 	uCount, unb, _ := ws.UserDao.CheckByUsername(web.SiteId, Username)
 	seelog.Info("~~~UserDao Register~~", Username, Mobile, Email)
 	if unb && uCount > 0 {
-		web.Result(captcha.New())
-		web.ST(ws.StUsernameExist)
+		web.ST(ws.StUsernameExist, captcha.New())
 		return
 	}
 	eCount, eb, _ := ws.UserDao.CheckByEmail(web.SiteId, Email)
 	if eb && eCount > 0 {
-		web.Result(captcha.New())
-		web.ST(ws.StEmailExist)
+		web.ST(ws.StEmailExist, captcha.New())
 		return
 	}
 	Password = UserMd5Pass(Username, Password)
@@ -124,20 +120,17 @@ func WebUserRegister(web *ws.Web) {
 	if ue == nil {
 		v, _, _ := ws.UserDao.BaseInfo(web.SiteId, id)
 		UserInfoToRedis(web, v)
-		web.Out["Info"] = v
 		ws.KvDao.UserCount(web.SiteId, web.SiteId)
-
 		fee := ws.GetSoreRule(web.SiteId).Register
 		if fee != 0 {
-			UpCount(&ws.UpReq{UserId: id, Fee: fee, EntityId: fmt.Sprint(id), SiteId: web.SiteId,
+			UpCount(&ws.UpReq{UserId: id, Fee: fee, EntityId: "register:" + fmt.Sprint(id), SiteId: web.SiteId,
 				ScoreType: "初始资本",
 				ScoreDesc: `获得初始资本 ` + fmt.Sprint(fee)})
 		}
-
+		web.ST(ws.OK, v)
 		return
 	} else {
-		web.Result(captcha.New())
-		web.ST(ws.StErrorUnknown)
+		web.ST(ws.StErrorUnknown, captcha.New())
 		return
 	}
 
