@@ -23,8 +23,8 @@ func WebUserLogin(web *ws.Web) {
 	Captcha := web.String("Captcha")
 	Digits := web.String("Digits")
 	if len(Username) == 0 || len(Password) == 0 {
-		web.Out["Type"] = "Password"
-		web.ST(ws.StErrorParameter)
+		//web.Out["Type"] = "Password"
+		web.ST(ws.StErrorParameter, "Password")
 		return
 	}
 	v, ext, e := ws.UserDao.BaseInfoByUsername(web.SiteId, Username)
@@ -33,36 +33,37 @@ func WebUserLogin(web *ws.Web) {
 		return
 	}
 	if !ext || v == nil || len(v) == 0 {
-		web.Out["Type"] = "Username"
-		web.ST(ws.StUsernameNotExist)
+		//web.Out["Type"] = "Username"
+		web.ST(ws.StUsernameNotExist, "Username")
 		return
 	}
 
 	errTime, _ := strconv.Atoi(v["PasswordError"])
 	if errTime > 3 {
 		if Captcha == "" {
-			web.Out["Type"] = "Captcha"
-			web.Out["Val"] = captcha.New()
-			web.ST(ws.StErrorCaptcha)
+			//web.Out["Type"] = "Captcha"
+			//web.Out["Val"] = captcha.New()
+			web.ST(ws.StErrorCaptcha, "Captcha", captcha.New())
 			return
 		} else {
 			if !captcha.VerifyString(Captcha, Digits) {
-				web.Out["Val"] = captcha.New()
-				web.Out["Type"] = "Captcha"
-				web.ST(ws.StErrorCaptcha)
+				//web.Out["Val"] = captcha.New()
+				//web.Out["Type"] = "Captcha"
+				web.ST(ws.StErrorCaptcha, "Captcha", captcha.New())
 				return
 			}
 		}
 	}
 	if v["Password"] == UserMd5Pass(Username, Password) {
 		ws.UserDao.SetPasswordError(0, Username, web.SiteId, )
-		web.Out["Info"] = v
+		//web.Out["Info"] = v
 		UserInfoToRedis(web, v, )
+		web.ST(ws.OK, v)
 		return
 	} else {
 		ws.UserDao.SetPasswordError(errTime+1, Username, web.SiteId, )
-		web.Out["Type"] = "Password"
-		web.ST(ws.StUserPassError)
+		//web.Out["Type"] = "Password"
+		web.ST(ws.StUserPassError, "Password")
 		return
 	}
 }
@@ -70,16 +71,15 @@ func WebUserLogin(web *ws.Web) {
 func UserInfoToRedis(web *ws.Web, v map[string]string) {
 	delete(v, "Password")
 	delete(v, "PasswordError")
-
+	id := v["Id"]
 	h := md5.New()
-	h.Write([]byte(v["Id"] + ";" + strconv.FormatInt(time.Now().UnixNano(), 16)))
+	h.Write([]byte(id + ";" + strconv.FormatInt(time.Now().UnixNano(), 16)))
 	tk := hex.EncodeToString(h.Sum(nil))
-	v["Token"] = tk
 
-	web.Result(v["Id"] + "_" + tk)
-	ws.TokenDao.Del(web.Ua, v["Id"], web.SiteId)
-	ws.TokenDao.Add(v["Id"], web.Ua, tk, web.SiteId)
-	ws.TokenMap[web.Ua+"_"+v["Id"]] = []string{tk, v["Username"]}
+	v["Token"] = id + "_" + tk
+	ws.TokenDao.Del(web.Ua, id, web.SiteId)
+	ws.TokenDao.Add(id, web.Ua, tk, web.SiteId)
+	ws.TokenMap[web.Ua+"_"+id] = []string{tk, v["Username"]}
 
 }
 

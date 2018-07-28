@@ -66,7 +66,7 @@ export default {
         },
         loadCaptcha() {
             this.ajax('/gk-user/CaptchaNew', {}, function (r, th) {
-                th.CaptchaId = r.Result;
+                th.CaptchaId = r.result;
                 th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
             });
         },
@@ -77,7 +77,7 @@ export default {
             this.reg["CaptchaId"] = this.CaptchaId;
             this.ajax('/gk-user/Register', this.reg, (r, th) => {
                 if (r.Status && !r.Status.Code) {
-                    Cookies.set('h5Token', r.Result, {expires: 365});
+                    Cookies.set('h5Token', r.result, {expires: 365});
                     window.gk.user = r.Info;
                     window.gk.login = true;
                     vm.$emit("data", window.gk);
@@ -90,7 +90,7 @@ export default {
                     });
                 } else {
                     th.reg.CaptchaVal = "";
-                    th.CaptchaId = r.Result;
+                    th.CaptchaId = r.result;
                     th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
                     th.$vux.toast.text(r.Status.Msg, 'bottom')
                     if (r.Status.Code == 8) {

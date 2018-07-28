@@ -40,17 +40,3 @@ type ST struct {
 	Code int32
 	Msg  string
 }
-
-//func (c *ST) ResultNil() *Result {
-//	return &Result{Status: &ST{Code: c.Code, Msg: c.Msg}}
-//}
-//func (c *ST) Result(result string) *Result {
-//	return &Result{Result: result, Status: &ST{Code: c.Code, Msg: c.Msg}}
-//}
-//
-//type Result struct {
-//	Status *ST
-//	Result string
-//	Param  map[string]string
-//}
-//

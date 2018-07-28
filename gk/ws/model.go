@@ -12,10 +12,6 @@ type UpReq struct {
 	//
 	SiteId int64
 }
-type UpResp struct {
-	Row   int64
-	Score int64
-}
 type MsgReq struct {
 	UserId          int64
 	FromUserId      int64
@@ -25,12 +21,4 @@ type MsgReq struct {
 	EntityId        string
 	MsgType         string
 	FromUsername    string
-}
-
-type NilResp struct {
-}
-type UserBase struct {
-	Result   bool
-	UserId   int64
-	Username string
 }

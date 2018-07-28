@@ -34,11 +34,11 @@
             <a @click="openNew">创作新主题</a>
         </card>
         <card v-if="gk.user.LoginAward==1">
-            <router-link to="/p/my/LoginAward">领取今日的登录奖励</router-link>
+            <go to="my/LoginAward" title="领取今日的登录奖励"><Icon type="cube" size="18"></Icon> 领取今日的登录奖励</go>
         </card>
         <card>
             <router-link to="/p/my/msg" class="message-con">
-                <span v-if="gk.user.MsgCount > 0">有{{msgUnRead}} 条未读消息</span>
+                <span v-if="gk.user.MsgCount > 0"><Icon type="speakerphone" size="18"></Icon>有{{msgUnRead}} 条未读消息</span>
                 <span v-else>无未读消息</span>
             </router-link>
         </card>

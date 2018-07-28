@@ -19,9 +19,6 @@ type Web struct {
 	Username string
 }
 
-func (p *Web) Result(r interface{}) {
-	p.Out["result"] = r
-}
 func (p *Web) initParam() {
 	row, b := p.Context.GetRawData()
 	if b == nil {
@@ -69,7 +66,18 @@ func (p *Web) ScoreLack() bool { //检查积分
 }
 
 //--
-func (p *Web) ST(st *ST) {
-	p.Out["Code"] = st.Code
-	p.Out["Msg"] = st.Msg
+func (p *Web) Result(result ... interface{}) {
+	if result != nil {
+		if len(result) == 1 {
+			p.Out["result"] = result[0]
+		} else {
+			p.Out["result"] = result
+		}
+	}
+}
+
+func (p *Web) ST(st *ST, result ... interface{}) {
+	p.Out["code"] = st.Code
+	p.Out["msg"] = st.Msg
+	p.Result(result ...)
 }

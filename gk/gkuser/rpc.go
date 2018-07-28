@@ -31,8 +31,7 @@ func UpCount(in *ws.UpReq) (int64) {
 	return 0
 }
 
-func Msg(in *ws.MsgReq) (*ws.NilResp, error) {
+func Msg(in *ws.MsgReq) {
 	ws.MsgDao.Add(in.SiteId, in.Title, in.Body, in.EntityId, in.MsgType, in.FromUserId, in.UserId, in.GroupId)
 	ws.UserDao.UpMsg(in.UserId, in.UserId, in.SiteId)
-	return &ws.NilResp{}, nil
 }

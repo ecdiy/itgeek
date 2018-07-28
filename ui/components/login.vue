@@ -71,7 +71,7 @@
             loadCaptcha() {
                 let th = this;
                 this.ajax(this.captchaNew, {}, function (r) {
-                    th.CaptchaId = r.Result;
+                    th.CaptchaId = r.result;
                     th.authImg = th.authImgUrl + th.CaptchaId;
                 });
             },
@@ -82,8 +82,8 @@
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.ajax(this.actionUrl, this.form, (r, th) => {
-                            if ((!r.Status.Code || r.Status.Code == 0) && r.Result.length > 0) {
-                                Cookies.set(th.cookieTokenName, r.Result, {expires: 365});
+                            if ((!r.Status.Code || r.Status.Code == 0) && r.result.length > 0) {
+                                Cookies.set(th.cookieTokenName, r.result, {expires: 365});
                                 th.$emit('on-login', r.Info);
                             } else {
                                 if (r.Status.Code == 8) {
@@ -94,10 +94,10 @@
                                         th.err[k] = "";
                                     }
                                 }
-                                if (r.Result != '') {
-                                    th.err[r.Result] = r.Status.Msg;
+                                if (r.result != '') {
+                                    th.err[r.result] = r.Status.Msg;
                                 }
-                                if (r.Result == 'Captcha') {
+                                if (r.result == 'Captcha') {
                                     th.captchaCls = '';
                                     th.form.Captcha = "";
                                     th.form.Digits = '';

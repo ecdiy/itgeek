@@ -1,5 +1,11 @@
 <template>
     <div>
+        <div class="cell swipe-wrapper" v-if="gk.user.LoginAward==1">
+            <x-icon type="cube" size="18"></x-icon>
+            <go to="my/LoginAward">
+                领取今日的登录奖励
+            </go>
+        </div>
         <div class="cell ">
             <div class="cat">
                 <ul>
@@ -24,6 +30,8 @@
                 </ul>
             </div>
         </div>
+
+
         <div class="cell swipe-wrapper" v-for="(it,index) in topicList" :key="it.Id">
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tbody>
@@ -63,28 +71,28 @@
 <script>
     export default {
         data() {
-            return {topicList: [], pId: "0", cId: "0", catList: []}
+            return {topicList: [], pId: "0", cId: "0", catList: [], gk: window.gk}
         },
         created() {
             this.cat();
-            this.init()
+            this.init();
+            vm.$on("data", (p) => {
+                this.gk = p;
+            })
+            //     this.cat();
+            //     var h = window.location.hash;
+            //     var f = "/p/topic/list/";
+            //     if (h.indexOf(f) == 0) {
+            //         h = h.substr(f.length)
+            //         var ix = h.indexOf('_');
+            //         this.setId(h.substr(0, ix), h.substr(ix + 1))
+            //     } else {
+            //         this.load()
+            //     }
         },
         watch: {
             '$route': 'init'
-        },
-        // created() {
-        //     this.cat();
-        //     var h = window.location.hash;
-        //     var f = "/p/topic/list/";
-        //     if (h.indexOf(f) == 0) {
-        //         h = h.substr(f.length)
-        //         var ix = h.indexOf('_');
-        //         this.setId(h.substr(0, ix), h.substr(ix + 1))
-        //     } else {
-        //         this.load()
-        //     }
-        // },
-        methods: {
+        }, methods: {
             cat() {
                 if (this.catList.length == 0) {
                     this.ajax('/gk-topic/category/list')
@@ -116,7 +124,6 @@
             },
             load() {
                 this.ajax('/gk-topic/list', {pId: this.pId, cId: this.cId, page: 1}, (r, th) => {
-
                     th.upPid(th);
                 })
             }

@@ -91,7 +91,7 @@ export default {
         },
         loadCaptcha() {
             this.ajax('/gk-user/CaptchaNew', {}, (r, th) => {
-                th.CaptchaId = r.Result;
+                th.CaptchaId = r.result;
                 th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
             });
         },
@@ -102,7 +102,7 @@ export default {
             this.reg["CaptchaId"] = this.CaptchaId;
             this.ajax('/gk-user/Register', this.reg, function (r, th) {
                 if (r.Status && (!r.Status.Code || r.Status.Code == 0)) {
-                    Cookies.set('webToken', r.Result, {expires: 365});
+                    Cookies.set('webToken', r.result, {expires: 365});
                     window.gk.user = r.Info;
                     window.gk.login = true;
                     th.$Modal.success({
@@ -123,7 +123,7 @@ export default {
                     if (r.Status.Code == 1002) {
                         th.em.Email = r.Status.Msg;
                     }
-                    th.CaptchaId = r.Result;
+                    th.CaptchaId = r.result;
                     th.authImg = "/api/gk-user/Captcha?t=" + th.CaptchaId;
                 }
             });

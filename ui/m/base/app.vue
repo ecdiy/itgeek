@@ -1,12 +1,9 @@
 <template>
-    <div id="main" class="app-main">
-        <div class="cell hd">
-
+    <div id="main" style="word-break: break-all;width: 100%;">
+        <div class="hd">
              <span class="fl" v-if="!gk.site.Logo || gk.site.Logo==''" style="font-weight: bold">
                  <router-link to="/">{{gk.site.SiteName}}</router-link>
               </span>
-
-
             <router-link v-if="gk.site.Logo && gk.site.Logo!=''" class="fl" to="/" :title="gk.site.SiteName">
                 <img :src="gk.site.Logo" height="50"/>
             </router-link>
@@ -24,7 +21,13 @@
                     </span>
             </span>
         </div>
-        <router-view></router-view>
+
+        <div style="text-align: center;background-color: #e2e2e2;">
+            <div style="padding: 5px;width: auto;">
+                <router-view></router-view>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -61,6 +64,15 @@ export default {
 };
 </script>
 <style>
+    div.box {
+        display: block;
+        background-color: #fff;
+        border-radius: 3px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, .1);
+        border-bottom: 1px solid #e2e2e2;
+        padding-bottom: 10px;
+    }
+
     a:active, a:link, a:visited {
         color: #778087;
         text-decoration: none;
@@ -68,44 +80,15 @@ export default {
     }
 
     .hd {
+
+        padding: 10px 5px;
+        text-align: center;
+        background-color: #fff;
         height: 25px;
         line-height: 25px;
-    }
-
-    .app-main {
-        word-break: break-all;
-        width: 100%;
-        height: 100%;
-    }
-
-    .nav {
-        clear: both;
-        float: left;
-        display: block;
-        padding: 10px;
-    }
-
-    .nav span {
+        font-size: 15px;
         font-weight: 500;
-        padding: 0 10px;
-    }
-
-    .bar {
-        display: block;
-        width: 100%;
-        clear: both;
-        float: left;
-    }
-
-    .cell {
-        display: block;
-        width: 100%;
-        clear: both;
-        float: left;
-        padding: 10px 0;
-        line-height: 120%;
-        text-align: left;
-        border-bottom: 1px solid #e2e2e2;
+        border-bottom: 1px solid rgba(0, 0, 0, .22);
     }
 
     .fl {

@@ -21,9 +21,9 @@
         var len = dependencies.length;
         var instances = new Array(len);
         for (var i = 0; i < len; ++i) { instances[i] = dem(dependencies[i]); }
-        var defResult = definition.apply(null, instances);
-        if (defResult === undefined) { throw 'module [' + id + '] returned undefined'; }
-        actual.instance = defResult;
+        var defresult = definition.apply(null, instances);
+        if (defresult === undefined) { throw 'module [' + id + '] returned undefined'; }
+        actual.instance = defresult;
     };
 
     var def = function (id, dependencies, definition) {
