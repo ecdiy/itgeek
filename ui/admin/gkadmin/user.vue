@@ -5,7 +5,10 @@
 </template>
 
 <script>
+    import basePage from '../libs/base-table'
     export default {
+
+        components: {basePage},
         data() {
             return {
                 column: [{title: 'Username', key: 'Username'},
