@@ -63,7 +63,7 @@ geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0
 
 ###后台管理
 
-![image](https://github.com/ecdiy/itgeek/raw/dev/doc/admin.gif)
+![image](https://github.com/ecdiy/itgeek/blob/master/doc/admin.gif?raw=true)
 
 #### FAQ
 ##### baidu统计代码，修改发表后的index.html,找到对应位置,注意有部分代码修改
