@@ -38,12 +38,18 @@
         }, methods: {
             gop(p) {
                 vm.$router.push({path: '/p/my/balance,' + p})
+            },
+            init() {
+                var p = window.location.pathname.split(",")
+                this.current = Number(p[1])
+                this.ajax('/gk-user/scoreLogList', {page: this.current})
             }
         },
         created() {
-            var p = window.location.pathname.split(",")
-            this.current = Number(p[1])
-            this.ajax('/gk-user/scoreLogList', {page: this.current})
+            this.init();
+        },
+        watch: {
+            '$route': 'init'
         }
     }
 </script>

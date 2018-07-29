@@ -29,9 +29,9 @@
             </div>
         </div>
 
-        <div class="h10"></div>
+        <div class="h10" v-if="replyList && replyList.length>0"></div>
 
-        <div class="box">
+        <div class="box" v-if="replyList && replyList.length>0">
             <div class="cell" v-for="it in replyList">
                 <table cellpadding="0" cellspacing="0" border="0" width="100%">
                     <tr>
@@ -114,8 +114,6 @@ export default {
                     th.favStatus = r.Fav
                 })
             }
-
-
         }
     }
 }
