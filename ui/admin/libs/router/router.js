@@ -12,6 +12,7 @@ export const routers = [
     {
         path: '/', component: gk,
         children: [
+            r(() => import('@/base/upUserPass.vue'), 'gkadmin_upUserPass'),
             r(() => import('@/base/home.vue'), 'home', '/'),
             r(() => import('@/gkadmin/index.vue'), 'gkadmin_index'),
             r(() => import('@/gkadmin/category.vue'), 'gkadmin_category'),

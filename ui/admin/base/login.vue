@@ -95,6 +95,7 @@
                                 vm.$router.push({path: '/'});
                             } else {
                                 gk.login = false;
+                                th.$Notice.error({title: r.msg});
                             }
                             // if (r.result.length >= 2) {
                             //     th.form.Captcha = r.result[1];

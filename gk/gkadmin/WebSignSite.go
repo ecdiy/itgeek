@@ -20,7 +20,17 @@ func WebUserStatus(c *gin.Context) {
 	}
 	c.JSON(200, auth.Out)
 }
-
+func WebNewAdminUser(auth *ws.Web) {
+	us := auth.String("SiteAdminUser")
+	ps := auth.String("SiteAdminPass")
+	if len(us) > 3 && len(ps) > 3 {
+		h := md5.New()
+		h.Write([]byte( us + "," + ps))
+		ws.KvDao.Update(us, "SiteAdminUser", auth.SiteId)
+		ws.KvDao.Update(hex.EncodeToString(h.Sum(nil)), "SiteAdminPass", auth.SiteId)
+	}
+	auth.ST(ws.OK)
+}
 func WebAdminUserInit(c *gin.Context) {
 	auth := ws.VerifyAdmin(c)
 	_, u, _ := ws.KvDao.Get(auth.SiteId, "SiteAdminUser")

@@ -17,6 +17,7 @@ func InitWeb() {
 		ws.WebGin.POST("/api/gk-admin/userStatus", WebUserStatus)
 		ws.WebGin.POST("/api/gk-admin/userInit", WebAdminUserInit)
 		ws.WebGin.POST("/api/gk-admin/login", WebAdminUserLogin)
+		auth("newAdminUser", WebNewAdminUser)
 	}
 	auth("baseSave", WebBaseSave)
 	auth("baseGet", WebBaseGet)

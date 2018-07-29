@@ -24,6 +24,7 @@ Vue.prototype.ajax = function (url, p, fun) {
         if (fun && typeof(fun) == 'function') {
             fun(r.data, th)
         }
+        vm.$emit("data", window.gk)
     }).catch((err) => {
         if (err.response && err.response.status == 401) {
             window.goUrl = window.location.hash

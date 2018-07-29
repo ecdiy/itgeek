@@ -55,6 +55,10 @@
                             {name: '首页', path: 'gkadmin/pageIndex'},
                             {name: '主题详情', path: 'gkadmin/pageTopicDetail'},
                         ]
+                    }, {
+                        name: '账户', sub: [
+                            {name: '修改密码', path: 'gkadmin/upUserPass'}
+                        ]
                     }
                 ]
             }

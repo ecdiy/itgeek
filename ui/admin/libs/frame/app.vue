@@ -32,9 +32,10 @@
             return {gk: window.gk}
         }, methods: {
             loginOut() {
-                window.gk.login = false;
+                gk.login = false;
+                vm.$emit("data", window.gk)
                 Cookies.remove("webGeekAdmin");
-                vm.$emit("login", false);
+                vm.$router.replace('/p/login')
             }
         }, created() {
             this.ajax('/gk-admin/userStatus', {}, (r, th) => {

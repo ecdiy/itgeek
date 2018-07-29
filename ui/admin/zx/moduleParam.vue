@@ -14,9 +14,6 @@
                         <Col span="4">{{r.desc}}</Col>
                         <Col span="20">
                             <div style="width: 100%;padding:0 0 10px 0">
-                                <!--<FormItem v-if="r.type=='text'" :label="r.name">-->
-                                <!--<Input v-model="tmp[it.name][r.name]"></Input>-->
-                                <!--</FormItem>-->
                                 <ele-img v-if="r.type=='img'" :paramName="[it.name]"
                                          @on-result-change="onResultChange"></ele-img>
                             </div>
@@ -31,13 +28,6 @@
                                             <Icon type="close"></Icon>
                                         </div>
                                     </div>
-                                    <div v-else>
-                                        <!-- TODO  <div @click="selectTag(it.name,r.name,pIdx,index)" :class="cls[it.name][index]"-->
-                                        <!--style="float: left;padding: 0 12px 0 8px;">-->
-                                        <!--{{index+1}}-->
-                                        <!--</div>-->
-                                    </div>
-
                                 </li>
                             </ul>
                         </Col>
