@@ -59,6 +59,7 @@ func VerifyAdmin(c *gin.Context) (*Web) {
 	tKey := ua + KvGeekAdmin
 	ect, _ := c.Cookie(tKey)
 	auth.SiteId = 0
+	auth.initParam()
 	kv, kvb, _ := KvDao.Get(auth.SiteId, tKey)
 	if kvb && kv == ect {
 		auth.Auth = true

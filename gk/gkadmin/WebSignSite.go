@@ -27,19 +27,21 @@ func WebAdminUserInit(c *gin.Context) {
 	_, p, _ := ws.KvDao.Get(auth.SiteId, "SiteAdminPass")
 	if !u && !p {
 		us := auth.String("SiteAdminUser")
-		ws.KvDao.Add(0, "SiteAdminUser", us)
-		h := md5.New()
-		h.Write([]byte( us + "," + auth.String("SiteAdminPass")))
-		ws.KvDao.Add(0, "SiteAdminPass", hex.EncodeToString(h.Sum(nil)))
-		auth.Result(ws.OK)
+		ps := auth.String("SiteAdminPass")
+		if len(us) > 3 && len(ps) > 3 {
+			h := md5.New()
+			h.Write([]byte( us + "," + ps))
+			ws.KvDao.Add(0, "SiteAdminUser", us)
+			ws.KvDao.Add(0, "SiteAdminPass", hex.EncodeToString(h.Sum(nil)))
+			userLogin(auth)
+		}
 	} else {
 		auth.Result(ws.StExist)
 	}
 	c.JSON(200, auth.Out)
 }
 
-func WebAdminUserLogin(c *gin.Context) {
-	auth := ws.VerifyAdmin(c)
+func userLogin(auth *ws.Web) {
 	us := auth.String("SiteAdminUser")
 	_, u, _ := ws.KvDao.Get(auth.SiteId, "SiteAdminUser")
 	md5pass, p, _ := ws.KvDao.Get(auth.SiteId, "SiteAdminPass")
@@ -49,14 +51,20 @@ func WebAdminUserLogin(c *gin.Context) {
 		ep := hex.EncodeToString(h.Sum(nil))
 		if ep == md5pass {
 			tk := Token(us)
-			ua := ws.GetUa(c)
+			ua := ws.GetUa(auth.Context)
 			ws.KeySave(auth.SiteId, ua+ws.KvGeekAdmin, tk)
-			auth.Result(tk)
+			auth.ST(ws.OK, tk)
+			auth.Context.JSON(200, auth.Out)
 			return
 		}
 	}
 	auth.ST(ws.StUserPassError)
-	c.JSON(200, auth.Out)
+	auth.Context.JSON(200, auth.Out)
+}
+
+func WebAdminUserLogin(c *gin.Context) {
+	auth := ws.VerifyAdmin(c)
+	userLogin(auth)
 }
 
 func Token(id string) string {

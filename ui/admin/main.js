@@ -21,10 +21,6 @@ Vue.prototype.ajax = function (url, p, fun) {
         if (th.hasOwnProperty("loading")) {
             th.loading = false;
         }
-        if (r.data.hasOwnProperty("gkUser")) {
-            gk.user = r.data.gkUser;
-            vm.$emit("data", window.gk);
-        }
         if (fun && typeof(fun) == 'function') {
             fun(r.data, th)
         }
@@ -32,8 +28,7 @@ Vue.prototype.ajax = function (url, p, fun) {
         if (err.response && err.response.status == 401) {
             window.goUrl = window.location.hash
             window.gk.login = false;
-            window.gk.user = {};
-            Cookies.remove('token');
+            Cookies.remove('webGeekAdmin');
             th.$router.replace('/p/login')
             vm.$emit("data", window.gk)
         } else {
@@ -43,8 +38,7 @@ Vue.prototype.ajax = function (url, p, fun) {
 }
 
 window.goUrl = '/';
-window.gk = {login: false, user: {}, siteId: 0};
-Cookies.set("ua", "web");
+window.gk = {login: false, siteId: 0};
 
 Vue.component('go', function (resolve) {
     require(['../components/go.vue'], resolve)

@@ -3,21 +3,23 @@
         <div style="width:300px;margin: auto">
             <div class="login-con">
                 <Card :bordered="false">
-                    <p slot="title">
+                    <span slot="title">
                         <Icon type="log-in"></Icon>
-                        欢迎登录
-                    </p>
+                        {{title}}
+                    </span>
                     <div class="form-con">
                         <Form :model="form" ref="form">
-                            <FormItem prop="Username" :rules="rules.Username" label="用户名" :error="err.Username">
-                                <Input v-model="form.Username" placeholder="请输入用户名">
+                            <FormItem prop="SiteAdminUser" :rules="rules.SiteAdminUser" label="用户名"
+                                      :error="err.SiteAdminUser">
+                                <Input v-model="form.SiteAdminUser" placeholder="请输入用户名">
                                 <span slot="prepend">
                                     <Icon :size="16" type="person"></Icon>
                                 </span>
                                 </Input>
                             </FormItem>
-                            <FormItem prop="Password" :rules="rules.Password" label="密码" :error="err.Password">
-                                <Input type="password" v-model="form.Password" placeholder="请输入密码">
+                            <FormItem prop="SiteAdminPass" :rules="rules.SiteAdminPass" label="密码"
+                                      :error="err.SiteAdminPass">
+                                <Input type="password" v-model="form.SiteAdminPass" placeholder="请输入密码">
                                 <span slot="prepend">
                                     <Icon :size="14" type="locked"></Icon>
                                 </span>
@@ -46,29 +48,34 @@
     export default {
         data() {
             return {
+                title: '', url: '',
                 authImgUrl: '/api/gk-user/Captcha?t=',
                 captchaNew: '/gk-user/CaptchaNew',
                 authImg: "",
-                form: {Captcha: "", Username: '', Digits: ''},
-                err: {Username: "", Password: ""},
+                form: {Captcha: "", SiteAdminUser: '', Digits: ''},
+                err: {SiteAdminUser: "", SiteAdminPass: ""},
                 rules: {
-                    Username: [
+                    SiteAdminUser: [
                         {required: true, min: 3, message: '账号不能为空，长度至少5位', trigger: 'blur'}
                     ],
-                    Password: [
+                    SiteAdminPass: [
                         {required: true, min: 6, message: '密码不能为空，长度至少6位', trigger: 'blur'}
                     ]
                 }
             };
         },
         created() {
+            Cookies.remove("webGeekAdmin");
             this.ajax('/gk-admin/userStatus', {}, (r, th) => {
-                if (!r.login) {
-                    th.$router.replace('/p/login')
+                if (!r.login && !r.user && !r.pass) {
+                    th.title = "设置管理员账号"
+                    th.url = 'userInit'
+                } else {
+                    th.title = '欢迎登录'
+                    th.url = 'login'
                 }
             });
-            
-            Cookies.remove("webToken");
+
             var un = Cookies.get("user");
             if (un && un != "" && un.length > 1) {
                 this.form.Username = un;
@@ -81,30 +88,27 @@
                 }
                 this.$refs.form.validate((valid) => {
                     if (valid) {
-                        this.ajax('/gk-user/Login', this.form, (r, th) => {
+                        this.ajax('/gk-admin/' + this.url, this.form, (r, th) => {
                             if (r.code == 0) {
-                                gk.user = r.result[0];
+                                Cookies.set('webGeekAdmin', r.result[0], {expires: 365});
                                 gk.login = true;
-                                Cookies.set('webToken', gk.user.Token, {expires: 365});
-                                if (window.goUrl == "" || window.goUrl == window.location.pathname) {
-                                    window.goUrl = '/'
-                                }
-                                vm.$router.push({path: window.goUrl});
-                                return;
-                            }
-                            if (r.result.length >= 2) {
-                                th.form.Captcha = r.result[1];
-                                th.authImg = th.authImgUrl + r.result[1];
+                                vm.$router.push({path: '/'});
                             } else {
-                                th.authImg = ""
+                                gk.login = false;
                             }
-                            if (r.code == 1004) {
-                                th.form.Password = "";
-                            }
-                            for (var k in th.err) {
-                                th.err[k] = "";
-                            }
-                            th.err[r.result[0]] = r.msg;
+                            // if (r.result.length >= 2) {
+                            //     th.form.Captcha = r.result[1];
+                            //     th.authImg = th.authImgUrl + r.result[1];
+                            // } else {
+                            //     th.authImg = ""
+                            // }
+                            // if (r.code == 1004) {
+                            //     th.form.Password = "";
+                            // }
+                            // for (var k in th.err) {
+                            //     th.err[k] = "";
+                            // }
+                            // th.err[r.result[0]] = r.msg;
                         });
                     }
                 });

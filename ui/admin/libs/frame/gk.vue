@@ -77,7 +77,7 @@
                 var i = p.indexOf("-");
                 var px = this.menu[p.substr(0, i)].sub[p.substr(i + 1)]
                 document.title = px.name;
-                vm.$router.push({path: '/p/' + px.path + ',' + window.gk.siteId})
+                vm.$router.push({path: '/p/' + px.path})
             }
         }
     }

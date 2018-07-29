@@ -38,7 +38,7 @@ func InitWs() {
 func KeySave(siteId int64, k, v string) (int64, error) {
 	_, e, _ := KvDao.Get(siteId, k)
 	if e {
-		return KvDao.Update(k, v, siteId)
+		return KvDao.Update(v, k, siteId)
 	} else {
 		return KvDao.Add(siteId, k, v)
 	}

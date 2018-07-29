@@ -8,12 +8,8 @@
 
                 <div class="fr">
                     <span v-if="gk.login">
-                        {{gk.user.Username}}
                         <go to="admin">后台管理</go>
                         <a @click="loginOut">登出</a>
-                    </span>
-                    <span v-else>
-                        <go to="/">首页</go>
                     </span>
                 </div>
             </div>
@@ -37,30 +33,22 @@
         }, methods: {
             loginOut() {
                 window.gk.login = false;
-                Cookies.remove("ecToken");
+                Cookies.remove("webGeekAdmin");
                 vm.$emit("login", false);
             }
         }, created() {
             this.ajax('/gk-admin/userStatus', {}, (r, th) => {
                 if (!r.login) {
                     th.$router.replace('/p/login')
+                    gk.login = false;
+                } else {
+                    th.gk.login = true;
+                    gk.login = true;
                 }
             });
-
-            var tk = Cookies.get('ecToken');
-            if (tk && tk.length > 1) {
-                window.gk.login = true;
-                this.ajax('/ec-site/Self', {}, (r) => {
-                    if (r.Login) {
-                        window.gk.user = r.Info;
-                    } else {
-                        Cookies.remove("ecToken");
-                        window.gk.user = {};
-                        window.gk.login = false;
-                    }
-                    vm.$emit("data", window.gk)
-                })
-            }
+            this.$on("data", (p) => {
+                this.gk = p;
+            })
         }
     };
 </script>
