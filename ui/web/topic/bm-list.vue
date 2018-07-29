@@ -43,7 +43,7 @@
             total () {
                 var t = 0;
                 for (var i = 0; i < this.catList.length; i++) {
-                    if ((this.cId > 0 && this.catList[i].Id == v.cId) || (this.cId == 0 && this.pId == 0) || (this.cId == 0 && this.pId == this.catList[i].ParentId)) {
+                    if ((this.cId > 0 && this.catList[i].Id == this.cId) || (this.cId == 0 && this.pId == 0) || (this.cId == 0 && this.pId == this.catList[i].ParentId)) {
                         t += Number(this.catList[i].ItemCount);
                     }
                 }
