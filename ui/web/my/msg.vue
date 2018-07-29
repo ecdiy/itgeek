@@ -12,7 +12,7 @@
                     <router-link :to="'/p/member/'+it.Username">
                         <img :src="avatar(it.FromUserId)" border="0"></router-link>
                 </Col>
-                <Col span="22">
+                <Col span="22" style="padding-left: 10px">
                     <div>
                         <span v-html="it.Title" :msg-id="it.Id" :class="it.Status=='0'?'unread':''"></span>
                         {{it.CreateAt}}

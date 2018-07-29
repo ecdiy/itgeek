@@ -14,6 +14,7 @@ export const routers = [
     r(() => import('@/my/balance'), 'my/balance,:id', '账户余额'),
     r(() => import('@/user/login.vue'), 'user_login', '登录'),
     r(() => import('@/user/member.vue'), 'member/:id', ''),
+    r(() => import('@/user/dau.vue'), 'user_dau', '今日活跃会员'),
     {
     path: '/', component: Main,
     children: [

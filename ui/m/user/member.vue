@@ -1,11 +1,19 @@
 <template>
     <div>
         <div class="box">
-            <div v-if="member.Id>0">
-                <img :src="avatar(member.Id)" border="0"></div>
-            <div><h2>{{member.Username}}</h2><br>
-                加入于: {{member.CreateAt}} 今日活跃度排名
-                <router-link to="/p/user/dau">{{DauOrder}}</router-link>
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                    <td width="50" align="left">
+                        <img v-if="member.Id>0" :src="avatar(member.Id)" border="0">
+                    </td>
+                    <td>
+                        <h4>{{member.Username}}</h4>
+                    </td>
+                </tr>
+            </table>
+            <div style="padding-left: 10px">
+                加入于: {{member.CreateAt}}
+                <router-link to="/p/user/dau">今日活跃度排名{{DauOrder}}</router-link>
             </div>
             <div>
                 <x-button mini v-if="isLogin && followStatus>=0" @click="gz">{{gzAction}}</x-button>
@@ -16,6 +24,8 @@
             <div class="h10"/>
             <topic-list :list="list" self="1"></topic-list>
         </div>
+        <page v-if="totalTopicPage>1" :all="totalTopicPage" :no="current"
+              :url="'/p/member/'+member.Username+','+tabs+',{}'"></page>
 
     </div>
 </template>
@@ -29,17 +39,24 @@
             topicList
             //     ButtonTab,
             //     ButtonTabItem
+        }, computed: {
+            totalTopicPage() {
+                return Math.ceil(this.member.TopicCount / 20)
+            }, gzAction() {
+                return this.followStatus == 1 ? "取消关注" : (this.followStatus == 0 ? "关注" : "")
+            },
+            isLogin() {
+                return window.gk.login && window.gk.user.Id != this.member.Id
+            }
         },
         data() {
             return {
                 followStatus: -1,
-                member: {Id: 0, Username: '', CreateAt: '', Info: ''},
+                member: {Id: 0, Username: '', CreateAt: '', Info: '', TopicCount: 0},
                 tabs: 0, list: [], total: 0, current: 1, DauOrder: 0
             };
         },
         methods: {
-            consoleIndex() {
-            },
             gz() {
                 this.ajax('/gk-topic/follow', {userId: this.member.Id}, (o) => {
                     gk.user.FollowCount = o.followCount;
@@ -66,20 +83,13 @@
         },
         watch: {
             'tabs': 'loadData'
-        }, computed: {
-            gzAction() {
-                return this.followStatus == 1 ? "取消关注" : (this.followStatus == 0 ? "关注" : "")
-            },
-            isLogin() {
-                return window.gk.login && window.gk.user.Id != this.member.Id
-            },
-            TopicCount() {
-                return Number(this.member.TopicCount);
-            }
         },
         created() {
-            var an = window.location.pathname.substr(10);
-            this.ajax('/gk-user/memberInfo', {username: an}, this.load)
+            var an = window.location.pathname.substr(10).split(',');
+            if (an.length == 3) {
+                this.current = Number(an[2])
+            }
+            this.ajax('/gk-user/memberInfo', {username: an[0]}, this.load)
         }
     }
 </script>

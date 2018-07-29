@@ -1,5 +1,6 @@
 <template>
     <card>
+        <span slot="title">当前账户余额:{{score}}</span>
         <div>
             <Table :columns="column" :loading="loading" :data="list"></Table>
             <div style="clear: both;padding-top: 10px; ">
@@ -14,6 +15,7 @@
     export default {
         data() {
             return {
+                score: gk.user.Score,
                 total: 0, list: [], loading: true, current: 1,
                 column:
                     [{title: '日期', key: 'CreateAt', width: 150},

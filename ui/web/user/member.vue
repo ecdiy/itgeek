@@ -95,8 +95,11 @@
             }
         },
         created() {
-            var an = window.location.pathname.substr(10);
-            this.ajax('/gk-user/memberInfo', {username: an}, this.load)
+            var an = window.location.pathname.substr(10).split(',');
+            if (an.length == 3) {
+                this.current = Number(an[2])
+            }
+            this.ajax('/gk-user/memberInfo', {username: an[0]}, this.load)
         }
     }
 </script>

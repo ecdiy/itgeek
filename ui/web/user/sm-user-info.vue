@@ -38,7 +38,7 @@
         </card>
         <card>
             <router-link to="/p/my/msg" class="message-con">
-                <span v-if="gk.user.MsgCount > 0"><Icon type="speakerphone" size="18"></Icon>有{{msgUnRead}} 条未读消息</span>
+                <span v-if="gk.user.MsgCount > 0"><Icon type="speakerphone" size="18" style="padding-right: 10px"></Icon>有{{msgUnRead}} 条未读消息</span>
                 <span v-else>无未读消息</span>
             </router-link>
         </card>

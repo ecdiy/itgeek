@@ -12,9 +12,8 @@
                     </td>
                     <td width="10"></td>
                     <td width="auto" valign="middle"><span class="small fade">
-                            <a class="node"
-                               @click="setId(0,it.CategoryId)">{{it.CategoryName}}</a> &nbsp;•&nbsp; <strong><a
-                            :to="'/p/member/'+it.Username">{{it.Username}}</a></strong></span>
+                            <go :to="'/p/topic/list,0,'+it.CategoryId+',1'" class="node">{{it.CategoryName}}</go> &nbsp;•&nbsp; <strong><router-link
+                            :to="'/p/member/'+it.Username">{{it.Username}}</router-link></strong></span>
                         <div>
                                 <span class="item_title"><router-link
                                         :to="'/p/topic/detail,'+it.Id+','+it.UserId">{{it.Title}}</router-link></span>
@@ -23,7 +22,7 @@
                             <span class="small fade">{{ it.CreateAt}}</span>
                             <span class="small fade" v-if="it.ReplyUsername!=''">
                              &nbsp;•&nbsp;最后回复 <strong><router-link
-                                    :to="'/p/member/'+it.ReplyUserId">{{it.ReplyUsername}}</router-link></strong></span>
+                                    :to="'/p/member/'+it.ReplyUsername">{{it.ReplyUsername}}</router-link></strong></span>
                         </div>
                     </td>
                     <td width="70" align="right" valign="middle"> {{it.ReplyCount}}</td>
@@ -39,7 +38,3 @@
         props: {list: Array, cId: "", self: ""}
     }
 </script>
-
-<style scoped>
-
-</style>

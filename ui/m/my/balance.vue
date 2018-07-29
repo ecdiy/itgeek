@@ -30,14 +30,16 @@
         }, computed: {
             totalPage() {
                 return Math.ceil(this.total / 20)
-            },
+            }
+        },
+        methods: {
             init() {
                 var pn = window.location.pathname;
                 var p = pn.split(",")
                 this.current = Number(p[1])
                 this.ajax('/gk-user/scoreLogList', {page: this.current})
             }
-        }, 
+        },
         created() {
             this.init();
         },

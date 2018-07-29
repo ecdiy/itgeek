@@ -34,37 +34,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="cell swipe-wrapper" v-for="(it,index) in topicList" :key="it.Id">
-                <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                    <tbody>
-                    <tr>
-                        <td width="24" valign="top" align="center">
-                            <router-link :to="'/p/member/'+it.Username"><img
-                                    :src="avatar(it.UserId)"
-                                    border="0" align="default"
-                                    style="max-width: 24px; max-height: 24px;"></router-link>
-                        </td>
-                        <td width="10"></td>
-                        <td width="auto" valign="middle"><span class="small fade">
-                            <a class="node"
-                               @click="setId(0,it.CategoryId)">{{it.CategoryName}}</a> &nbsp;•&nbsp; <strong><a
-                                :to="'/p/member/'+it.Username">{{it.Username}}</a></strong></span>
-                            <div>
-                                <span class="item_title"><router-link
-                                        :to="'/p/topic/detail,'+it.Id+','+it.UserId">{{it.Title}}</router-link></span>
-                            </div>
-                            <div>
-                                <span class="small fade">{{ it.CreateAt}}</span>
-                                <span class="small fade" v-if="it.ReplyUsername!=''">
-                             &nbsp;•&nbsp;最后回复 <strong><router-link
-                                        :to="'/p/member/'+it.ReplyUserId">{{it.ReplyUsername}}</router-link></strong></span>
-                            </div>
-                        </td>
-                        <td width="70" align="right" valign="middle"> {{it.ReplyCount}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <topic-list :list="topicList"></topic-list>
             <div class="cell">
                 <page :all="totalPage" :no="current" :url="'/p/topic/list,'+pId+','+cId+',{}'"></page>
             </div>
@@ -74,7 +44,12 @@
 
 
 <script>
+    import topicList from '../topic/topicList'
+
     export default {
+        components: {
+            topicList
+        },
         data() {
             return {topicList: [], pId: "0", cId: "0", catList: [], gk: window.gk, current: 1}
         },
@@ -84,24 +59,12 @@
             vm.$on("data", (p) => {
                 this.gk = p;
             })
-            //     this.cat();
-            //     var h = window.location.hash;
-            //     var f = "/p/topic/list/";
-            //     if (h.indexOf(f) == 0) {
-            //         h = h.substr(f.length)
-            //         var ix = h.indexOf('_');
-            //         this.setId(h.substr(0, ix), h.substr(ix + 1))
-            //     } else {
-            //         this.load()
-            //     }
-
-
         },
         computed: {
             totalPage() {
                 var t = 0;
                 for (var i = 0; i < this.catList.length; i++) {
-                    if ((this.cId > 0 && this.catList[i].Id == v.cId) || (this.cId == 0 && this.pId == 0) || (this.cId == 0 && this.pId == this.catList[i].ParentId)) {
+                    if ((this.cId > 0 && this.catList[i].Id == this.cId) || (this.cId == 0 && this.pId == 0) || (this.cId == 0 && this.pId == this.catList[i].ParentId)) {
                         t += Number(this.catList[i].ItemCount);
                     }
                 }
@@ -117,13 +80,13 @@
                 }
             },
             init() {
-                var pn = window.location.pathname;
-                var p = pn.split(",")
+                var p = window.location.pathname.split(",");
                 if (p.length > 3) {
                     this.pId = p[1];
                     this.cId = p[2];
                     this.current = Number(p[3]);
                 }
+                console.log(this, p)
                 this.load()
             },
             upPid(v) {
