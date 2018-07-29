@@ -6,7 +6,10 @@ import (
 	"regexp"
 )
 
-const PageSize = 20
+const (
+	PageSize     = 20
+	KV_GeekAdmin = "GeekAdmin"
+)
 
 var (
 	Gpa       *gpa.Gpa
@@ -31,4 +34,12 @@ func InitWs() {
 
 		ZxDao, ThankDao, RefererDao,
 	)
+}
+func KeySave(siteId int64, k, v string) (int64, error) {
+	_, e, _ := KvDao.Get(siteId, k)
+	if e {
+		return KvDao.Update(k, v, siteId)
+	} else {
+		return KvDao.Add(siteId, k, v)
+	}
 }

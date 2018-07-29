@@ -13,7 +13,11 @@ func InitWeb() {
 	auth := func(url string, fun func(auth *ws.Web)) {
 		ws.WebAuthAdmin("/api/gk-admin/"+url, fun)
 	}
-
+	if ws.MultiSite == 0 {
+		ws.WebGin.POST("/api/gk-admin/userStatus", WebUserStatus)
+		ws.WebGin.POST("/api/gk-admin/userInit", WebAdminUserInit)
+		ws.WebGin.POST("/api/gk-admin/login", WebAdminUserLogin)
+	}
 	auth("baseSave", WebBaseSave)
 	auth("baseGet", WebBaseGet)
 
