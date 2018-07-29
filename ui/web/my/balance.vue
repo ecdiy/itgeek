@@ -42,7 +42,7 @@
         },
         created() {
             var p = window.location.pathname.split(",")
-            this.current = p[1]
+            this.current = Number(p[1])
             this.ajax('/gk-user/scoreLogList', {page: this.current})
         }
     }

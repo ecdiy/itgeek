@@ -35,7 +35,7 @@
         created() {
             var pn = window.location.pathname;
             var p = pn.split(",")
-            this.current = p[1]
+            this.current = Number(p[1])
             this.ajax('/gk-user/scoreLogList', {page: this.current})
         }
     }
@@ -46,5 +46,8 @@
         border-bottom: 1px solid #e9eaec;
         padding: 3px;
     }
-    th{padding: 5px}
+
+    th {
+        padding: 5px
+    }
 </style>
