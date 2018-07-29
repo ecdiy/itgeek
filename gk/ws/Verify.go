@@ -6,6 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	ecTokenMap = make(map[string]string)
+	//authMap = make(map[string]func(userId int64, param *Param, res map[string]interface{}))
+)
+
 func Verify(c *gin.Context) *Web {
 	auth := &Web{}
 	auth.Ua = GetUa(c)
@@ -42,6 +47,66 @@ func Verify(c *gin.Context) *Web {
 			}
 		}
 	}
+	auth.Auth = false
+	return auth
+}
+
+func VerifyAdmin(c *gin.Context) (*Web) {
+	auth := &Web{}
+	auth.Context = c
+	auth.Out = make(map[string]interface{})
+	ua := GetUa(c)
+	ect, _ := c.Cookie(ua + "GeekAdmin")
+	auth.SiteId = 0
+	kv, kvb, _ := KvDao.Get(auth.SiteId, ua+"GeekAdmin")
+	if kvb && kv == ect {
+		auth.Auth = true
+		return auth
+	}
+	auth.Auth = false
+	return auth
+}
+
+func VerifyMultiSiteAdmin(c *gin.Context) (*Web) {
+	auth := &Web{}
+	auth.Context = c
+	auth.Out = make(map[string]interface{})
+	ua := GetUa(c)
+	ect, e := c.Cookie("ecToken")
+
+	if e == nil && len(ect) > 2 {
+		idx := strings.Index(ect, "_")
+		if idx > 0 {
+			id := ect[0:idx]
+			etk := ua + ect[0:idx]
+			v, vb := ecTokenMap[etk]
+			if !vb || v != ect[idx+1:] {
+				qTk, qb, _ := Gpa.QueryString("select Token from site.EcToken where Ua=? and UserId=?", ua, id)
+				if !qb {
+					auth.Auth = false
+					return auth
+				} else {
+					if qTk == ect[idx+1:] {
+						ecTokenMap[etk] = qTk
+					} else {
+						auth.Auth = false
+						return auth
+					}
+				}
+			}
+			auth.initParam()
+			siteId := auth.Int64("siteId")
+			if siteId > 0 {
+				ext, _, _ := Gpa.QueryInt("select count(*) from site.Site where UserId=? and Id=?", id, siteId)
+				if ext == 1 {
+					auth.SiteId = siteId
+					auth.Auth = true
+					return auth
+				}
+			}
+		}
+	}
+
 	auth.Auth = false
 	return auth
 }

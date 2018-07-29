@@ -2,17 +2,17 @@ package gkadmin
 
 import "github.com/ecdiy/itgeek/gk/ws"
 
-func WebZxSave(param *Param, res map[string]interface{}) {
-	_, ext, _ := ws.ZxDao.GetTest(param.SiteId, param.String("PageUa"), param.String("PageKey"))
+func WebZxSave(web *ws.Web) {
+	_, ext, _ := ws.ZxDao.GetTest(web.SiteId, web.String("PageUa"), web.String("PageKey"))
 	if ext {
-		res["row"], _ = ws.ZxDao.UpJson(param.String("Json"), param.String("PageUa"), param.String("PageKey"), param.SiteId)
+		web.Out["row"], _ = ws.ZxDao.UpJson(web.String("Json"), web.String("PageUa"), web.String("PageKey"), web.SiteId)
 	} else {
-		res["row"], _ = ws.ZxDao.Add(param.SiteId, param.String("PageKey"), param.String("PageUa"), param.String("Json"))
+		web.Out["row"], _ = ws.ZxDao.Add(web.SiteId, web.String("PageKey"), web.String("PageUa"), web.String("Json"))
 	}
 }
-func WebZxPub(param *Param, res map[string]interface{}) {
-	res["row"], _ = ws.ZxDao.Pub(param.String("PageUa"), param.String("PageKey"), param.SiteId)
+func WebZxPub(web *ws.Web) {
+	web.Out["row"], _ = ws.ZxDao.Pub(web.String("PageUa"), web.String("PageKey"), web.SiteId)
 }
-func WebZxGet(param *Param, res map[string]interface{}) {
-	res["zxJson"], _, _ = ws.ZxDao.GetTest(param.SiteId, param.String("PageUa"), param.String("PageKey"))
+func WebZxGet(web *ws.Web) {
+	web.Out["zxJson"], _, _ = ws.ZxDao.GetTest(web.SiteId, web.String("PageUa"), web.String("PageKey"))
 }

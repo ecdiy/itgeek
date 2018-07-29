@@ -21,12 +21,14 @@ type Web struct {
 }
 
 func (p *Web) initParam() {
-	row, b := p.Context.GetRawData()
-	if b == nil {
-		var data map[string]interface{}
-		je := json.Unmarshal(row, &data)
-		if je == nil {
-			p.param = data
+	if p.param == nil {
+		row, b := p.Context.GetRawData()
+		if b == nil {
+			var data map[string]interface{}
+			je := json.Unmarshal(row, &data)
+			if je == nil {
+				p.param = data
+			}
 		}
 	}
 }
@@ -96,9 +98,9 @@ func SiteId(c *gin.Context) int64 {
 	return 0
 }
 
-func WebAuth(url string, fun func(wdb *Web)) {
+func byAuthFun(url string, fun func(wdb *Web), auth func(c *gin.Context) *Web) {
 	WebGin.POST(url, func(c *gin.Context) {
-		web := Verify(c)
+		web := auth(c)
 		if web.Auth {
 			web.initParam()
 			fun(web)
@@ -107,6 +109,17 @@ func WebAuth(url string, fun func(wdb *Web)) {
 			c.AbortWithStatus(401)
 		}
 	})
+}
+
+func WebAuth(url string, fun func(wdb *Web)) {
+	byAuthFun(url, fun, Verify)
+}
+func WebAuthAdmin(url string, fun func(wdb *Web)) {
+	if MultiSite == 1 {
+		byAuthFun(url, fun, VerifyMultiSiteAdmin)
+	} else {
+		byAuthFun(url, fun, VerifyAdmin)
+	}
 }
 
 func WebPost(url string, fun func(wdb *Web)) {

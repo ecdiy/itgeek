@@ -65,6 +65,6 @@ func main() {
 	ws.WebGin.Static("/dist", BaseDir+"/web/dist")
 	ws.WebGin.Static("/static", BaseDir+"/static")
 
-	seelog.Info("version:0.0.3 (itgeek.top) BaseDir=", BaseDir)
+	seelog.Info("version:0.0.4 (itgeek.top) BaseDir=", BaseDir)
 	ws.WebGin.Run(ws.EnvParam(ws.KeyBindAddr))
 }

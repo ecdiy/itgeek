@@ -2,9 +2,9 @@ package gkadmin
 
 import "github.com/ecdiy/itgeek/gk/ws"
 
-func WebTopicList(param *Param, res map[string]interface{}) {
+func WebTopicList(web *ws.Web) {
 
-	res["list"], _ = ws.TopicDao.List(param.SiteId, param.Start(20))
-	res["total"], _, _ = ws.TopicDao.Count(param.SiteId)
+	web.Out["list"], _ = ws.TopicDao.List(web.SiteId, web.Start())
+	web.Out["total"], _, _ = ws.TopicDao.Count(web.SiteId)
 
 }

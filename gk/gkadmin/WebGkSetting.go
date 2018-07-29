@@ -2,17 +2,17 @@ package gkadmin
 
 import "github.com/ecdiy/itgeek/gk/ws"
 
-func WebBaseGet(param *Param, res map[string]interface{}) {
-	res["baseInfo"], _, _ = ws.KvDao.Get(param.SiteId, param.String("key"))
+func WebBaseGet(web *ws.Web) {
+	web.Out["baseInfo"], _, _ = ws.KvDao.Get(web.SiteId, web.String("key"))
 }
-func WebBaseSave(param *Param, res map[string]interface{}) {
-	InitCount(param.SiteId)
-	key := param.String("key")
-	_, b, _ := ws.KvDao.Get(param.SiteId, key)
+func WebBaseSave(web *ws.Web) {
+	InitCount(web.SiteId)
+	key := web.String("key")
+	_, b, _ := ws.KvDao.Get(web.SiteId, key)
 	if b {
-		res["row"], _ = ws.KvDao.Update(param.String("info"), key, param.SiteId)
+		web.Out["row"], _ = ws.KvDao.Update(web.String("info"), key, web.SiteId)
 	} else {
-		res["row"], _ = ws.KvDao.Add(param.SiteId, key, param.String("info"))
+		web.Out["row"], _ = ws.KvDao.Add(web.SiteId, key, web.String("info"))
 	}
 }
 func InitCount(siteId int64) {
