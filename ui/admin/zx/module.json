@@ -1,0 +1,44 @@
+[
+  {
+    "name": "图片",
+    "key": "gk-img",
+    "param": [
+      {
+        "name": "openTarget",
+        "desc": "打开链接",
+        "type": "select",
+        "val": [
+          {
+            "label": "新窗口",
+            "val": 1
+          },
+          {
+            "label": "当前窗口",
+            "val": 0
+          }
+        ]
+      },
+      {
+        "name": "list",
+        "desc": "图片列表",
+        "type": "array",
+        "subParam": [
+          {
+            "desc": "图片",
+            "type": "img"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "自定义HTML",
+    "key": "gk-html",
+    "param": [
+      {
+        "name": "html",
+        "type": "html"
+      }
+    ]
+  }
+]
