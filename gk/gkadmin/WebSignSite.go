@@ -46,9 +46,9 @@ func WebAdminUserInit(c *gin.Context) {
 			userLogin(auth)
 		}
 	} else {
-		auth.Result(ws.StExist)
+		auth.ST(ws.StExist)
+		c.JSON(200, auth.Out)
 	}
-	c.JSON(200, auth.Out)
 }
 
 func userLogin(auth *ws.Web) {

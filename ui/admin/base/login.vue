@@ -97,19 +97,6 @@
                                 gk.login = false;
                                 th.$Notice.error({title: r.msg});
                             }
-                            // if (r.result.length >= 2) {
-                            //     th.form.Captcha = r.result[1];
-                            //     th.authImg = th.authImgUrl + r.result[1];
-                            // } else {
-                            //     th.authImg = ""
-                            // }
-                            // if (r.code == 1004) {
-                            //     th.form.Password = "";
-                            // }
-                            // for (var k in th.err) {
-                            //     th.err[k] = "";
-                            // }
-                            // th.err[r.result[0]] = r.msg;
                         });
                     }
                 });

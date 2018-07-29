@@ -39,7 +39,7 @@
     export default {
         data() {
             return {
-                an: '', on: '',
+                an: '', on: [],
                 gk: window.gk, menu: [
                     {
                         name: "社区管理", sub: [

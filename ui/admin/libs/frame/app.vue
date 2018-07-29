@@ -8,7 +8,6 @@
 
                 <div class="fr">
                     <span v-if="gk.login">
-                        <go to="admin">后台管理</go>
                         <a @click="loginOut">登出</a>
                     </span>
                 </div>
