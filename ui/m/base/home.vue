@@ -86,7 +86,6 @@
                     this.cId = p[2];
                     this.current = Number(p[3]);
                 }
-                console.log(this, p)
                 this.load()
             },
             upPid(v) {

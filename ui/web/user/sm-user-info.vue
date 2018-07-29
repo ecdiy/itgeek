@@ -42,9 +42,9 @@
                 <span v-else>无未读消息</span>
             </router-link>
         </card>
-        <card>
-            <go to="topic/referer">来源分析</go>
-        </card>
+        <!--<card>-->
+            <!--<go to="topic/referer">来源分析</go>-->
+        <!--</card>-->
     </div>
 </template>
 <script>
