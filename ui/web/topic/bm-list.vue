@@ -38,7 +38,17 @@
     export default {
         components: {topicList},
         data() {
-            return {topicList: [], pId: "0", cId: "0", catList: [], total: 0, current: 1}
+            return {topicList: [], pId: "0", cId: "0", catList: [],   current: 1}
+        }, computed: {
+            total () {
+                var t = 0;
+                for (var i = 0; i < this.catList.length; i++) {
+                    if ((this.cId > 0 && this.catList[i].Id == v.cId) || (this.cId == 0 && this.pId == 0) || (this.cId == 0 && this.pId == this.catList[i].ParentId)) {
+                        t += Number(this.catList[i].ItemCount);
+                    }
+                }
+                return t
+            }
         },
         methods: {
             loadPage(data) {
@@ -60,13 +70,6 @@
                         }
                     }
                 }
-                var t = 0;
-                for (var i = 0; i < v.catList.length; i++) {
-                    if ((v.cId > 0 && v.catList[i].Id == v.cId) || (v.cId == 0 && v.pId == 0) || (v.cId == 0 && v.pId == v.catList[i].ParentId)) {
-                        t += Number(v.catList[i].ItemCount);
-                    }
-                }
-                v.total = t;
             },
             setId(p, r) {
                 this.current = 1;

@@ -50,9 +50,6 @@ Vue.component('go', function (resolve) {
 Vue.component('gk-body', function (resolve) {
     require(['./libs/frame/gkBody.vue'], resolve)
 })
-Vue.component('base-page', function (resolve) {
-    require(['../components/base-table.vue'], resolve)
-})
 
 Vue.component('user-info', function (resolve) {
     require(['./user/sm-user-info.vue'], resolve)

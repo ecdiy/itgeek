@@ -64,7 +64,9 @@
                     </tr>
                     </tbody>
                 </table>
-
+            </div>
+            <div class="cell">
+                <page :all="totalPage" :no="current" :url="'/p/topic/list,'+pId+','+cId+',{}'"></page>
             </div>
         </div>
     </div>
@@ -74,7 +76,7 @@
 <script>
     export default {
         data() {
-            return {topicList: [], pId: "0", cId: "0", catList: [], gk: window.gk}
+            return {topicList: [], pId: "0", cId: "0", catList: [], gk: window.gk, current: 1}
         },
         created() {
             this.cat();
@@ -92,6 +94,19 @@
             //     } else {
             //         this.load()
             //     }
+
+
+        },
+        computed: {
+            totalPage() {
+                var t = 0;
+                for (var i = 0; i < this.catList.length; i++) {
+                    if ((this.cId > 0 && this.catList[i].Id == v.cId) || (this.cId == 0 && this.pId == 0) || (this.cId == 0 && this.pId == this.catList[i].ParentId)) {
+                        t += Number(this.catList[i].ItemCount);
+                    }
+                }
+                return Math.ceil(t / 20)
+            }
         },
         watch: {
             '$route': 'init'
@@ -126,7 +141,7 @@
                 this.load()
             },
             load() {
-                this.ajax('/gk-topic/list', {pId: this.pId, cId: this.cId, page: 1}, (r, th) => {
+                this.ajax('/gk-topic/list', {pId: this.pId, cId: this.cId, page: this.current}, (r, th) => {
                     th.upPid(th);
                 })
             }

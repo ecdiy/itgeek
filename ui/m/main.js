@@ -15,6 +15,9 @@ Vue.component('flexbox-item', FlexboxItem)
 Vue.component('go', function (resolve) {
     require(['../components/go.vue'], resolve)
 })
+Vue.component('page', function (resolve) {
+    require(['./libs/page.vue'], resolve)
+})
 
 Vue.use(ConfirmPlugin)
 

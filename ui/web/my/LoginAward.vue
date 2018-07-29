@@ -20,7 +20,7 @@
             <div v-if="LoginAward==0">
                 每日登录奖励已领取
                 <div style="padding: 15px;width: 100%">
-                    <go to="my/balance" title="账户余额">查看我的账户余额</go>
+                    <go to="my/balance,1" title="账户余额">查看我的账户余额</go>
                 </div>
                 <div>已连续登录 {{loginDay}} 天</div>
             </div>

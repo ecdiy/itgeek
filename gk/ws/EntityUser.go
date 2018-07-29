@@ -32,11 +32,12 @@ type DaoUser struct {
 	LoginAward func(SiteId int64, userId int64) (map[string]string, bool, error) `select LoginAward,LoginDay from GkUser where SiteId=? and  Id=?`
 	Score      func(SiteId int64, userId int64) (int64, bool, error)             `select Score from GkUser where SiteId=? and Id=?`
 
-	UpScore      func(sc, userId, siteId int64) (int64, error)   `update GkUser set Score=? where Id=? and SiteId=?`
+	UpScore func(sc, userId, siteId int64) (int64, error) `update GkUser set Score=? where Id=? and SiteId=?`
 
 	LoginAwardDo func(SiteId int64, userId int64) (int64, error) `update GkUser set LoginAward=0,LoginDay=LoginDay+1 where SiteId=? and Id=? and LoginAward=1`
 
-	Dau      func(SiteId int64, ) ([]map[string]string, error)           `select Dau,Id,Username,Info from GkUser where SiteId=? and  Dau>0 order by Dau desc limit 0,10`
+	Dau func(SiteId int64, ) ([]map[string]string, error) `select Dau,Id,Username,Info from GkUser where SiteId=? and Dau>0 order by Dau desc limit 0,10`
+
 	DauOrder func(SiteId int64, userId interface{}) (int64, bool, error) `select count(*)+1 DauOrder from GkUser where SiteId=? and  Dau>(select Dau from GkUser where Id=?)`
 	DauAdd   func(SiteId int64, userId int64) (int64, error)             `update GkUser set Dau=Dau+1 where SiteId=? and Id=?`
 

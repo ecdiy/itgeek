@@ -14,7 +14,7 @@
                         </router-link>
                     </div>
                     <div style="clear: both;padding: 0" class="small">
-                        <router-link to="/p/my/balance">积分：{{gk.user.Score}}</router-link>
+                        <router-link to="/p/my/balance,1">积分：{{gk.user.Score}}</router-link>
                     </div>
                 </div>
             </div>

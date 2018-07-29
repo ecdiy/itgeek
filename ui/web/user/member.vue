@@ -97,7 +97,6 @@
         created() {
             var an = window.location.pathname.substr(10);
             this.ajax('/gk-user/memberInfo', {username: an}, this.load)
-
         }
     }
 </script>

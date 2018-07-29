@@ -28,9 +28,9 @@ func WebScoreLoginAwardStatus(auth *ws.Web) {
 		auth.Out["LoginAward"] = res["LoginAward"]
 		auth.Out["today"] = time.Now().Format("2006-01-02")
 		auth.Out["loginDay"] = res["LoginDay"]
-		if auth.Out["LoginAward"] == "1" {
-
-		}
+		//if auth.Out["LoginAward"] == "1" {
+		//
+		//}
 	}
 }
 func WebScoreLoginAwardDo(auth *ws.Web) {
@@ -42,6 +42,7 @@ func WebScoreLoginAwardDo(auth *ws.Web) {
 	}
 	auth.Out["Id"] = id
 	auth.Out["Score"] = score
+	WebScoreLoginAwardStatus(auth)
 }
 
 func WebScoreLogList(auth *ws.Web) {

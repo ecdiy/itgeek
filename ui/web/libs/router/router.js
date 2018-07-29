@@ -46,7 +46,7 @@ export const routers = [
     {
         auth: true, path: '/', component: frame,
         children: [
-            r(() => import('@/my/balance'), 'my_balance', '账户余额'),
+            r(() => import('@/my/balance'), 'my/balance,:id', '账户余额'),
             r(() => import('@/my/setting.vue'), 'my_setting', '设置'),
             r(() => import('@/my/LoginAward'), 'my_LoginAward', '领取今日登录奖励'),
             r(() => import('@/user/topPlayer'), 'user_topPlayer', '社区消费排行榜'),
