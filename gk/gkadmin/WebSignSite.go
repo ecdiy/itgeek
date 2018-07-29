@@ -18,6 +18,7 @@ func WebUserStatus(c *gin.Context) {
 		_, auth.Out["user"], _ = ws.KvDao.Get(auth.SiteId, "SiteAdminUser")
 		_, auth.Out["pass"], _ = ws.KvDao.Get(auth.SiteId, "SiteAdminPass")
 	}
+	c.JSON(200, auth.Out)
 }
 
 func WebAdminUserInit(c *gin.Context) {
@@ -34,6 +35,7 @@ func WebAdminUserInit(c *gin.Context) {
 	} else {
 		auth.Result(ws.StExist)
 	}
+	c.JSON(200, auth.Out)
 }
 
 func WebAdminUserLogin(c *gin.Context) {
@@ -48,12 +50,13 @@ func WebAdminUserLogin(c *gin.Context) {
 		if ep == md5pass {
 			tk := Token(us)
 			ua := ws.GetUa(c)
-			ws.KeySave(auth.SiteId, ua+ws.KV_GeekAdmin, tk)
+			ws.KeySave(auth.SiteId, ua+ws.KvGeekAdmin, tk)
 			auth.Result(tk)
 			return
 		}
 	}
 	auth.ST(ws.StUserPassError)
+	c.JSON(200, auth.Out)
 }
 
 func Token(id string) string {

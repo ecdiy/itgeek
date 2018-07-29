@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	PageSize     = 20
-	KV_GeekAdmin = "GeekAdmin"
+	PageSize    = 20
+	KvGeekAdmin = "GeekAdmin"
 )
 
 var (

@@ -62,6 +62,12 @@
             };
         },
         created() {
+            this.ajax('/gk-admin/userStatus', {}, (r, th) => {
+                if (!r.login) {
+                    th.$router.replace('/p/login')
+                }
+            });
+            
             Cookies.remove("webToken");
             var un = Cookies.get("user");
             if (un && un != "" && un.length > 1) {

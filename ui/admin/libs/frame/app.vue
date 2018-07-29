@@ -3,7 +3,7 @@
         <card style="height: 50px;">
             <div class="content">
                 <go title="首页" class="fl" to="/">
-                    <h2>ITGeek</h2>
+                    <h3>后台管理</h3>
                 </go>
 
                 <div class="fr">
@@ -41,6 +41,12 @@
                 vm.$emit("login", false);
             }
         }, created() {
+            this.ajax('/gk-admin/userStatus', {}, (r, th) => {
+                if (!r.login) {
+                    th.$router.replace('/p/login')
+                }
+            });
+
             var tk = Cookies.get('ecToken');
             if (tk && tk.length > 1) {
                 window.gk.login = true;

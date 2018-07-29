@@ -61,6 +61,7 @@ func main() {
 	upload.InitWeb()
 	gkadmin.InitWeb()
 
+	ws.WebGin.Static("/admin", BaseDir+"/admin")
 	ws.WebGin.Static("/h5dist", BaseDir+"/m/h5dist")
 	ws.WebGin.Static("/dist", BaseDir+"/web/dist")
 	ws.WebGin.Static("/static", BaseDir+"/static")

@@ -56,9 +56,10 @@ func VerifyAdmin(c *gin.Context) (*Web) {
 	auth.Context = c
 	auth.Out = make(map[string]interface{})
 	ua := GetUa(c)
-	ect, _ := c.Cookie(ua + "GeekAdmin")
+	tKey := ua + KvGeekAdmin
+	ect, _ := c.Cookie(tKey)
 	auth.SiteId = 0
-	kv, kvb, _ := KvDao.Get(auth.SiteId, ua+"GeekAdmin")
+	kv, kvb, _ := KvDao.Get(auth.SiteId, tKey)
 	if kvb && kv == ect {
 		auth.Auth = true
 		return auth
