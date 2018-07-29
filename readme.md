@@ -65,7 +65,7 @@ geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0
 
 #### 网站Web效果
 
-![image](https://github.com/ecdiy/itgeek/blob/master/doc/itgeek.gif?raw=true)
+![image](https://github.com/ecdiy/itgeek/blob/master/doc/web.gif?raw=true)
 
 #### 网站H5效果
 
