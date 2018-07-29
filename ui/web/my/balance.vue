@@ -37,12 +37,11 @@
             }
         }, methods: {
             gop(p) {
-                vm.push({path: '/p/my/balance,' + p})
+                vm.$router.push({path: '/p/my/balance,' + p})
             }
         },
         created() {
-            var pn = window.location.pathname;
-            var p = pn.split(",")
+            var p = window.location.pathname.split(",")
             this.current = p[1]
             this.ajax('/gk-user/scoreLogList', {page: this.current})
         }
