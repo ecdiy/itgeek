@@ -5,3 +5,4 @@
 /*.cmd
 /gk/cmd/gk_test.go
 /*.iml
+/tools/*.exe

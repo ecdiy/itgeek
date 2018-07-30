@@ -1,5 +1,12 @@
 项目地址:[https://github.com/ecdiy/itgeek]
 
+##安装
+### 安装数据库
+```angular2html
+新建库XXX 导入db\geek.sql 库名与参数DbDsn DB名一致
+```
+
+###源码安装
  ```angular2html
 go get github.com/ecdiy/gpa
 go get github.com/gin-gonic/gin
@@ -13,8 +20,26 @@ go get github.com/ecdiy/itgeek
  npm install
 ```
 
+ ..... 此处省略N多 类似nginx,intelj设置之类
+ 
+ ### 可执行包
+ [https://github.com/ecdiy/itgeek/releases]
+ 下最新版
 
-详情介绍：[http://itgeek.top/p/topic/list,300,308,1] 
+#### *** 源码安装与可执行包两者选一即可 ***
+
+###设置
+```angular2html
+geek BindAddr=:80 ImgHost=http://192.168.x.x DbDsn=root:root@tcp(127.0.0.1:3306)/gkx?timeout=30s&charset=utf8mb4&parseTime=true
+端口号,host,数据
+
+
+http://192.168.x.x/admin 
+管理你的站点信息，分类需要设置，否则发不了主题
+
+```
+
+功能详情介绍：[http://itgeek.top/p/topic/list,300,308,1] 
 
 
 #### 目录结构
@@ -35,13 +60,18 @@ go get github.com/ecdiy/itgeek
 #### 参数说明
 ```angular2html
 BindAddr=:9000
-UploadDir=./upload/  上传图片的目录
-DbDriver=mysql       数据库驱动名称
+UploadDir=./upload/  #上传图片的目录
+DbDriver=mysql       #数据库驱动名称
 DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true  
-ImgHost=http://127.0.0.1:9000
-MultiSite=0         这个参数不要设置成1，这个多站点标识，如果要设置成多站点与开发者单独联系。
+ImgHost=http://192.168.x.x:9000  #不能设置成127.0.0.1
+MultiSite=0         #这个参数不要设置成1，这个多站点标识，如果要设置成多站点与开发者单独联系。
 
-geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true ImgHost=http://127.0.0.1:9000
+geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
+
+geek BindAddr=:88 ImgHost=http://192.168.31.174:88 DbDsn=root:root@tcp(127.0.0.1:3306)/gkx?timeout=30s&charset=utf8mb4&parseTime=true
+
+建议设置
+ImgHost不能设置成127.0.0.1，否则会导致上传图片有路径问题，不能正确显示图片
 
 以上是默认值，如果与之一样可以不用配置
 ```
