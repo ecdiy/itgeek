@@ -28,18 +28,37 @@ go get github.com/ecdiy/itgeek
 
 #### *** 源码安装与可执行包两者选一即可 ***
 
-###设置
+#### 参数说明
 ```angular2html
+BindAddr=:9000
+UploadDir=./upload/  #上传图片的目录
+DbDriver=mysql       #数据库驱动名称
+DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true  
+ImgHost=http://192.168.x.x:9000  #不能设置成127.0.0.1
+MultiSite=0         #这个参数不要设置成1，这个多站点标识，如果要设置成多站点与开发者单独联系。
+
+
+
+以上是默认值，如果与之一样可以不用配置
+如:
+ 
 geek BindAddr=:80 ImgHost=http://192.168.x.x DbDsn=root:root@tcp(127.0.0.1:3306)/gkx?timeout=30s&charset=utf8mb4&parseTime=true
-端口号,host,数据
 
+端口号 
+ImgHost不能设置成127.0.0.1，否则会导致上传图片有路径问题，不能正确显示图片
+数据库
 
-http://192.168.x.x/admin 
-管理你的站点信息，分类需要设置，否则发不了主题
 
 ```
 
-功能详情介绍：[http://itgeek.top/p/topic/list,300,308,1] 
+#### 下一步
+```angular2html 
+http://192.168.x.x/admin
+管理你的站点信息，分类需要设置，否则发不了主题
+```
+
+#### 功能详情介绍：
+[http://itgeek.top/p/topic/list,300,308,1] 
 
 
 #### 目录结构
@@ -57,24 +76,7 @@ http://192.168.x.x/admin
 #### 其它工具
 [https://nodejs.org/en/]
 
-#### 参数说明
-```angular2html
-BindAddr=:9000
-UploadDir=./upload/  #上传图片的目录
-DbDriver=mysql       #数据库驱动名称
-DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true  
-ImgHost=http://192.168.x.x:9000  #不能设置成127.0.0.1
-MultiSite=0         #这个参数不要设置成1，这个多站点标识，如果要设置成多站点与开发者单独联系。
 
-geek BindAddr=:88 UploadDir=./upload/ DbDriver=mysql DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
-
-geek BindAddr=:88 ImgHost=http://192.168.31.174:88 DbDsn=root:root@tcp(127.0.0.1:3306)/gkx?timeout=30s&charset=utf8mb4&parseTime=true
-
-建议设置
-ImgHost不能设置成127.0.0.1，否则会导致上传图片有路径问题，不能正确显示图片
-
-以上是默认值，如果与之一样可以不用配置
-```
 
 #### 数据库增量升级: 
 /db/geek.sql是当前版本下的数据库脚本，如果需要做增量升级的，参考这个主题
