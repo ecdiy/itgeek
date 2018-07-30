@@ -7,6 +7,7 @@ import (
 	"strings"
 	"os"
 	"io/ioutil"
+	"github.com/cihub/seelog"
 )
 
 func InitWeb() {
@@ -55,7 +56,6 @@ func InitWeb() {
 	ws.WebGin.NoRoute(func(ctx *gin.Context) {
 		url := ctx.Request.URL.Path
 		if strings.Index(url, "/avatar/") == 0 {
-
 			p := "./upload" + url
 			_, e := os.Stat(p)
 			if e == nil {
@@ -69,7 +69,11 @@ func InitWeb() {
 			ws.WebGin.HandleContext(ctx)
 			return
 		}
-
+		if strings.Index(url, "/admin/p/") == 0 {
+			seelog.Error(url)
+			ctx.Redirect(302, "/admin/index.html")
+			return
+		}
 		if strings.Index(url, "/p/") == 0 {
 			ua := ws.GetUa(ctx)
 			if ua == "web" {

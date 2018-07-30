@@ -1,3 +1,6 @@
+
+window.appUrl = '/admin'
+
 import Vue from 'vue';
 import iView from 'iview';
 import {router} from './libs/router/index';
@@ -7,7 +10,6 @@ import Cookies from 'js-cookie';
 import 'iview/dist/styles/iview.css';
 
 Vue.use(iView);
-
 
 Vue.prototype.ajax = function (url, p, fun) {
     let th = this;
@@ -30,7 +32,7 @@ Vue.prototype.ajax = function (url, p, fun) {
             window.goUrl = window.location.hash
             window.gk.login = false;
             Cookies.remove('webGeekAdmin');
-            th.$router.replace('/p/login')
+            th.$router.replace(appUrl + '/p/login')
             vm.$emit("data", window.gk)
         } else {
             console.log(err)
@@ -42,7 +44,7 @@ window.goUrl = '/';
 window.gk = {login: false, siteId: 0};
 
 Vue.component('go', function (resolve) {
-    require(['../components/go.vue'], resolve)
+    require(['./libs/go.vue'], resolve)
 })
 window.vm = new Vue({
     el: '#app', router, render: h => h(App),

@@ -34,12 +34,12 @@
                 gk.login = false;
                 vm.$emit("data", window.gk)
                 Cookies.remove("webGeekAdmin");
-                vm.$router.replace('/p/login')
+                vm.$router.replace(appUrl + '/p/login')
             }
         }, created() {
             this.ajax('/gk-admin/userStatus', {}, (r, th) => {
                 if (!r.login) {
-                    th.$router.replace('/p/login')
+                    th.$router.replace(appUrl + '/p/login')
                     gk.login = false;
                 } else {
                     th.gk.login = true;

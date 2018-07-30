@@ -92,7 +92,7 @@
                             if (r.code == 0) {
                                 Cookies.set('webGeekAdmin', r.result[0], {expires: 365});
                                 gk.login = true;
-                                vm.$router.push({path: '/'});
+                                vm.$router.push({path: appUrl + '/'});
                             } else {
                                 gk.login = false;
                                 th.$Notice.error({title: r.msg});

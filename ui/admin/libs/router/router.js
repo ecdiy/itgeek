@@ -2,7 +2,7 @@ import gk from '@/libs/frame/gk.vue';
 
 const r = function (c, n, p) {
     return {
-        path: p ? p : '/p/' + n.replace('_', '/'), name: n, component: c
+        path: '/admin' + (p ? p : '/p/' + n.replace('_', '/')), name: n, component: c
     }
 };
 
