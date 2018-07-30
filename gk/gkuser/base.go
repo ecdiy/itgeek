@@ -43,6 +43,7 @@ func InitWeb() {
 	post("/memberInfo", WebMemberInfo)
 	auth("/setting/save", WebSettingSave)
 	auth("/setting/get", WebSettingGet)
+	auth("/setting/upPass", WebSettingUpPass)
 
 	auth("/LoginAwardStatus", WebScoreLoginAwardStatus)
 	auth("/LoginAwardDo", WebScoreLoginAwardDo)

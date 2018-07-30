@@ -28,3 +28,14 @@ func WebSettingSave(auth *ws.Web) {
 func WebSettingGet(auth *ws.Web) {
 	auth.Out["row"], _, _ = ws.UserDao.SettingGet(auth.SiteId, auth.UserId)
 }
+
+func WebSettingUpPass(auth *ws.Web) {
+	p := auth.String("Password")
+	if len(p) > 3 {
+		p = UserMd5Pass(auth.Username, p)
+		ws.UserDao.UpPassword(p, auth.UserId, auth.SiteId)
+		auth.ST(ws.OK)
+	} else {
+		auth.ST(ws.StErrorParameter)
+	}
+}

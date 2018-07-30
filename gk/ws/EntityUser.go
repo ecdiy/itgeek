@@ -23,6 +23,8 @@ type DaoUser struct {
 
 	SetPasswordError func(PasswordError interface{}, username string, SiteId int64) (int64, error) `update GkUser set PasswordError=?,LoginDate=now() where Username=? and SiteId=?  `
 
+	UpPassword func(p string, userId, siteId int64) (int64, error) `update GkUser set Password=? where Id=? and SiteId=?`
+
 	UpTopic  func(tc, UserId int64, SiteId int64) (int64, error)      `update GkUser set TopicCount=?,ModifyAt=now() where Id=? and SiteId=? `
 	UpReply  func(rc, UserId int64, SiteId int64) (int64, error)      `update GkUser set ReplyCount=?,ModifyAt=now() where Id=? and SiteId=? `
 	UpFav    func(rc, UserId int64, SiteId int64) (int64, error)      `update GkUser set FavCount=?,ModifyAt=now() where Id=? and SiteId=? `
