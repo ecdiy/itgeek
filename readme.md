@@ -1,12 +1,12 @@
 项目地址:[https://github.com/ecdiy/itgeek]
 
-##安装
+## 安装
 ### 安装数据库
 ```angular2html
 新建库XXX 导入db\geek.sql 库名与参数DbDsn DB名一致
 ```
 
-###源码安装
+###  源码安装
  ```angular2html
 go get github.com/ecdiy/gpa
 go get github.com/gin-gonic/gin
