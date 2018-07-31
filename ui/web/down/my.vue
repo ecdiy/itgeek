@@ -6,15 +6,10 @@
                 <br>
                 <table width="400" cellpadding="5" cellspacing="15" border="0">
                     <tr>
-                        <td>积分</td>
                         <td>上传资源</td>
                         <td>下载资源</td>
-                        <td>创建专辑</td>
-
                     </tr>
                     <tr>
-                        <td>9</td>
-                        <td>9</td>
                         <td>9</td>
                         <td>9</td>
                     </tr>
@@ -29,8 +24,7 @@
                             <Button type="success" size="large">上传资源</Button>
                         </go>
                     </TabPane>
-                    <TabPane label="积分明细">
-                    </TabPane>
+
                     <TabPane label="下载明细">
                     </TabPane>
                     <TabPane label="收藏">

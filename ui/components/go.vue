@@ -7,7 +7,7 @@
 <script>
     window.goa = (t) => {
         var x = t.getAttribute("title");
-        if (!x) x = t.innerHTML;
+        if (!x) x = t.innerHTML.replace(/<[^>]*>/g, "");
         document.title = x;
         var x = t.getAttribute("to");
         vm.$router.push({path: x.charAt(0) == '/' ? x : '/p/' + x})

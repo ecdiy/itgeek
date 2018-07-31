@@ -16,11 +16,13 @@ var (
 	DirUpload   string
 	ImgHost     string
 	ImgMaxWidth int
+	DownDir     string
 )
 
 func InitWeb() {
 	DirUpload = ws.EnvParam("UploadDir")
 	ImgHost = ws.EnvParam("ImgHost")
+	DownDir = ws.EnvParam("DownDir")
 	ImgMaxWidth = ws.EnvParamInt("ImgMaxWidth", 800)
 	os.MkdirAll(DirUpload, 0777)
 
@@ -42,5 +44,9 @@ func InitWeb() {
 			ctx.Status(401)
 		}
 	})
+
+	ws.WebGin.POST("/api/gk-upload/uploadRes", WebUploadResource)
+	ws.WebAuth("/api/gk-upload/resPublic", WebPublicResource)
+	ws.WebAuth("/api/gk-upload/resInfo", WebResourceInfo)
 
 }

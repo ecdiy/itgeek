@@ -3,16 +3,19 @@
         <div slot="left">
             <card>
                 <Row>
-                    <Col span="18">
-
+                    <Col span="16">
                         <Form :labelWidth="80" style="width: 450px">
                             <FormItem label="资源类型">
                                 <Upload :on-success="onSuccess" :show-upload-list="false"
-                                        action="/api/gk-upload/Avatar">
+                                        action="/api/gk-upload/uploadRes">
                                     <Button icon="ios-cloud-upload-outline">选择文件</Button>
-                                </Upload>
-                            </FormItem>
 
+                                </Upload>
+                                您可以上传小于50MB的文件
+                            </FormItem>
+                            <FormItem label="资源名称">
+                                <Input v-model="fm.ResName"/>
+                            </FormItem>
                             <FormItem label="资源类型">
                                 <Select v-model="fm.ResType" style="width:200px">
                                     <Option value="1">文档</Option>
@@ -47,26 +50,29 @@
                                 </Select>
                             </FormItem>
                             <FormItem label="资源分数">
-                                <Input/>
+                                <Input  v-model="fm.ResScore"/>最少为：取整（资源文件大小/1M)*3
                             </FormItem>
                             <FormItem label="资源标签">
-                                <Input/>
+                                <Input/>最多添加5个标签，多个标签之间用“,”分隔
                             </FormItem>
                             <FormItem label="资源描述">
-                                <Input type="textarea" :autosize="{minRows: 2,maxRows: 5}"/>
+                                <Input type="textarea" v-model="fm.ResDesc" :autosize="{minRows: 2,maxRows: 5}"/>
                             </FormItem>
-                            <Button icon="ios-cloud-upload-outline">发布</Button>
+                            <FormItem label="">
+                                <Button icon="ios-cloud-upload-outline" @click="pub">发布</Button>
+                            </FormItem>
                         </Form>
                     </Col>
-                    <Col span="6">
+                    <Col span="8">
                         <card>
                 <span slot="title">
                     上传须知
                 </span>
                             <ul style="padding:5px 10px">
-                                <li>扣除平台服务积分，1M 1积分，不足1M按1M计算</li>
+                                <li>下载时扣除平台服务积分，1M 1积分，不足1M按1M计算</li>
                                 <li>如涉及侵权内容,您的资源将被移除</li>
                                 <li>请勿上传小说、mp3、图片等与技术无关的内容.一旦发现将被删除</li>
+                                <li>不能上传重复资源</li>
                                 <li>请勿在未经授权的情况下上传任何涉及著作权侵权的资源，除非该资源完全由您个人创作</li>
                                 <li>点击上传资源即表示您确认该资源不违反资源分享的使用条款，并且您拥有该资源的所有版权或者上传资源的授权</li>
                                 <li>您上传的资源如果因版权、使用、内容完整度 等原因被举报并通过官方审核，将扣除通过该资源获得的全部积分</li>
@@ -77,8 +83,6 @@
             </card>
         </div>
         <div slot="right">
-
-
         </div>
     </gk-body>
 </template>
@@ -86,11 +90,14 @@
 <script>
     export default {
         data() {
-            return {fm: {}}
+            return {fm: {Id: 0},}
         }, methods: {
-            onSuccess() {
-                window.avatarVer++;
-                this.v++;
+            pub() {
+                this.ajax('/gk-upload/resPublic', this.fm, "down/my")
+            },
+            onSuccess(r) {
+                this.fm.Id = r.Id;
+                console.log(r)
             },
         }
     }

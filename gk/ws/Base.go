@@ -27,12 +27,10 @@ func InitWs() {
 
 	MultiSite = EnvParamInt("MultiSite", 0)
 	Gpa = gpa.Init(EnvParam("DbDriver"), EnvParam("DbDsn"), UserDao, KvDao, ScoreLog, MsgDao, TokenDao,
-
 		TopicDao, TopicCategoryDao, ReplyDao, FavDao, FollowDao, AppendDao,
-
 		NoteDao, CategoryDao,
-
 		ZxDao, ThankDao, RefererDao,
+		ResourceDao, ResourceSummaryDao,
 	)
 }
 func KeySave(siteId int64, k, v string) (int64, error) {

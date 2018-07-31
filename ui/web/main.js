@@ -17,7 +17,7 @@ Vue.prototype.avatar = function (id) {
     return '/avatar/' + gk.siteId + '/' + id + '/48.png?t=' + window.avatarVer
 }
 
-Vue.prototype.ajax = function (url, p, fun) {
+Vue.prototype.ajax = function (url, p, fun, goUrl) {
     let th = this;
     axios.post('/api' + url, p ? p : {}).then(function (r) {
         for (var k in r.data) {
@@ -27,9 +27,16 @@ Vue.prototype.ajax = function (url, p, fun) {
         if (th.hasOwnProperty("loading")) {
             th.loading = false;
         }
-        if (fun && typeof(fun) == 'function') {
-            fun(r.data, th)
-            vm.$emit("data", window.gk)
+        if (fun) {
+            if (typeof(fun) == 'function') {
+                fun(r.data, th)
+                vm.$emit("data", window.gk)
+                if (goUrl && typeof(fun) == 'string') {
+                    th.$router.replace('/p/' + goUrl)
+                }
+            } else {
+                th.$router.replace('/p/' + fun)
+            }
         }
     }).catch((err) => {
         if (err.response && err.response.status == 401) {

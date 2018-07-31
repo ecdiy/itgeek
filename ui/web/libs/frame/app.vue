@@ -20,9 +20,9 @@
                         <!--<li>-->
                         <!--<router-link to="/p/DevOps">项目/DevOps</router-link>-->
                         <!--</li>-->
-                        <li>
-                            <go to="note">热门笔记</go>
-                        </li>
+                        <!--<li>-->
+                        <!--<go to="note">热门笔记</go>-->
+                        <!--</li>-->
                         <li>
                             <go to="down">下载</go>
                         </li>

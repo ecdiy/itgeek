@@ -52,7 +52,6 @@
             </TabPane>
         </Tabs>
     </card>
-
 </template>
 
 <script>

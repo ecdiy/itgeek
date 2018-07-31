@@ -16,6 +16,7 @@ func ParamBase() {
 
 	ws.ParamInit(ws.EnvDev, `
 UploadDir=./upload/
+DownDir=./down/
 DbDriver=mysql
 DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
 ImgHost=http://127.0.0.1:9000
@@ -24,6 +25,7 @@ MultiSite=0
 `)
 	ws.ParamInit(ws.EnvProd, `
 UploadDir=./upload/
+DownDir=./down/
 DbDriver=mysql
 DbDsn=root:root@tcp(127.0.0.1:3306)/gk?timeout=30s&charset=utf8mb4&parseTime=true
 ImgHost=http://s.ecdiy.cn
