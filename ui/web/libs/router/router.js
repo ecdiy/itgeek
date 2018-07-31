@@ -27,6 +27,10 @@ export const routers = [
             r(() => import('@/topic/detail.vue'), 'topic/detail,:id', ''),
 
 
+            r(() => import('@/down/index.vue'), 'down'),
+            r(() => import('@/notes/hot.vue'), 'note'),
+
+
         ]
     },
     {
@@ -41,6 +45,10 @@ export const routers = [
             r(() => import('@/notes/newMarkdown.vue'), 'notes_newMarkdown', '创建笔记'),
             r(() => import('@/notes/category.vue'), 'notes_category', '笔记分类管理'),
             r(() => import('@/notes/detail.vue'), 'notes/item/:id', ''),
+
+
+            r(() => import('@/down/my.vue'), 'down_my'),
+            r(() => import('@/down/upload.vue'), 'down_upload'),
         ]
     },
     {

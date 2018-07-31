@@ -34,17 +34,26 @@
             <a @click="openNew">创作新主题</a>
         </card>
         <card v-if="gk.user.LoginAward==1">
-            <go to="my/LoginAward" title="领取今日的登录奖励"><Icon type="cube" size="18"></Icon> 领取今日的登录奖励</go>
+            <go to="my/LoginAward" title="领取今日的登录奖励">
+                <Icon type="cube" size="18"></Icon>
+                领取今日的登录奖励
+            </go>
         </card>
         <card>
             <router-link to="/p/my/msg" class="message-con">
-                <span v-if="gk.user.MsgCount > 0"><Icon type="speakerphone" size="18" style="padding-right: 10px"></Icon>有{{msgUnRead}} 条未读消息</span>
+                <span v-if="gk.user.MsgCount > 0">
+                    <Icon type="speakerphone" size="18"
+                          style="padding-right: 10px"></Icon>有{{msgUnRead}} 条未读消息</span>
                 <span v-else>无未读消息</span>
             </router-link>
         </card>
         <!--<card>-->
-            <!--<go to="topic/referer">来源分析</go>-->
+        <!--<go to="topic/referer">来源分析</go>-->
         <!--</card>-->
+
+        <card>
+            <go to="down/my">我的资源</go>
+        </card>
     </div>
 </template>
 <script>

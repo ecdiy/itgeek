@@ -37,7 +37,7 @@
                 <img :src="hdImg" border="0" style="max-height: 48px">
                 <Upload :on-success="onSuccess" :show-upload-list="false"
                         action="/api/gk-upload/Avatar">
-                    <Button type="ghost" icon="ios-cloud-upload-outline">上传头像</Button>
+                    <Button icon="ios-cloud-upload-outline">上传头像</Button>
                 </Upload>
             </TabPane>
             <TabPane label="修改密码">

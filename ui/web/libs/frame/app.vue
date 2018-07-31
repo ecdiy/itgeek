@@ -20,7 +20,12 @@
                         <!--<li>-->
                         <!--<router-link to="/p/DevOps">项目/DevOps</router-link>-->
                         <!--</li>-->
-                        <!--<li>下载</li>-->
+                        <li>
+                            <go to="note">热门笔记</go>
+                        </li>
+                        <li>
+                            <go to="down">下载</go>
+                        </li>
                     </ul>
                 </div>
 
@@ -28,8 +33,8 @@
                     <router-link to="/">首页</router-link>
                     <span v-if="gk.login">
                         {{gk.user.Username}}
-                        <router-link to="/p/notes/list">笔记</router-link>
-                        <router-link to="/p/my/setting">设置</router-link>
+                        <go to="notes/list">笔记</go>
+                        <go to="my/setting">设置</go>
                           <a @click="loginOut">登出</a>
                     </span>
                     <span v-else>
