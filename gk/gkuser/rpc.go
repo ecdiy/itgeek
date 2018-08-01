@@ -25,7 +25,7 @@ func UpCount(in *ws.UpReq) (int64) {
 		ws.KvDao.TopicCount(in.SiteId, in.SiteId)
 	}
 	if in.Fee != 0 {
-		_, sc, _ := ChangeScore(in.SiteId, in.EntityId, in.ScoreType, in.ScoreDesc, in.Fee, in.UserId)
+		_, sc, _, _ := ChangeScore(in.SiteId, in.EntityId, in.ScoreType, in.ScoreDesc, in.Fee, in.UserId)
 		return int64(sc)
 	}
 	return 0

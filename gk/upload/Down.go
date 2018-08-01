@@ -37,7 +37,7 @@ func WebUploadResource(c *gin.Context) {
 				up := &UpFile{}
 				up.Upload(c, "", DownDir, k, fmt.Sprint(web.SiteId))
 				if !up.Exist {
-					id, _ := ws.ResourceDao.Add(web.SiteId, web.UserId, up.Size, up.FileName, up.Uri)
+					id, _ := ws.ResourceDao.Add(web.SiteId, web.UserId, up.Size, up.FileName, up.Uri, web.Username)
 					web.Out["Id"] = id
 				} else {
 					web.Out["Id"] = 0

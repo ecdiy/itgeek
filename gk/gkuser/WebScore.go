@@ -6,14 +6,17 @@ import (
 	"github.com/ecdiy/itgeek/gk/ws"
 )
 
-func ChangeScore(siteId int64, entityId, scoreType, scoreDesc string, fee int64, userId int64) (int64, int64, error) {
+func ChangeScore(siteId int64, entityId, scoreType, scoreDesc string, fee int64, userId int64) (int64, int64, bool, error) {
 	sc, _, _ := ws.UserDao.Score(siteId, userId)
 	score := fee + sc
-	id, e := ws.ScoreLog.Add(siteId, score, scoreType, scoreDesc, entityId, fee, userId)
-	if id > 0 {
-		ws.UserDao.UpScore(score, userId, siteId)
+	if score > 0 {
+		id, e := ws.ScoreLog.Add(siteId, score, scoreType, scoreDesc, entityId, fee, userId)
+		if id > 0 {
+			ws.UserDao.UpScore(score, userId, siteId)
+			return id, score, true, e
+		}
 	}
-	return id, score, e
+	return 0, score, false, nil
 }
 
 func GenerateRangeNum(min, max int) int64 {
@@ -36,7 +39,7 @@ func WebScoreLoginAwardStatus(auth *ws.Web) {
 func WebScoreLoginAwardDo(auth *ws.Web) {
 	val := GenerateRangeNum(5, 50)
 	t := time.Now().Format("2006-01-02")
-	id, score, _ := ChangeScore(auth.SiteId, t, "每日登录奖励", t+"的每日登录奖励", val, auth.UserId)
+	id, score, _, _ := ChangeScore(auth.SiteId, t, "每日登录奖励", t+"的每日登录奖励", val, auth.UserId)
 	if id > 0 {
 		ws.UserDao.LoginAwardDo(auth.SiteId, auth.UserId)
 	}

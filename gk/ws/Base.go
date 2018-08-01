@@ -30,7 +30,7 @@ func InitWs() {
 		TopicDao, TopicCategoryDao, ReplyDao, FavDao, FollowDao, AppendDao,
 		NoteDao, CategoryDao,
 		ZxDao, ThankDao, RefererDao,
-		ResourceDao, ResourceSummaryDao,
+		ResourceDao, ResourceSummaryDao, ResourceDownDao,
 	)
 }
 func KeySave(siteId int64, k, v string) (int64, error) {

@@ -108,7 +108,7 @@ func WebAppend(auth *ws.Web) {
 		if cb && c < 3 {
 			appId, _ := ws.AppendDao.Add(auth.SiteId, id, at)
 			auth.Out["Id"] = appId
-			_, auth.Out["score"], _ = gkuser.ChangeScore(auth.SiteId, "append:"+fmt.Sprint(appId), "创建主题附言",
+			_, auth.Out["score"], _,_ = gkuser.ChangeScore(auth.SiteId, "append:"+fmt.Sprint(appId), "创建主题附言",
 				"创建了附言 > "+topicLink(base["Id"], base["UserId"], base["Title"]), -20, auth.UserId)
 		} else {
 			auth.ST(ws.StMax)

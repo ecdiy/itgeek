@@ -5,6 +5,7 @@ import App from './libs/frame/app.vue';
 import axios from "axios";
 import Cookies from 'js-cookie';
 import 'iview/dist/styles/iview.css';
+import "babel-polyfill";
 
 Vue.use(iView);
 

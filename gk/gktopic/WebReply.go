@@ -67,7 +67,7 @@ func WebTopicReplyThank(auth *ws.Web) {
 		tl := topicLink(replyInfo["TopicId"], replyInfo["Author"], replyInfo["Title"])
 		sr := ws.GetSoreRule(auth.SiteId)
 
-		_, auth.Out["score"], _ = gkuser.ChangeScore(auth.SiteId, "thank:"+strconv.FormatInt(thId, 10), "发送谢意",
+		_, auth.Out["score"], _ ,_= gkuser.ChangeScore(auth.SiteId, "thank:"+strconv.FormatInt(thId, 10), "发送谢意",
 			"感谢 "+memberLink(replyInfo["Username"])+" 的回复 > "+tl, sr.Thank, auth.UserId)
 
 		entityId := "thank:" + strconv.FormatInt(thId, 10)
