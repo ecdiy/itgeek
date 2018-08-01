@@ -104,7 +104,9 @@ func byAuthFun(url string, fun func(wdb *Web), auth func(c *gin.Context) *Web) {
 		if web.Auth {
 			web.initParam()
 			fun(web)
-			c.JSON(200, web.Out)
+			if len(web.Out) > 0 {
+				c.JSON(200, web.Out)
+			}
 		} else {
 			c.AbortWithStatus(401)
 		}

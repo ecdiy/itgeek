@@ -45,8 +45,11 @@ func InitWeb() {
 		}
 	})
 
-	ws.WebGin.POST("/api/gk-upload/uploadRes", WebUploadResource)
+	ws.WebGin.POST("/api/gk-upload/resUpload", WebUploadResource)
 	ws.WebAuth("/api/gk-upload/resPublic", WebPublicResource)
 	ws.WebAuth("/api/gk-upload/resInfo", WebResourceInfo)
+	ws.WebPost("/api/gk-upload/resList", WebResourceList)
+	ws.WebPost("/api/gk-upload/resDetail", WebResourceDetail)
+	ws.WebGin.GET("/api/gk-upload/resDown", WebResDownFile)
 
 }

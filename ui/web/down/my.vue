@@ -2,7 +2,7 @@
     <gk-body>
         <div slot="left">
             <card>
-                上传权限： 50M
+                上传权限：{{info.UpLimit}}M
                 <br>
                 <table width="400" cellpadding="5" cellspacing="15" border="0">
                     <tr>
@@ -10,16 +10,26 @@
                         <td>下载资源</td>
                     </tr>
                     <tr>
-                        <td>9</td>
-                        <td>9</td>
+                        <td>{{info.UploadItem}}</td>
+                        <td>{{info.DownItem}}</td>
                     </tr>
                 </table>
-
             </card>
 
             <card>
                 <Tabs size="small" :animated="false">
                     <TabPane label="上传资源">
+
+                        <ul>
+                            <li v-for="it in list">
+                                <go :to="'down/item,'+it.Id+','+ UserId">{{it.ResName}}</go>
+                                <div v-html="it.ResDesc"></div>
+                                <div>
+                                    上传时间:{{it.CreateAt}}
+                                </div>
+                            </li>
+                        </ul>
+
                         <go to="down/upload">
                             <Button type="success" size="large">上传资源</Button>
                         </go>
@@ -39,7 +49,16 @@
 </template>
 
 <script>
-    export default {}
+    export default {
+        data() {
+            return {
+                info: {}, list: [], UserId: gk.user.Id,
+            }
+        },
+        created() {
+            this.ajax('/gk-upload/resInfo', {})
+        }
+    }
 </script>
 
 <style scoped>

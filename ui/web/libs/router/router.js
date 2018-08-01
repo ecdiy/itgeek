@@ -31,6 +31,7 @@ export const routers = [
             r(() => import('@/notes/hot.vue'), 'note'),
 
 
+            r(() => import('@/down/item.vue'), 'down/item,:s'),
         ]
     },
     {

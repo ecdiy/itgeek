@@ -7,7 +7,7 @@
                         <Form :labelWidth="80" style="width: 450px">
                             <FormItem label="资源类型">
                                 <Upload :on-success="onSuccess" :show-upload-list="false"
-                                        action="/api/gk-upload/uploadRes">
+                                        action="/api/gk-upload/resUpload">
                                     <Button icon="ios-cloud-upload-outline">选择文件</Button>
 
                                 </Upload>
