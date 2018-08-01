@@ -38,6 +38,9 @@
                     <TabPane label="下载明细">
                     </TabPane>
                     <TabPane label="收藏">
+                        <ul>
+                            <li></li>
+                        </ul>
                     </TabPane>
                 </Tabs>
             </card>
@@ -52,7 +55,7 @@
     export default {
         data() {
             return {
-                info: {}, list: [], UserId: gk.user.Id,
+                info: {}, list: [], fav: [], UserId: gk.user.Id,
             }
         },
         created() {
