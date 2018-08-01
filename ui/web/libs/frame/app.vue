@@ -14,7 +14,7 @@
                 <div class="h">
                     <ul>
                         <li>
-                            <router-link to="/p/topic/list,0,0,1">主题</router-link>
+                            <go to="/p/topic/list,0,0,1">主题</go>
                         </li>
                         <!--<li>文章</li>-->
                         <!--<li>-->
@@ -30,7 +30,6 @@
                 </div>
 
                 <div class="fr">
-                    <router-link to="/">首页</router-link>
                     <span v-if="gk.login">
                         {{gk.user.Username}}
                         <go to="notes/list">笔记</go>

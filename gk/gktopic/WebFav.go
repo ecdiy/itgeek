@@ -7,7 +7,7 @@ import (
 
 func WebFavList(auth *ws.Web) {
 
-	auth.Out["FavList"], _ = ws.FavDao.List(auth.SiteId, auth.UserId, auth.Start())
+	auth.Out["FavList"], _ = ws.FavDao.ListFavTopic(auth.SiteId, auth.UserId, auth.Start())
 }
 
 func WebFav(auth *ws.Web) {
@@ -18,7 +18,7 @@ func WebFav(auth *ws.Web) {
 		ws.FavDao.Del(auth.SiteId, auth.UserId, id)
 		doType = 0
 	} else {
-		ws.FavDao.Save(auth.SiteId, auth.UserId, id)
+		ws.FavDao.Save(auth.SiteId, auth.UserId, ws.FavTypeTopic, id)
 	}
 	tfc, _, _ := ws.FavDao.Count(auth.SiteId, auth.UserId)
 

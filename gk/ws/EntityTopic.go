@@ -3,7 +3,7 @@ package ws
 var (
 	TopicDao         = &DaoTopic{}
 	TopicCategoryDao = &DaoTopicCategory{}
-	FavDao           = &DaoFav{}
+
 	FollowDao        = &DaoFollow{}
 	AppendDao        = &DaoTopicAppend{}
 )
@@ -63,17 +63,6 @@ type DaoTopic struct {
 	HotAll   func(SiteId int64, ) ([]map[string]string, error) `select Id,UserId,Title,ShowTimes from Topic where SiteId=? Order by ShowTimes desc limit 0,10`
 }
 
-type DaoFav struct {
-	List func(SiteId int64, UserId, start int64) ([]map[string]string, error) `select t.Id,t.Title,t.Username,t.UserId,fmt(t.CreateAt)CreateAt,c.Name CategoryName,t.CategoryId,t.ReplyCount,t.ReplyUsername,t.ReplyUserId,ifnull(t.ReplyTime,t.CreateAt)ReplyTime
-								from Topic t left join Category c on t.CategoryId=c.Id 
-								where t.SiteId=? and t.Id in (select EntityId from Fav where UserId=?)
-								order by ifnull(t.ReplyTime,t.CreateAt) desc limit ?,20`
-
-	Count func(SiteId int64, UserId int64) (int64, bool, error)                 `select count(*) from Fav where SiteId=? and UserId=? `
-	Exist func(SiteId int64, UserId int64, Id interface{}) (int64, bool, error) `select count(*) from Fav where SiteId=? and UserId=? and EntityId=?`
-	Del   func(SiteId int64, UserId int64, Id interface{}) (int64, error)       `delete from Fav where SiteId=? and UserId=? and EntityId=?`
-	Save  func(SiteId int64, UserId int64, Id interface{}) (int64, error)       `INSERT INTO Fav(SiteId,UserId,EntityId,CreateAt)VALUES(?,?,?,now())`
-}
 type DaoFollow struct {
 	Exist    func(SiteId int64, Id int64, UserId interface{}) (int64, bool, error) `select count(*) from Follow where SiteId=? and FollowId=? and UserId=?`
 	Follow   func(SiteId int64, FollowId, UserId int64) (int64, error)             `INSERT INTO Follow (SiteId,FollowId,UserId,CreateAt)VALUES(?,?,?,now())`
