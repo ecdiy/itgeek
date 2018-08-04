@@ -13,14 +13,37 @@ go get github.com/gin-gonic/gin
 go get github.com/cihub/seelog
 go get github.com/hunterhug/go_image/graphics
 go get github.com/ecdiy/itgeek
+.....
+
 ```
+go打包
+cd .\gk\cmd
+go build  -ldflags "-s -w" -o geek.exe
  
  ```angular2html
  cd ui
  npm install
+ 
+ 后台管理打包
+ npm run build-admin
+ web打包
+ npm run build-web
+ H5打包
+ npm run build-m
+```
+### build.cmd 打包所有
+```
+打包windows与linux下所有可以运行程序与资源
 ```
 
- ..... 此处省略N多 类似nginx,intelj设置之类
+### IDE开发
+```angular2html
+设置nginx 代理webpack项目
+intelj导入项目 
+..... 此处省略N多 类似nginx,intelj设置之类
+```
+
+
  
  ### 可执行包
  [https://github.com/ecdiy/itgeek/releases]
