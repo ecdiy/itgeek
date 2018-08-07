@@ -126,4 +126,12 @@ export default {
 .fav, .fav a {
     font-size: 12px;
 }
+
+h2 {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 100%;
+    margin: 5px 0px 12px 0px;
+    padding: 0px;
+}
 </style>
